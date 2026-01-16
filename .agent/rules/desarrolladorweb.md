@@ -14,6 +14,8 @@ quiero hacer una página web. Dicha página web quiero tenga todos los alimentos
  fosforo: xg
  sal: xg
 
+Todos los alimentos, así como el contenidos de estos, iran almacenados en un bbdd
+
 Creo que me entiendes por donde voy. QUiero que me muestre lo que contiene cada alimento dependiendo de la cantidad (en gramos) que meta el usuario en campo de texto.
 
 Responde siempre en español

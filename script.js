@@ -1,85 +1,3 @@
-// Datos de ejemplo de alimentos (valores por 100g)
-const foodDatabase = [
-    {
-        id: 1,
-        name: "Manzana",
-        image: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        nutrients: {
-            protein: 0.3,   // g
-            sugar: 10.4,    // g
-            fat: 0.2,       // g
-            potassium: 107, // mg
-            phosphorus: 11, // mg
-            salt: 0.001     // g
-        }
-    },
-    {
-        id: 2,
-        name: "Pollo (Pechuga)",
-        image: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        nutrients: {
-            protein: 31,
-            sugar: 0,
-            fat: 3.6,
-            potassium: 256,
-            phosphorus: 228,
-            salt: 0.1
-        }
-    },
-    {
-        id: 3,
-        name: "Arroz Blanco",
-        image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        nutrients: {
-            protein: 2.7,
-            sugar: 0.1,
-            fat: 0.3,
-            potassium: 35,
-            phosphorus: 43,
-            salt: 0.01
-        }
-    },
-    {
-        id: 4,
-        name: "Salmón",
-        image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        nutrients: {
-            protein: 20,
-            sugar: 0,
-            fat: 13,
-            potassium: 363,
-            phosphorus: 200,
-            salt: 0.05
-        }
-    },
-    {
-        id: 5,
-        name: "Huevo",
-        image: "https://images.unsplash.com/photo-1506976785307-8732e854ad03?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        nutrients: {
-            protein: 13,
-            sugar: 1.1,
-            fat: 11,
-            potassium: 126,
-            phosphorus: 198,
-            salt: 0.12
-        }
-    },
-    {
-        id: 6,
-        name: "Espinacas",
-        image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        nutrients: {
-            protein: 2.9,
-            sugar: 0.4,
-            fat: 0.4,
-            potassium: 558,
-            phosphorus: 49,
-            salt: 0.07
-        }
-    }
-];
-
 // Elementos del DOM
 const gridContainer = document.getElementById('food-grid');
 const modal = document.getElementById('food-modal');
@@ -97,11 +15,20 @@ const valPhosphorus = document.getElementById('val-phosphorus');
 const valSalt = document.getElementById('val-salt');
 
 let currentFood = null;
+let foodDatabase = []; // Ahora se llenará desde la API
 
 // Inicialización
-function init() {
-    renderGrid();
-    setupEventListeners();
+async function init() {
+    try {
+        const response = await fetch('/api/foods');
+        if (!response.ok) throw new Error('Error al cargar datos');
+        foodDatabase = await response.json();
+        renderGrid();
+        setupEventListeners();
+    } catch (error) {
+        console.error("Error cargando alimentos:", error);
+        gridContainer.innerHTML = '<p>Error al cargar los alimentos. Asegúrate de que el servidor (server.py) esté corriendo.</p>';
+    }
 }
 
 // Renderizar lista de alimentos
