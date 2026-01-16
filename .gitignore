@@ -1,0 +1,18 @@
+
+# Agent configuration
+.agent/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+
+# Data
+# *.db  <-- Comentado para permitir subir la BBDD
+# renal_diet.db
+
+# OS
+.DS_Store
+Thumbs.db
