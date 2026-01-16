@@ -3,6 +3,7 @@ const gridContainer = document.getElementById('food-grid');
 const modal = document.getElementById('food-modal');
 const closeModalBtn = document.querySelector('.close-modal');
 const gramsInput = document.getElementById('grams-input');
+const searchInput = document.getElementById('search-input');
 
 // Elementos del Modal para actualizar
 const mImg = document.getElementById('modal-img');
@@ -23,7 +24,7 @@ async function init() {
         const response = await fetch('/api/foods');
         if (!response.ok) throw new Error('Error al cargar datos');
         foodDatabase = await response.json();
-        renderGrid();
+        renderGrid(foodDatabase); // Render inicial con todo
         setupEventListeners();
     } catch (error) {
         console.error("Error cargando alimentos:", error);
@@ -31,10 +32,16 @@ async function init() {
     }
 }
 
-// Renderizar lista de alimentos
-function renderGrid() {
+// Renderizar lista de alimentos (acepta lista filtrada)
+function renderGrid(foodsToRender) {
     gridContainer.innerHTML = '';
-    foodDatabase.forEach(food => {
+
+    if (foodsToRender.length === 0) {
+        gridContainer.innerHTML = '<p style="text-align: center; width: 100%; color: #888;">No se encontraron alimentos.</p>';
+        return;
+    }
+
+    foodsToRender.forEach(food => {
         const card = document.createElement('div');
         card.className = 'food-card';
         card.innerHTML = `
@@ -85,6 +92,15 @@ function setupEventListeners() {
     gramsInput.addEventListener('input', (e) => {
         const grams = parseFloat(e.target.value) || 0;
         updateNutrients(grams);
+    });
+
+    // Buscador
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase().trim();
+        const filteredFoods = foodDatabase.filter(food =>
+            food.name.toLowerCase().includes(searchTerm)
+        );
+        renderGrid(filteredFoods);
     });
 }
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,14 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header class="main-header">
         <h1>Alimentación Renal</h1>
         <p>Controla tu ingesta nutricional de forma sencilla</p>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="🔍 Buscar alimento...">
+        </div>
     </header>
 
     <main class="container">
@@ -29,7 +34,7 @@
                     <img id="modal-img" src="" alt="Alimento">
                     <h2 id="modal-name">Nombre del Alimento</h2>
                 </div>
-                
+
                 <!-- Parte B: Datos y Cálculo -->
                 <div class="modal-column column-b">
                     <div class="input-group">
@@ -73,4 +78,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
