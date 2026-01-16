@@ -1,19 +1,27 @@
 :root {
-    --primary-color: #4a90e2;
-    /* Azul suave */
-    --secondary-color: #f5f7fa;
-    /* Fondo muy claro */
-    --text-color: #333;
-    --card-bg: #ffffff;
-    --modal-overlay: rgba(0, 0, 0, 0.6);
-    --accent-color: #ff6b6b;
-    /* Un toque de color para resaltar */
-    --font-main: 'Outfit', sans-serif;
-    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
-    --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.1);
-    --radius-lg: 20px;
-    --radius-md: 12px;
+    --primary-color: #3b82f6;
+    /* Azul vibrante moderno */
+    --primary-dark: #2563eb;
+    --accent-color: #10b981;
+    /* Verde esmeralda para salud */
+    --bg-color: #f3f4f6;
+    --card-bg: rgba(255, 255, 255, 0.85);
+    /* Glass effect base */
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
 }
+
+/* Base & Typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;700;800&display=swap');
 
 * {
     box-sizing: border-box;
@@ -22,261 +30,56 @@
 }
 
 body {
-    font-family: var(--font-main);
-    background-color: var(--secondary-color);
-    color: var(--text-color);
+    font-family: var(--font-body);
+    background-color: var(--bg-color);
+    background-image:
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-main);
     line-height: 1.6;
+    min-height: 100vh;
 }
 
+/* Header Section */
 .main-header {
     text-align: center;
-    padding: 3rem 1rem;
-    background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    padding: 4rem 1.5rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
-.main-header h1 {
-    font-size: 2.5rem;
-    color: var(--primary-color);
+.header-content h1 {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
+    letter-spacing: -1px;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-    padding-bottom: 4rem;
-}
-
-/* Grid de Alimentos */
-.food-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 2rem;
-}
-
-.food-card {
-    background: var(--card-bg);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    text-align: center;
-    box-shadow: var(--shadow-soft);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-    border: 1px solid transparent;
-}
-
-.food-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
-    border-color: rgba(74, 144, 226, 0.2);
-}
-
-.food-card img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-radius: var(--radius-md);
+.subtitle {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-main);
     margin-bottom: 1rem;
 }
 
-.food-card h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-/* Modal */
-.modal {
-    display: none;
-    /* Oculto por defecto */
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--modal-overlay);
-    backdrop-filter: blur(5px);
-    /* Efecto glassmorphism fondo */
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-}
-
-.modal.active {
-    display: flex;
-    animation: fadeIn 0.3s ease;
-}
-
-.modal-content {
-    background: var(--card-bg);
-    border-radius: var(--radius-lg);
-    width: 100%;
-    max-width: 800px;
-    position: relative;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-}
-
-.close-modal {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 2rem;
-    cursor: pointer;
-    color: #999;
-    z-index: 10;
-    transition: color 0.2s;
-}
-
-.close-modal:hover {
-    color: var(--accent-color);
-}
-
-.modal-body {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-/* Columnas modal */
-.modal-column {
-    padding: 2rem;
-    flex: 1;
-    min-width: 300px;
-}
-
-.column-a {
-    background-color: #fafbfc;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-right: 1px solid #eee;
-}
-
-.column-a img {
-    border-radius: 50%;
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    box-shadow: var(--shadow-soft);
-    margin-bottom: 1.5rem;
-    border: 4px solid white;
-}
-
-.column-a h2 {
-    font-size: 2rem;
-    color: var(--primary-color);
-    text-align: center;
-}
-
-.column-b {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-/* Input y Datos */
-.input-group {
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #666;
-}
-
-.input-group input {
-    width: 60%;
-    padding: 12px;
-    border: 2px solid #e1e4e8;
-    border-radius: var(--radius-md);
-    font-size: 1.1rem;
-    text-align: center;
-    font-family: inherit;
-    transition: border-color 0.3s;
-}
-
-.input-group input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-}
-
-.nutritional-info h3 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-weight: 400;
-    color: #888;
+.description {
+    color: var(--text-muted);
     font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    line-height: 1.7;
 }
 
-.info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-}
-
-.info-item {
-    background: #f8f9fa;
-    padding: 1rem;
-    border-radius: var(--radius-md);
-    text-align: center;
-    transition: transform 0.2s;
-}
-
-.info-item:hover {
-    transform: scale(1.02);
-    background: #f1f3f5;
-}
-
-.info-item .label {
-    display: block;
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 0.2rem;
-}
-
-.info-item .value {
-    display: block;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--primary-color);
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-@media (max-width: 768px) {
-    .modal-body {
-        flex-direction: column;
-    }
-
-    .column-a {
-        border-right: none;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 1rem;
-    }
-}
-
-/* Search Bar Moderno */
+/* Modern Search Bar */
 .search-container {
-    margin-top: 2.5rem;
+    margin-top: 2rem;
     position: relative;
-    max-width: 450px;
+    max-width: 600px;
     margin-left: auto;
     margin-right: auto;
     display: flex;
@@ -285,42 +88,344 @@ body {
 
 .search-icon {
     position: absolute;
-    left: 20px;
-    width: 20px;
-    height: 20px;
-    color: #a0aec0;
+    left: 24px;
+    width: 22px;
+    height: 22px;
+    color: #9ca3af;
     transition: color 0.3s ease;
-    z-index: 1;
+    z-index: 2;
 }
 
 #search-input {
     width: 100%;
-    padding: 1.2rem 1.5rem 1.2rem 3.5rem;
-    /* Padding left para el icono */
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 50px;
+    padding: 1.4rem 1.5rem 1.4rem 4rem;
+    font-size: 1.15rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 100px;
     outline: none;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05),
-        0 5px 10px rgba(0, 0, 0, 0.02);
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-#search-input::placeholder {
-    color: #a0aec0;
-    font-weight: 400;
-}
-
-/* Estado Focus: Neumorfismo suave / Elevación */
-.search-container:focus-within .search-icon {
-    color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-lg);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #search-input:focus {
     background: #ffffff;
-    box-shadow: 0 15px 35px rgba(74, 144, 226, 0.2),
-        0 5px 10px rgba(0, 0, 0, 0.05);
-    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow-xl), 0 0 0 4px rgba(59, 130, 246, 0.1);
+    transform: translateY(-2px);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+#search-input::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+}
+
+.search-container:focus-within .search-icon {
+    color: var(--primary-color);
+}
+
+/* Grid Layout */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2.5rem;
+}
+
+/* Modern Food Card */
+.food-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    border: var(--glass-border);
+    padding: 1rem;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    backdrop-filter: blur(10px);
+}
+
+.food-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.food-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1.2rem;
+    transition: transform 0.5s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.food-card:hover img {
+    transform: scale(1.03);
+}
+
+.food-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+/* Modern Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.6);
+    /* Backdrop oscuro */
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.modal.active {
+    display: flex;
+    animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 950px;
+    position: relative;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    overflow: hidden;
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #9ca3af;
+    z-index: 10;
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.8);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-modal:hover {
+    color: var(--text-main);
+    background: white;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    display: flex;
+    align-items: stretch;
+}
+
+/* Modal Column A (Visual) */
+.column-a {
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    width: 40%;
+    border-right: 1px solid #e2e8f0;
+}
+
+.column-a img {
+    border-radius: 50%;
+    width: 240px;
+    height: 240px;
+    object-fit: cover;
+    box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.3);
+    margin-bottom: 2rem;
+    border: 6px solid white;
+}
+
+.column-a h2 {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    color: var(--text-main);
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Modal Column B (Interaction) */
+.column-b {
+    padding: 3rem;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.input-group {
+    margin-bottom: 3rem;
+    text-align: center;
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid #f3f4f6;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+}
+
+.input-group input {
+    width: 100%;
+    max-width: 200px;
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: 700;
+    color: var(--primary-color);
+    transition: all 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+/* Nutritional Grid */
+.nutritional-info h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.info-item {
+    background: #f8fafc;
+    padding: 1.2rem 1rem;
+    border-radius: 16px;
+    text-align: center;
+    transition: transform 0.2s;
+    border: 1px solid transparent;
+}
+
+.info-item:hover {
+    transform: translateY(-3px);
+    background: white;
+    border-color: #e2e8f0;
+    box-shadow: var(--shadow-sm);
+}
+
+.info-item .label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.info-item .value {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+/* Highlight key nutrients with colors */
+.info-item:nth-child(4) .value {
+    color: #ef4444;
+}
+
+/* Potasio - Warning color */
+.info-item:nth-child(5) .value {
+    color: #f59e0b;
+}
+
+/* Fosforo */
+.info-item:nth-child(6) .value {
+    color: #8b5cf6;
+}
+
+/* Sal */
+
+/* Animations */
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@media (max-width: 850px) {
+    .modal-body {
+        flex-direction: column;
+    }
+
+    .column-a,
+    .column-b {
+        width: 100%;
+    }
+
+    .column-a {
+        padding: 2rem;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .column-a img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .header-content h1 {
+        font-size: 2.5rem;
+    }
 }
