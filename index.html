@@ -11,88 +11,101 @@
 
 <body>
     <header class="main-header">
-        <div class="header-content">
-            <h1>Alimentación Renal Inteligente</h1>
-            <p class="subtitle">Tu compañera digital para el control nutricional avanzado</p>
-            <p class="description">
-                Bienvenido a la herramienta definitiva para pacientes renales.
-                Consulta al instante los valores críticos de tus alimentos (Potasio, Fósforo, Proteínas)
-                y toma decisiones informadas para cuidar tu salud renal con precisión milimétrica.
-            </p>
+        <div class="language-switcher">
+            <select id="lang-select">
+                <option value="es">🇪🇸 ES</option>
+                <option value="en">🇺🇸 EN</option>
+                <option value="de">🇩🇪 DE</option>
+                <option value="fr">🇫🇷 FR</option>
+                <option value="pt">🇵🇹 PT</option>
+                <option value="ja">🇯🇵 JA</option>
+            </select>
         </div>
-        <div class="search-container">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" id="search-input" placeholder="¿Qué vas a comer hoy? (Ej: Manzana, Pollo...)">
-        </div>
-    </header>
 
-    <main class="container">
-        <div id="food-grid" class="food-grid">
-            <!-- Los alimentos se generarán aquí dinámicamente -->
-        </div>
-    </main>
+        <header class="main-header">
+            <div class="header-content">
+                <h1 data-i18n="title">Alimentación Renal Inteligente</h1>
+                <p class="subtitle" data-i18n="subtitle">Tu compañera digital para el control nutricional avanzado</p>
+                <p class="description" data-i18n="description">
+                    Bienvenido a la herramienta definitiva para pacientes renales.
+                    Consulta al instante los valores críticos de tus alimentos (Potasio, Fósforo, Proteínas)
+                    y toma decisiones informadas para cuidar tu salud renal con precisión milimétrica.
+                </p>
+            </div>
+            <div class="search-container">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="search-input" data-i18n-placeholder="searchPlaceholder"
+                    placeholder="¿Qué vas a comer hoy? (Ej: Manzana, Pollo...)">
+            </div>
+        </header>
 
-    <!-- Modal de Detalles -->
-    <div id="food-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div class="modal-body">
-                <!-- Parte A: Visual -->
-                <div class="modal-column column-a">
-                    <img id="modal-img" src="" alt="Alimento">
-                    <h2 id="modal-name">Nombre del Alimento</h2>
-                </div>
+        <main class="container">
+            <div id="food-grid" class="food-grid">
+                <!-- Los alimentos se generarán aquí dinámicamente -->
+            </div>
+        </main>
 
-                <!-- Parte B: Datos y Cálculo -->
-                <div class="modal-column column-b">
-                    <div class="input-group">
-                        <label for="grams-input">Cantidad (gramos)</label>
-                        <input type="number" id="grams-input" placeholder="Ej: 100" min="0">
+        <!-- Modal de Detalles -->
+        <div id="food-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <div class="modal-body">
+                    <!-- Parte A: Visual -->
+                    <div class="modal-column column-a">
+                        <img id="modal-img" src="" alt="Alimento">
+                        <h2 id="modal-name">Nombre del Alimento</h2>
                     </div>
 
-                    <div class="nutritional-info">
-                        <h3>Información Nutricional</h3>
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <span class="label">Proteínas</span>
-                                <span class="value" id="val-protein">0g</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Azúcares</span>
-                                <span class="value" id="val-sugar">0g</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Grasas</span>
-                                <span class="value" id="val-fat">0g</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Potasio</span>
-                                <span class="value" id="val-potassium">0mg</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Fósforo</span>
-                                <span class="value" id="val-phosphorus">0mg</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Sal</span>
-                                <span class="value" id="val-salt">0g</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Calcio</span>
-                                <span class="value" id="val-calcium">0mg</span>
+                    <!-- Parte B: Datos y Cálculo -->
+                    <div class="modal-column column-b">
+                        <div class="input-group">
+                            <label for="grams-input" data-i18n="amountLabel">Cantidad (gramos)</label>
+                            <input type="number" id="grams-input" placeholder="100" min="0">
+                        </div>
+
+                        <div class="nutritional-info">
+                            <h3 data-i18n="nutritionalInfo">Información Nutricional</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="label" data-i18n="protein">Proteínas</span>
+                                    <span class="value" id="val-protein">0g</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label" data-i18n="sugar">Azúcares</span>
+                                    <span class="value" id="val-sugar">0g</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label" data-i18n="fat">Grasas</span>
+                                    <span class="value" id="val-fat">0g</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label" data-i18n="potassium">Potasio</span>
+                                    <span class="value" id="val-potassium">0mg</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label" data-i18n="phosphorus">Fósforo</span>
+                                    <span class="value" id="val-phosphorus">0mg</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label" data-i18n="salt">Sal</span>
+                                    <span class="value" id="val-salt">0g</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label" data-i18n="calcium">Calcio</span>
+                                    <span class="value" id="val-calcium">0mg</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script src="script.js"></script>
+        <script src="script.js"></script>
 </body>
 
 </html>

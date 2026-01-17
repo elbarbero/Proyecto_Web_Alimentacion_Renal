@@ -34,6 +34,14 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                 foods.append({
                     "id": row["id"],
                     "name": row["name"],
+                    "names": {
+                        "es": row["name"],
+                        "en": row["name_en"],
+                        "de": row["name_de"],
+                        "fr": row["name_fr"],
+                        "pt": row["name_pt"],
+                        "ja": row["name_ja"]
+                    },
                     "image": row["image_url"],
                     "nutrients": {
                         "protein": row["protein"],
