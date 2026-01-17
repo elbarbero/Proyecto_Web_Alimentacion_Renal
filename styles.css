@@ -20,67 +20,6 @@
     --radius-xl: 32px;
 }
 
-/* Header + Top Row */
-.header-top-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    margin-bottom: 0.5rem;
-}
-
-/* Language Switcher - Ahora relativo al contenedor */
-.language-switcher {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-/* Ajuste Responsive: En movil baja */
-@media (max-width: 768px) {
-    .header-top-row {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .language-switcher {
-        position: static;
-        transform: none;
-        order: -1;
-        /* Poner encima del título en móvil */
-        margin-bottom: 1rem;
-    }
-}
-
-#lang-select {
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(10px);
-    font-family: var(--font-body);
-    font-weight: 600;
-    color: var(--text-main);
-    cursor: pointer;
-    outline: none;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-sm);
-    appearance: none;
-    /* Hide default arrow in some browsers for cleaner look, or style it */
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 0.7rem center;
-    background-size: 1em;
-    padding-right: 2.5rem;
-}
-
-#lang-select:hover {
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
-}
-
 /* Base & Typography */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;700;800&display=swap');
 
@@ -106,11 +45,90 @@ body {
 .main-header {
     text-align: center;
     padding: 4rem 1.5rem 2rem;
-    max-width: 900px;
+    max-width: 1400px;
     margin: 0 auto;
 }
 
-/* Original h1 block removed/merged */
+/* Title Row Layout - Flexbox for Alignment */
+.title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    position: relative;
+    width: 100%;
+}
+
+.title-row .spacer {
+    flex: 1;
+    /* Pushes title to center from left */
+}
+
+.header-content h1 {
+    flex: 2;
+    /* Centered Title */
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0;
+    letter-spacing: -1px;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-align: center;
+}
+
+/* Language Switcher - Right Aligned */
+.language-switcher {
+    flex: 1;
+    /* Pushes title to center from right */
+    display: flex;
+    justify-content: flex-end;
+    /* Align right */
+    position: relative;
+}
+
+/* Enhanced Selector Style */
+#lang-select {
+    padding: 0.6rem 2.8rem 0.6rem 1.2rem;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    font-family: var(--font-heading);
+    /* Match the title font */
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    appearance: none;
+    -webkit-appearance: none;
+    font-size: 0.95rem;
+
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+}
+
+#lang-select:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-color);
+}
+
+#lang-select:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    border-color: var(--primary-color);
+    background: white;
+}
 
 .subtitle {
     font-size: 1.25rem;
@@ -179,15 +197,16 @@ body {
 
 /* Grid Layout */
 .container {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 2rem;
 }
 
 .food-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2.5rem;
+    /* Reduced min-width to 180px to force 5 columns */
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
 }
 
 /* Modern Food Card */
@@ -213,10 +232,11 @@ body {
 
 .food-card img {
     width: 100%;
-    height: 220px;
+    height: 160px;
+    /* Reduced height slightly due to narrower width */
     object-fit: cover;
-    border-radius: var(--radius-lg);
-    margin-bottom: 1.2rem;
+    border-radius: 16px;
+    margin-bottom: 1rem;
     transition: transform 0.5s ease;
     box-shadow: var(--shadow-sm);
 }
@@ -227,10 +247,11 @@ body {
 
 .food-card h3 {
     font-family: var(--font-heading);
-    font-size: 1.4rem;
+    font-size: 1.15rem;
+    /* Slightly smaller text for grid density */
     font-weight: 700;
     color: var(--text-main);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
 }
 
 /* Modern Modal */
@@ -243,7 +264,6 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(15, 23, 42, 0.6);
-    /* Backdrop oscuro */
     backdrop-filter: blur(8px);
     justify-content: center;
     align-items: center;
@@ -422,22 +442,18 @@ body {
     color: var(--text-main);
 }
 
-/* Highlight key nutrients with colors */
+/* Highlight key nutrients */
 .info-item:nth-child(4) .value {
     color: #ef4444;
 }
 
-/* Potasio - Warning color */
 .info-item:nth-child(5) .value {
     color: #f59e0b;
 }
 
-/* Fosforo */
 .info-item:nth-child(6) .value {
     color: #8b5cf6;
 }
-
-/* Sal */
 
 /* Animations */
 @keyframes modalPop {
@@ -452,7 +468,30 @@ body {
     }
 }
 
-@media (max-width: 850px) {
+/* Mobile Responsive */
+@media (max-width: 900px) {
+    .title-row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .header-content h1 {
+        white-space: normal;
+        font-size: 2.5rem;
+        order: 1;
+        flex: auto;
+    }
+
+    .language-switcher {
+        order: 0;
+        justify-content: center;
+        flex: auto;
+    }
+
+    .title-row .spacer {
+        display: none;
+    }
+
     .modal-body {
         flex-direction: column;
     }
@@ -475,9 +514,5 @@ body {
 
     .info-grid {
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    .header-content h1 {
-        font-size: 2.5rem;
     }
 }
