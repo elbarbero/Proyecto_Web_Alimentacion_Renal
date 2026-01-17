@@ -1,12 +1,9 @@
 :root {
     --primary-color: #3b82f6;
-    /* Azul vibrante moderno */
     --primary-dark: #2563eb;
     --accent-color: #10b981;
-    /* Verde esmeralda para salud */
     --bg-color: #f3f4f6;
     --card-bg: rgba(255, 255, 255, 0.85);
-    /* Glass effect base */
     --text-main: #1f2937;
     --text-muted: #6b7280;
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -20,7 +17,6 @@
     --radius-xl: 32px;
 }
 
-/* Base & Typography */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;700;800&display=swap');
 
 * {
@@ -32,16 +28,13 @@
 body {
     font-family: var(--font-body);
     background-color: var(--bg-color);
-    background-image:
-        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+    background-image: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
     background-attachment: fixed;
     color: var(--text-main);
     line-height: 1.6;
     min-height: 100vh;
 }
 
-/* Header Section */
 .main-header {
     text-align: center;
     padding: 4rem 1.5rem 2rem;
@@ -49,7 +42,7 @@ body {
     margin: 0 auto;
 }
 
-/* Title Row Layout - Flexbox for Alignment */
+/* Title Row */
 .title-row {
     display: flex;
     justify-content: space-between;
@@ -61,12 +54,10 @@ body {
 
 .title-row .spacer {
     flex: 1;
-    /* Pushes title to center from left */
 }
 
 .header-content h1 {
     flex: 2;
-    /* Centered Title */
     font-family: var(--font-heading);
     font-size: 3.5rem;
     font-weight: 800;
@@ -81,53 +72,100 @@ body {
     text-align: center;
 }
 
-/* Language Switcher - Right Aligned */
-.language-switcher {
+/* Custom Language Dropdown */
+.custom-select-wrapper {
     flex: 1;
-    /* Pushes title to center from right */
     display: flex;
     justify-content: flex-end;
-    /* Align right */
     position: relative;
+    z-index: 100;
 }
 
-/* Enhanced Selector Style */
-#lang-select {
-    padding: 0.6rem 2.8rem 0.6rem 1.2rem;
-    border-radius: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.6);
+.custom-select {
+    position: relative;
+    font-family: var(--font-heading);
+    width: 140px;
+}
+
+.select-selected {
     background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 50px;
+    padding: 0.6rem 1.2rem;
+    color: var(--text-main);
+    font-weight: 600;
+    cursor: pointer;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    font-family: var(--font-heading);
-    /* Match the title font */
-    font-weight: 600;
-    color: var(--text-main);
-    cursor: pointer;
-    outline: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    appearance: none;
-    -webkit-appearance: none;
-    font-size: 0.95rem;
+}
 
+.select-selected:after {
+    content: "";
+    width: 0.8em;
+    height: 0.8em;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1em;
+    background-position: center;
+    background-size: contain;
+    transition: transform 0.3s;
 }
 
-#lang-select:hover {
-    background: rgba(255, 255, 255, 0.9);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    border-color: var(--primary-color);
+.select-selected.select-arrow-active:after {
+    transform: rotate(180deg);
 }
 
-#lang-select:focus {
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-    border-color: var(--primary-color);
+.select-selected.select-arrow-active {
     background: white;
+    border-color: var(--primary-color);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.select-items {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.95);
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    padding: 0.2rem;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 4px;
+}
+
+.select-hide {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    pointer-events: none;
+}
+
+.select-items div {
+    color: var(--text-main);
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background 0.2s;
+    font-weight: 500;
+}
+
+.select-items div:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--primary-color);
 }
 
 .subtitle {
@@ -145,7 +183,7 @@ body {
     line-height: 1.7;
 }
 
-/* Modern Search Bar */
+/* Search Bar */
 .search-container {
     margin-top: 2rem;
     position: relative;
@@ -195,7 +233,7 @@ body {
     color: var(--primary-color);
 }
 
-/* Grid Layout */
+/* Grid */
 .container {
     max-width: 1600px;
     margin: 0 auto;
@@ -204,12 +242,11 @@ body {
 
 .food-grid {
     display: grid;
-    /* Reduced min-width to 180px to force 5 columns */
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 1.5rem;
 }
 
-/* Modern Food Card */
+/* Cards */
 .food-card {
     background: var(--card-bg);
     border-radius: var(--radius-lg);
@@ -233,7 +270,6 @@ body {
 .food-card img {
     width: 100%;
     height: 160px;
-    /* Reduced height slightly due to narrower width */
     object-fit: cover;
     border-radius: 16px;
     margin-bottom: 1rem;
@@ -248,13 +284,12 @@ body {
 .food-card h3 {
     font-family: var(--font-heading);
     font-size: 1.15rem;
-    /* Slightly smaller text for grid density */
     font-weight: 700;
     color: var(--text-main);
     margin-bottom: 0.2rem;
 }
 
-/* Modern Modal */
+/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -315,7 +350,6 @@ body {
     align-items: stretch;
 }
 
-/* Modal Column A (Visual) */
 .column-a {
     background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
     display: flex;
@@ -345,7 +379,6 @@ body {
     line-height: 1.2;
 }
 
-/* Modal Column B (Interaction) */
 .column-b {
     padding: 3rem;
     width: 60%;
@@ -393,7 +426,6 @@ body {
     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
-/* Nutritional Grid */
 .nutritional-info h3 {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -442,7 +474,6 @@ body {
     color: var(--text-main);
 }
 
-/* Highlight key nutrients */
 .info-item:nth-child(4) .value {
     color: #ef4444;
 }
@@ -455,7 +486,6 @@ body {
     color: #8b5cf6;
 }
 
-/* Animations */
 @keyframes modalPop {
     from {
         opacity: 0;
@@ -468,7 +498,6 @@ body {
     }
 }
 
-/* Mobile Responsive */
 @media (max-width: 900px) {
     .title-row {
         flex-direction: column;

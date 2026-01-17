@@ -91,15 +91,19 @@ const translations = {
     }
 };
 
-// Elementos del DOM
-const langSelect = document.getElementById('lang-select');
+// Global State
+let currentFood = null;
+let foodDatabase = [];
+let currentLang = 'es';
+
+// DOM Elements
 const gridContainer = document.getElementById('food-grid');
 const modal = document.getElementById('food-modal');
 const closeModalBtn = document.querySelector('.close-modal');
 const gramsInput = document.getElementById('grams-input');
 const searchInput = document.getElementById('search-input');
 
-// Elementos del Modal para actualizar
+// Modal Elements
 const mImg = document.getElementById('modal-img');
 const mName = document.getElementById('modal-name');
 const valProtein = document.getElementById('val-protein');
@@ -110,11 +114,9 @@ const valPhosphorus = document.getElementById('val-phosphorus');
 const valSalt = document.getElementById('val-salt');
 const valCalcium = document.getElementById('val-calcium');
 
-let currentFood = null;
-let foodDatabase = []; // Ahora se llenará desde la API
-
-// Change Language Function
+// Language Functions
 function updateLanguage(lang) {
+    currentLang = lang;
     const t = translations[lang];
     if (!t) return;
 
@@ -129,21 +131,83 @@ function updateLanguage(lang) {
         const key = el.getAttribute('data-i18n-placeholder');
         if (t[key]) el.placeholder = t[key];
     });
+
+    // Update Grid if loaded
+    if (foodDatabase.length > 0) {
+        // preserve filter if any
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const filteredFoods = foodDatabase.filter(food =>
+            getFoodName(food).toLowerCase().includes(searchTerm)
+        );
+        renderGrid(filteredFoods);
+    }
 }
 
-// Inicialización
+function getFoodName(food) {
+    if (food.names && food.names[currentLang]) {
+        return food.names[currentLang];
+    }
+    return food.name;
+}
+
+// Custom Select Logic
+function setupCustomSelect() {
+    const selected = document.querySelector('.select-selected');
+    const items = document.querySelector('.select-items');
+    const options = document.querySelectorAll('.select-items div');
+
+    // Toggle dropdown
+    selected.addEventListener('click', function (e) {
+        e.stopPropagation();
+        this.classList.toggle('select-arrow-active');
+        items.classList.toggle('select-hide');
+    });
+
+    // Handle option click
+    options.forEach(option => {
+        option.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const lang = this.getAttribute('data-value');
+            const text = this.textContent;
+
+            // Update UI
+            selected.textContent = text;
+
+            // Close dropdown
+            items.classList.add('select-hide');
+            selected.classList.remove('select-arrow-active');
+
+            // Update app
+            updateLanguage(lang);
+        });
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', function (e) {
+        if (!selected.contains(e.target) && !items.contains(e.target)) {
+            items.classList.add('select-hide');
+            selected.classList.remove('select-arrow-active');
+        }
+    });
+}
+
+// Initialization
 async function init() {
     try {
         const response = await fetch('/api/foods');
         if (!response.ok) throw new Error('Error al cargar datos');
         foodDatabase = await response.json();
-        renderGrid(foodDatabase); // Render inicial con todo
-        setupEventListeners();
 
-        // Set initial language based on selector (default es)
-        if (langSelect) {
-            updateLanguage(langSelect.value);
-        }
+        // Setup Logic
+        setupEventListeners();
+        setupCustomSelect();
+
+        // Default render
+        renderGrid(foodDatabase);
+
+        // Initial Lang
+        updateLanguage('es');
+
     } catch (error) {
         console.error("Error cargando alimentos:", error);
         if (gridContainer) {
@@ -152,10 +216,9 @@ async function init() {
     }
 }
 
-// Renderizar lista de alimentos (acepta lista filtrada)
+// Render Logic
 function renderGrid(foodsToRender) {
     gridContainer.innerHTML = '';
-
     if (foodsToRender.length === 0) {
         gridContainer.innerHTML = '<p style="text-align: center; width: 100%; color: #888;">No se encontraron alimentos.</p>';
         return;
@@ -165,78 +228,50 @@ function renderGrid(foodsToRender) {
         const card = document.createElement('div');
         card.className = 'food-card';
         card.innerHTML = `
-            <img src="${food.image}" alt="${food.name}">
-            <h3>${food.name}</h3>
+            <img src="${food.image}" alt="${getFoodName(food)}">
+            <h3>${getFoodName(food)}</h3>
         `;
         card.addEventListener('click', () => openModal(food));
         gridContainer.appendChild(card);
     });
 }
 
-// Abrir modal con alimento seleccionado
 function openModal(food) {
     currentFood = food;
-
-    // Resetear input
     gramsInput.value = '';
-
-    // Cargar datos estáticos parte A
     mImg.src = food.image;
-    mName.textContent = food.name;
-
-    // Resetear valores parte B
+    mName.textContent = getFoodName(food);
     updateNutrients(0);
-
     modal.classList.add('active');
     gramsInput.focus();
 }
 
-// Cerrar modal
 function closeModal() {
     modal.classList.remove('active');
     currentFood = null;
 }
 
-// Configurar listeners
 function setupEventListeners() {
     closeModalBtn.addEventListener('click', closeModal);
+    window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-    // Cerrar si clic fuera del contenido
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal();
-        }
-    });
-
-    // Calcular al escribir
     gramsInput.addEventListener('input', (e) => {
-        const grams = parseFloat(e.target.value) || 0;
-        updateNutrients(grams);
+        updateNutrients(parseFloat(e.target.value) || 0);
     });
 
-    // Buscador
     searchInput.addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase().trim();
         const filteredFoods = foodDatabase.filter(food =>
-            food.name.toLowerCase().includes(searchTerm)
+            getFoodName(food).toLowerCase().includes(searchTerm)
         );
         renderGrid(filteredFoods);
     });
-
-    // Cambio de idioma
-    langSelect.addEventListener('change', (e) => {
-        updateLanguage(e.target.value);
-    });
 }
 
-// Lógica de cálculo
 function updateNutrients(grams) {
     if (!currentFood) return;
-
     const ratio = grams / 100;
-
     const n = currentFood.nutrients;
-
     valProtein.textContent = (n.protein * ratio).toFixed(1) + 'g';
     valSugar.textContent = (n.sugar * ratio).toFixed(1) + 'g';
     valFat.textContent = (n.fat * ratio).toFixed(1) + 'g';
@@ -246,5 +281,4 @@ function updateNutrients(grams) {
     valCalcium.textContent = (n.calcium * ratio).toFixed(0) + 'mg';
 }
 
-// Arrancar app
 init();
