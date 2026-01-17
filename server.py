@@ -41,7 +41,8 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                         "fat": row["fat"],
                         "potassium": row["potassium"],
                         "phosphorus": row["phosphorus"],
-                        "salt": row["salt"]
+                        "salt": row["salt"],
+                        "calcium": row["calcium"]
                     }
                 })
             conn.close()

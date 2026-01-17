@@ -14,6 +14,7 @@ const valFat = document.getElementById('val-fat');
 const valPotassium = document.getElementById('val-potassium');
 const valPhosphorus = document.getElementById('val-phosphorus');
 const valSalt = document.getElementById('val-salt');
+const valCalcium = document.getElementById('val-calcium');
 
 let currentFood = null;
 let foodDatabase = []; // Ahora se llenará desde la API
@@ -118,6 +119,7 @@ function updateNutrients(grams) {
     valPotassium.textContent = (n.potassium * ratio).toFixed(0) + 'mg';
     valPhosphorus.textContent = (n.phosphorus * ratio).toFixed(0) + 'mg';
     valSalt.textContent = (n.salt * ratio).toFixed(2) + 'g';
+    valCalcium.textContent = (n.calcium * ratio).toFixed(0) + 'mg';
 }
 
 // Arrancar app
