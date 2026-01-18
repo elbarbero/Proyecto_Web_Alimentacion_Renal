@@ -168,10 +168,9 @@ function setupCustomSelect() {
         option.addEventListener('click', function (e) {
             e.stopPropagation();
             const lang = this.getAttribute('data-value');
-            const text = this.textContent;
 
-            // Update UI
-            selected.textContent = text;
+            // Update UI (Uses innerHTML to keep the flag image)
+            selected.innerHTML = this.innerHTML;
 
             // Close dropdown
             items.classList.add('select-hide');

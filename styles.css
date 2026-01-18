@@ -84,24 +84,38 @@ body {
 .custom-select {
     position: relative;
     font-family: var(--font-heading);
-    width: 140px;
+    width: 180px;
 }
+
+/* Increased width for full names */
 
 .select-selected {
     background: rgba(255, 255, 255, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: 50px;
-    padding: 0.6rem 1.2rem;
+    padding: 0.5rem 1rem;
+    /* Adjusted padding */
     color: var(--text-main);
     font-weight: 600;
     cursor: pointer;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    /* Center the cluster [Flag Text Arrow] */
     align-items: center;
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    gap: 8px;
+}
+
+.flag-img {
+    width: 20px;
+    height: auto;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    object-fit: contain;
+    /* Margin removed, using gap */
 }
 
 .select-selected:after {
@@ -113,6 +127,7 @@ body {
     background-position: center;
     background-size: contain;
     transition: transform 0.3s;
+    /* margin-left: auto; REMOVED to allow centering */
 }
 
 .select-selected.select-arrow-active:after {
@@ -120,31 +135,31 @@ body {
 }
 
 .select-selected.select-arrow-active {
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
     border-color: var(--primary-color);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .select-items {
     position: absolute;
     background-color: rgba(255, 255, 255, 0.95);
-    top: 100%;
+    top: 110%;
+    /* Floating with gap */
     left: 0;
     right: 0;
     z-index: 99;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-radius: 20px;
+    /* Fully rounded card */
     border: 1px solid rgba(255, 255, 255, 0.5);
     box-shadow: var(--shadow-xl);
     overflow: hidden;
     backdrop-filter: blur(20px);
-    padding: 0.2rem;
+    padding: 0.5rem;
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    margin-top: 4px;
+    margin-top: 5px;
 }
 
 .select-hide {
@@ -156,11 +171,19 @@ body {
 
 .select-items div {
     color: var(--text-main);
-    padding: 0.8rem 1rem;
+    padding: 0.8rem 1rem 0.8rem 2.8rem;
+    /* Large left padding to center the aligned block */
     cursor: pointer;
     border-radius: 12px;
     transition: background 0.2s;
     font-weight: 500;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* Aligns flags vertically */
+    gap: 12px;
+    /* Increased gap for better look */
 }
 
 .select-items div:hover {
