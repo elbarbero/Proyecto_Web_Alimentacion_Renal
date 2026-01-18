@@ -12,7 +12,12 @@ const translations = {
         potassium: "Potasio",
         phosphorus: "Fósforo",
         salt: "Sal",
-        calcium: "Calcio"
+        calcium: "Calcio",
+        feedbackTitle: "Enviar sugerencias",
+        feedbackDesc: "Ayúdanos a mejorar. ¿Qué funcionalidad te gustaría ver?",
+        feedbackPlaceholder: "Escribe tu sugerencia aquí...",
+        cancel: "Cancelar",
+        send: "Enviar"
     },
     en: {
         title: "Smart Renal Diet",
@@ -27,7 +32,12 @@ const translations = {
         potassium: "Potassium",
         phosphorus: "Phosphorus",
         salt: "Salt",
-        calcium: "Calcium"
+        calcium: "Calcium",
+        feedbackTitle: "Send Feedback",
+        feedbackDesc: "Help us improve. What features would you like to see?",
+        feedbackPlaceholder: "Write your suggestion here...",
+        cancel: "Cancel",
+        send: "Send"
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -42,7 +52,12 @@ const translations = {
         potassium: "Kalium",
         phosphorus: "Phosphor",
         salt: "Salz",
-        calcium: "Kalzium"
+        calcium: "Kalzium",
+        feedbackTitle: "Feedback senden",
+        feedbackDesc: "Helfen Sie uns, besser zu werden. Welche Funktionen wünschen Sie sich?",
+        feedbackPlaceholder: "Schreiben Sie hier Ihren Vorschlag...",
+        cancel: "Abbrechen",
+        send: "Senden"
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -57,7 +72,12 @@ const translations = {
         potassium: "Potassium",
         phosphorus: "Phosphore",
         salt: "Sel",
-        calcium: "Calcium"
+        calcium: "Calcium",
+        feedbackTitle: "Envoyer des commentaires",
+        feedbackDesc: "Aidez-nous à nous améliorer. Quelles fonctionnalités aimeriez-vous voir ?",
+        feedbackPlaceholder: "Écrivez votre suggestion ici...",
+        cancel: "Annuler",
+        send: "Envoyer"
     },
     pt: {
         title: "Dieta Renal Inteligente",
@@ -72,7 +92,12 @@ const translations = {
         potassium: "Potássio",
         phosphorus: "Fósforo",
         salt: "Sal",
-        calcium: "Cálcio"
+        calcium: "Cálcio",
+        feedbackTitle: "Enviar sugestões",
+        feedbackDesc: "Ajude-nos a melhorar. Que funcionalidade gostaria de ver?",
+        feedbackPlaceholder: "Escreva sua sugestão aqui...",
+        cancel: "Cancelar",
+        send: "Enviar"
     },
     ja: {
         title: "スマート腎臓食",
@@ -87,7 +112,12 @@ const translations = {
         potassium: "カリウム",
         phosphorus: "リン",
         salt: "塩分",
-        calcium: "カルシウム"
+        calcium: "カルシウム",
+        feedbackTitle: "提案を送る",
+        feedbackDesc: "改善にご協力ください。どのような機能が必要ですか？",
+        feedbackPlaceholder: "ここに提案を書いてください...",
+        cancel: "キャンセル",
+        send: "送信"
     }
 };
 
@@ -102,6 +132,14 @@ const modal = document.getElementById('food-modal');
 const closeModalBtn = document.querySelector('.close-modal');
 const gramsInput = document.getElementById('grams-input');
 const searchInput = document.getElementById('search-input');
+
+// Feedback Elements
+const feedbackBtn = document.getElementById('feedback-btn');
+const feedbackModal = document.getElementById('feedback-modal');
+const closeFeedbackBtn = document.getElementById('close-feedback');
+const cancelFeedbackBtn = document.getElementById('cancel-feedback');
+const sendFeedbackBtn = document.getElementById('send-feedback');
+const feedbackText = document.getElementById('feedback-text');
 
 // Modal Elements
 const mImg = document.getElementById('modal-img');
@@ -250,9 +288,66 @@ function closeModal() {
     currentFood = null;
 }
 
+function openFeedback() {
+    feedbackModal.classList.add('active');
+    feedbackText.focus();
+}
+
+function closeFeedback() {
+    feedbackModal.classList.remove('active');
+}
+
+async function sendFeedback() {
+    const text = feedbackText.value.trim();
+    if (!text) return;
+
+    // Visual feedback immediately
+    const originalText = sendFeedbackBtn.textContent;
+    sendFeedbackBtn.textContent = "...";
+
+    try {
+        const response = await fetch('/api/feedback', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: text })
+        });
+
+        if (response.ok) {
+            console.log("Feedback enviado servidor");
+
+            // Success State
+            sendFeedbackBtn.textContent = (currentLang === 'es' ? '¡Enviado!' : 'Sent!');
+            sendFeedbackBtn.style.background = '#10b981'; // Green
+
+            setTimeout(() => {
+                feedbackText.value = '';
+                closeFeedback();
+                // Reset button style
+                setTimeout(() => {
+                    sendFeedbackBtn.textContent = translations[currentLang].send;
+                    sendFeedbackBtn.style.background = '';
+                }, 500);
+            }, 1000);
+        } else {
+            throw new Error('Server error');
+        }
+    } catch (error) {
+        console.error("Error enviando feedback:", error);
+        sendFeedbackBtn.textContent = "Error";
+        setTimeout(() => {
+            sendFeedbackBtn.textContent = translations[currentLang].send;
+        }, 2000);
+    }
+}
+
 function setupEventListeners() {
     closeModalBtn.addEventListener('click', closeModal);
-    window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+        if (e.target === feedbackModal) closeFeedback();
+    });
 
     gramsInput.addEventListener('input', (e) => {
         updateNutrients(parseFloat(e.target.value) || 0);
@@ -265,6 +360,12 @@ function setupEventListeners() {
         );
         renderGrid(filteredFoods);
     });
+
+    // Feedback Listeners
+    feedbackBtn.addEventListener('click', openFeedback);
+    closeFeedbackBtn.addEventListener('click', closeFeedback);
+    cancelFeedbackBtn.addEventListener('click', closeFeedback);
+    sendFeedbackBtn.addEventListener('click', sendFeedback);
 }
 
 function updateNutrients(grams) {
