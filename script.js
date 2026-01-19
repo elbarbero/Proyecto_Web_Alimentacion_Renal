@@ -381,4 +381,143 @@ function updateNutrients(grams) {
     valCalcium.textContent = (n.calcium * ratio).toFixed(0) + 'mg';
 }
 
+// --- Auth Logic ---
+const authModal = document.getElementById('auth-modal');
+const closeAuthBtn = document.getElementById('close-auth');
+const userBtn = document.getElementById('user-btn');
+const authForm = document.getElementById('auth-form');
+const tabLogin = document.getElementById('tab-login');
+const tabRegister = document.getElementById('tab-register');
+const nameGroup = document.getElementById('register-fields');
+const authTitle = document.getElementById('auth-title');
+const authSubmit = document.getElementById('auth-submit');
+const switchRegister = document.getElementById('switch-to-register');
+const authError = document.getElementById('auth-error');
+
+let isRegistering = false;
+
+function setupAuth() {
+    if (!userBtn) return;
+
+    userBtn.addEventListener('click', () => {
+        authModal.classList.add('active');
+    });
+
+    closeAuthBtn.addEventListener('click', () => {
+        authModal.classList.remove('active');
+    });
+
+    tabLogin.addEventListener('click', () => toggleAuthMode(false));
+    tabRegister.addEventListener('click', () => toggleAuthMode(true));
+
+    if (switchRegister) {
+        switchRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleAuthMode(!isRegistering);
+        });
+    }
+
+    authForm.addEventListener('submit', handleAuthSubmit);
+
+    // Check if logged in
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+        const user = JSON.parse(storedUser);
+        console.log("Logged in as:", user.name);
+        // Visual indicator could be added here
+        userBtn.style.color = '#3b82f6';
+        userBtn.style.borderColor = '#3b82f6';
+    }
+}
+
+function toggleAuthMode(register) {
+    isRegistering = register;
+    authError.textContent = '';
+
+    if (isRegistering) {
+        tabLogin.classList.remove('active');
+        tabRegister.classList.add('active');
+        nameGroup.style.display = 'block';
+        // Simple localization for now, ideally use translation keys
+        authTitle.textContent = currentLang === 'en' ? 'Create Account' : 'Crear Cuenta';
+        authSubmit.textContent = currentLang === 'en' ? 'Sign Up' : 'Registrarse';
+        document.getElementById('auth-footer-text').style.display = 'none';
+        document.getElementById('auth-name').required = true;
+    } else {
+        tabRegister.classList.remove('active');
+        tabLogin.classList.add('active');
+        nameGroup.style.display = 'none';
+        authTitle.textContent = currentLang === 'en' ? 'Welcome Back' : 'Bienvenido de nuevo';
+        authSubmit.textContent = currentLang === 'en' ? 'Login' : 'Entrar';
+        document.getElementById('auth-footer-text').style.display = 'block';
+        document.getElementById('auth-name').required = false;
+    }
+}
+
+async function handleAuthSubmit(e) {
+    e.preventDefault();
+    authError.textContent = '';
+    authSubmit.disabled = true;
+
+    const email = document.getElementById('auth-email').value;
+    const password = document.getElementById('auth-password').value;
+    const name = document.getElementById('auth-name').value;
+    const surnames = document.getElementById('auth-surnames').value;
+    const birthdate = document.getElementById('auth-birthdate').value;
+
+    const endpoint = isRegistering ? '/api/register' : '/api/login';
+    const payload = { email, password };
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        authError.textContent = 'Por favor, introduce un email válido.';
+        authSubmit.disabled = false;
+        return;
+    }
+
+    if (isRegistering) {
+        payload.name = name;
+        payload.surnames = surnames;
+        payload.birthdate = birthdate;
+    }
+
+    try {
+        const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            // Success
+            localStorage.setItem('user', JSON.stringify({
+                id: data.userId,
+                name: data.name
+            }));
+            authModal.classList.remove('active');
+            userBtn.style.color = '#3b82f6';
+            userBtn.style.borderColor = '#3b82f6';
+            alert(`Hola ${data.name}!`);
+            authForm.reset();
+        } else {
+            authError.textContent = data.message || 'Error';
+        }
+    } catch (err) {
+        console.error(err);
+        authError.textContent = 'Error de conexión';
+    } finally {
+        authSubmit.disabled = false;
+    }
+}
+
+// Modify init to include setupAuth
+const originalInit = init;
+init = async function () {
+    await originalInit(); // Wait for original init (rendering)
+    setupAuth();
+};
+
 init();

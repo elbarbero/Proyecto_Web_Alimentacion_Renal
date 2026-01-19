@@ -79,6 +79,31 @@ def init_db():
     )
     ''')
 
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL,
+        name TEXT,
+        surnames TEXT,
+        birthdate TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    ''')
+
+    # Migration for existing tables
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN surnames TEXT")
+        print("Migración: Columna 'surnames' añadida.")
+    except sqlite3.OperationalError:
+        pass # Columna ya existe
+
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN birthdate TEXT")
+        print("Migración: Columna 'birthdate' añadida.")
+    except sqlite3.OperationalError:
+        pass # Columna ya existe
+
     cursor.executemany('''
     INSERT INTO foods (id, name, name_en, name_de, name_fr, name_pt, name_ja, image_url, protein, sugar, fat, potassium, phosphorus, salt, calcium)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)

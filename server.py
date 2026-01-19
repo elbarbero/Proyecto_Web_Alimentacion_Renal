@@ -10,6 +10,27 @@ DB_NAME = "renal_diet.db"
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import hashlib
+import binascii
+
+def hash_password(password):
+    """Hash a password for storing."""
+    salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+    pwdhash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'), 
+                                salt, 100000)
+    pwdhash = binascii.hexlify(pwdhash)
+    return (salt + pwdhash).decode('ascii')
+
+def verify_password(stored_password, provided_password):
+    """Verify a stored password against one provided by user"""
+    salt = stored_password[:64]
+    stored_password = stored_password[64:]
+    pwdhash = hashlib.pbkdf2_hmac('sha512', 
+                                  provided_password.encode('utf-8'), 
+                                  salt.encode('ascii'), 
+                                  100000)
+    pwdhash = binascii.hexlify(pwdhash).decode('ascii')
+    return pwdhash == stored_password
 
 # Configuración Email
 # Intenta cargar variables desde .env
@@ -74,6 +95,83 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                 print(f"Error procesando feedback: {e}")
                 self.send_response(500)
                 self.end_headers()
+
+        elif self.path == '/api/register':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                email = data.get('email')
+                password = data.get('password')
+                name = data.get('name')
+                surnames = data.get('surnames', '')
+                birthdate = data.get('birthdate', '')
+
+                if not email or not password:
+                    self.send_response(400)
+                    self.end_headers()
+                    return
+
+                # Check if user exists
+                conn = sqlite3.connect(DB_NAME)
+                cursor = conn.cursor()
+                cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
+                if cursor.fetchone():
+                    self.send_response(409) # Conflict
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"status": "error", "message": "Email already exists"}).encode())
+                    conn.close()
+                    return
+
+                # Create user
+                hashed_pw = hash_password(password)
+                cursor.execute("INSERT INTO users (email, password_hash, name, surnames, birthdate) VALUES (?, ?, ?, ?, ?)", 
+                               (email, hashed_pw, name, surnames, birthdate))
+                conn.commit()
+                user_id = cursor.lastrowid
+                conn.close()
+
+                self.send_response(201)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "success", "userId": user_id, "name": name}).encode())
+
+            except Exception as e:
+                print(f"Error registering user: {e}")
+                self.send_response(500)
+                self.end_headers()
+
+        elif self.path == '/api/login':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                email = data.get('email')
+                password = data.get('password')
+
+                conn = sqlite3.connect(DB_NAME)
+                cursor = conn.cursor()
+                cursor.execute("SELECT id, name, password_hash FROM users WHERE email = ?", (email,))
+                user = cursor.fetchone()
+                conn.close()
+
+                if user and verify_password(user[2], password):
+                    self.send_response(200)
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"status": "success", "userId": user[0], "name": user[1]}).encode())
+                else:
+                    self.send_response(401)
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"status": "error", "message": "Invalid credentials"}).encode())
+
+            except Exception as e:
+                print(f"Error logging in: {e}")
+                self.send_response(500)
+                self.end_headers()
+
         else:
             self.send_error(404, "Endpoint not found")
 
