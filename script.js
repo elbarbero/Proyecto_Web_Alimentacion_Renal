@@ -441,16 +441,25 @@ function toggleAuthMode(register) {
         // Simple localization for now, ideally use translation keys
         authTitle.textContent = currentLang === 'en' ? 'Create Account' : 'Crear Cuenta';
         authSubmit.textContent = currentLang === 'en' ? 'Sign Up' : 'Registrarse';
-        document.getElementById('auth-footer-text').style.display = 'none';
+        const footer = document.getElementById('auth-footer-text');
+        if (footer) footer.style.display = 'none';
+
         document.getElementById('auth-name').required = true;
+        document.getElementById('auth-surnames').required = true;
+        document.getElementById('auth-birthdate').required = true;
     } else {
         tabRegister.classList.remove('active');
         tabLogin.classList.add('active');
         nameGroup.style.display = 'none';
         authTitle.textContent = currentLang === 'en' ? 'Welcome Back' : 'Bienvenido de nuevo';
         authSubmit.textContent = currentLang === 'en' ? 'Login' : 'Entrar';
-        document.getElementById('auth-footer-text').style.display = 'block';
+
+        const footer = document.getElementById('auth-footer-text');
+        if (footer) footer.style.display = 'block';
+
         document.getElementById('auth-name').required = false;
+        document.getElementById('auth-surnames').required = false;
+        document.getElementById('auth-birthdate').required = false;
     }
 }
 
