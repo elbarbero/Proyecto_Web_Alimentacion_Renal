@@ -142,6 +142,51 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(500)
                 self.end_headers()
 
+        elif self.path == '/api/update_profile':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                email = data.get('email')
+                has_insufficiency = data.get('has_insufficiency')
+                treatment_type = data.get('treatment_type')
+                kidney_stage = data.get('kidney_stage')
+
+                if not email:
+                    self.send_response(400)
+                    self.end_headers()
+                    return
+
+                conn = sqlite3.connect(DB_NAME)
+                cursor = conn.cursor()
+                
+                # Update user
+                cursor.execute("""
+                    UPDATE users 
+                    SET has_insufficiency = ?, treatment_type = ?, kidney_stage = ?
+                    WHERE email = ?
+                """, (has_insufficiency, treatment_type, kidney_stage, email))
+                
+                if cursor.rowcount == 0:
+                    conn.close()
+                    self.send_response(404)
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"status": "error", "message": "User not found"}).encode())
+                    return
+
+                conn.commit()
+                conn.close()
+
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "success"}).encode())
+
+            except Exception as e:
+                print(f"Error updating profile: {e}")
+                self.send_response(500)
+                self.end_headers()
+
         elif self.path == '/api/login':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)

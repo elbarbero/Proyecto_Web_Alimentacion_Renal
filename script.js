@@ -42,7 +42,20 @@ const translations = {
         // Validation
         validationEmpty: "Completa este campo",
         validationEmail: "Introduce un email válido",
-        validationDate: "Introduce una fecha válida"
+        validationDate: "Introduce una fecha válida",
+        // Medical Profile
+        medicalProfileTitle: "Perfil Médico",
+        medicalProfileDesc: "Complete su perfil para personalizar su experiencia.",
+        questionInsufficiency: "¿Tiene insuficiencia renal?",
+        yes: "Sí",
+        no: "No",
+        questionTreatment: "Tratamiento",
+        selectOption: "Seleccione una opción",
+        dialysis: "Diálisis",
+        transplant: "Trasplante",
+        erca: "ERCA",
+        questionStage: "Estadio de la enfermedad renal",
+        saveBtn: "Guardar y Continuar"
     },
     en: {
         title: "Smart Renal Diet",
@@ -87,7 +100,20 @@ const translations = {
         // Validation
         validationEmpty: "Please fill out this field",
         validationEmail: "Please enter a valid email",
-        validationDate: "Please enter a valid date"
+        validationDate: "Please enter a valid date",
+        // Medical Profile
+        medicalProfileTitle: "Medical Profile",
+        medicalProfileDesc: "Complete your profile to personalize your experience.",
+        questionInsufficiency: "Do you have kidney failure?",
+        yes: "Yes",
+        no: "No",
+        questionTreatment: "Treatment",
+        selectOption: "Select an option",
+        dialysis: "Dialysis",
+        transplant: "Transplant",
+        erca: "CKD (Advanced)",
+        questionStage: "Kidney Disease Stage",
+        saveBtn: "Save and Continue"
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -132,7 +158,20 @@ const translations = {
         // Validation
         validationEmpty: "Bitte füllen Sie dieses Feld aus",
         validationEmail: "Bitte geben Sie eine gültige E-Mail ein",
-        validationDate: "Bitte geben Sie ein gültiges Datum ein"
+        validationDate: "Bitte geben Sie ein gültiges Datum ein",
+        // Medical Profile
+        medicalProfileTitle: "Medizinisches Profil",
+        medicalProfileDesc: "Vervollständigen Sie Ihr Profil für eine personalisierte Erfahrung.",
+        questionInsufficiency: "Haben Sie Nierenversagen?",
+        yes: "Ja",
+        no: "Nein",
+        questionTreatment: "Behandlung",
+        selectOption: "Wählen Sie eine Option",
+        dialysis: "Dialyse",
+        transplant: "Transplantation",
+        erca: "CKD (Fortgeschritten)",
+        questionStage: "Stadium der Nierenerkrankung",
+        saveBtn: "Speichern und Fortfahren"
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -177,7 +216,20 @@ const translations = {
         // Validation
         validationEmpty: "Veuillez remplir ce champ",
         validationEmail: "Veuillez entrer un email valide",
-        validationDate: "Veuillez entrer une date valide"
+        validationDate: "Veuillez entrer une date valide",
+        // Medical Profile
+        medicalProfileTitle: "Profil Médical",
+        medicalProfileDesc: "Complétez votre profil pour une expérience personnalisée.",
+        questionInsufficiency: "Avez-vous une insuffisance rénale ?",
+        yes: "Oui",
+        no: "Non",
+        questionTreatment: "Traitement",
+        selectOption: "Sélectionnez une option",
+        dialysis: "Dialyse",
+        transplant: "Greffe",
+        erca: "MRC (Avancé)",
+        questionStage: "Stade de la maladie rénale",
+        saveBtn: "Enregistrer et Continuer"
     },
     pt: {
         title: "Dieta Renal Inteligente",
@@ -222,7 +274,20 @@ const translations = {
         // Validation
         validationEmpty: "Preencha este campo",
         validationEmail: "Insira um email válido",
-        validationDate: "Insira uma data válida"
+        validationDate: "Insira uma data válida",
+        // Medical Profile
+        medicalProfileTitle: "Perfil Médico",
+        medicalProfileDesc: "Complete seu perfil para personalizar sua experiência.",
+        questionInsufficiency: "Você tem insuficiência renal?",
+        yes: "Sim",
+        no: "Não",
+        questionTreatment: "Tratamento",
+        selectOption: "Selecione uma opção",
+        dialysis: "Diálise",
+        transplant: "Transplante",
+        erca: "DRC (Avançado)",
+        questionStage: "Estágio da doença renal",
+        saveBtn: "Salvar e Continuar"
     },
     ja: {
         title: "スマート腎臓食",
@@ -277,7 +342,20 @@ const translations = {
         feedbackDesc: "改善にご協力ください。どのような機能が必要ですか？",
         feedbackPlaceholder: "ここに提案を書いてください...",
         cancel: "キャンセル",
-        send: "送信"
+        send: "送信",
+        // Medical Profile
+        medicalProfileTitle: "医療プロフィール",
+        medicalProfileDesc: "体験をパーソナライズするためにプロフィールを完成させてください。",
+        questionInsufficiency: "腎不全ですか？",
+        yes: "はい",
+        no: "いいえ",
+        questionTreatment: "治療",
+        selectOption: "オプションを選択",
+        dialysis: "透析",
+        transplant: "移植",
+        erca: "保存期腎不全",
+        questionStage: "腎臓病のステージ",
+        saveBtn: "保存して続行"
     }
 };
 
@@ -379,44 +457,88 @@ function getFoodName(food) {
     return food.name;
 }
 
-// Custom Select Logic
-function setupCustomSelect() {
-    const selected = document.querySelector('.select-selected');
-    const items = document.querySelector('.select-items');
-    const options = document.querySelectorAll('.select-items div');
+// Custom Select Logic (Generic)
+function setupCustomSelects() {
+    const customSelects = document.querySelectorAll('.custom-select');
 
-    // Toggle dropdown
-    selected.addEventListener('click', function (e) {
-        e.stopPropagation();
-        this.classList.toggle('select-arrow-active');
-        items.classList.toggle('select-hide');
-    });
+    customSelects.forEach(selectContainer => {
+        const selected = selectContainer.querySelector('.select-selected');
+        const items = selectContainer.querySelector('.select-items');
+        const options = selectContainer.querySelectorAll('.select-items div');
+        const hiddenInput = selectContainer.querySelector('input[type="hidden"]'); // For form usage
 
-    // Handle option click
-    options.forEach(option => {
-        option.addEventListener('click', function (e) {
+        // Toggle dropdown
+        selected.addEventListener('click', function (e) {
             e.stopPropagation();
-            const lang = this.getAttribute('data-value');
+            closeAllSelects(this); // Close others
+            this.classList.toggle('select-arrow-active');
+            items.classList.toggle('select-hide');
+        });
 
-            // Update UI (Uses innerHTML to keep the flag image)
-            selected.innerHTML = this.innerHTML;
+        // Handle option click
+        options.forEach(option => {
+            option.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const value = this.getAttribute('data-value');
+                const isLanguage = selectContainer.id === 'language-select';
 
-            // Close dropdown
-            items.classList.add('select-hide');
-            selected.classList.remove('select-arrow-active');
+                // Update UI
+                if (isLanguage) {
+                    // For language, we keep the HTML (img + text)
+                    selected.innerHTML = this.innerHTML;
+                    // Update app language
+                    updateLanguage(value);
+                } else {
+                    // For others (treatment), we act like a select
+                    // Update text (and keep translation key if needed, or just text)
+                    selected.textContent = this.textContent;
+                    // Update hidden input if exists
+                    if (hiddenInput) {
+                        hiddenInput.value = value;
+                    }
 
-            // Update app
-            updateLanguage(lang);
+                    // Specific logic for treatment to ensure i18n key update?
+                    // Actually, if we just set textContent, we lose data-i18n on the selected box if we overwrite it.
+                    // Better approach: Set text, but also update translations if needed.
+                    // For now, simple text replacement is fine, but let's check if we need to persist the key.
+                    // The 'selected' div has `data-i18n="selectOption"` initially.
+                    // When we pick an option, we should probably set the text to the translated value of that option.
+                    // The `updateLanguage` function will try to re-translate `selectOption` if we don't handle this.
+                    // Fix: Remove data-i18n from selected element once a user makes a choice, OR manage it.
+                    selected.removeAttribute('data-i18n');
+                }
+
+                // Close dropdown
+                items.classList.add('select-hide');
+                selected.classList.remove('select-arrow-active');
+            });
         });
     });
 
     // Close when clicking outside
     document.addEventListener('click', function (e) {
-        if (!selected.contains(e.target) && !items.contains(e.target)) {
-            items.classList.add('select-hide');
-            selected.classList.remove('select-arrow-active');
-        }
+        closeAllSelects(null);
     });
+}
+
+function closeAllSelects(elmnt) {
+    /* A function that will close all select boxes in the document,
+    except the current select box: */
+    const items = document.querySelectorAll('.select-items');
+    const selecteds = document.querySelectorAll('.select-selected');
+
+    for (let i = 0; i < selecteds.length; i++) {
+        if (elmnt == selecteds[i]) {
+            continue;
+        }
+        selecteds[i].classList.remove('select-arrow-active');
+    }
+    for (let i = 0; i < items.length; i++) {
+        if (elmnt == items[i].parentElement.querySelector('.select-selected')) {
+            continue;
+        }
+        items[i].classList.add('select-hide');
+    }
 }
 
 // Initialization
@@ -428,7 +550,7 @@ async function init() {
 
         // Setup Logic
         setupEventListeners();
-        setupCustomSelect();
+        setupCustomSelects(); // Updated generic function
 
         // Default render
         renderGrid(foodDatabase);
@@ -702,12 +824,19 @@ async function handleAuthSubmit(e) {
             // Success
             localStorage.setItem('user', JSON.stringify({
                 id: data.userId,
-                name: data.name
+                name: data.name,
+                email: email // Save email for profile update
             }));
             authModal.classList.remove('active');
             userBtn.style.color = '#3b82f6';
             userBtn.style.borderColor = '#3b82f6';
-            alert(`Hola ${data.name}!`);
+
+            if (isRegistering) {
+                const medicalModal = document.getElementById('medical-modal');
+                if (medicalModal) medicalModal.classList.add('active');
+            } else {
+                alert(`Hola ${data.name}!`);
+            }
             authForm.reset();
         } else {
             authError.textContent = data.message || 'Error';
@@ -721,10 +850,68 @@ async function handleAuthSubmit(e) {
 }
 
 // Modify init to include setupAuth
+// --- Medical Profile Logic ---
+function setupMedical() {
+    const medicalForm = document.getElementById('medical-form');
+    if (!medicalForm) return;
+
+    medicalForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const errorMsg = document.getElementById('medical-error');
+        const submitBtn = document.getElementById('save-medical');
+        errorMsg.textContent = '';
+        submitBtn.disabled = true;
+
+        // Get user from local storage
+        const storedUser = localStorage.getItem('user');
+        if (!storedUser) {
+            errorMsg.textContent = 'Error: Usuario no identificado';
+            submitBtn.disabled = false;
+            return;
+        }
+        const user = JSON.parse(storedUser);
+
+        // Gather Data
+        const insufficiencyToggle = document.getElementById('insufficiency-toggle');
+        const insufficiency = insufficiencyToggle && insufficiencyToggle.checked ? '1' : '0';
+
+        const treatment = document.getElementById('treatment-type-hidden').value;
+        const stage = document.querySelector('input[name="kidney_stage"]:checked')?.value;
+
+        try {
+            const res = await fetch('/api/update_profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: user.email,
+                    has_insufficiency: insufficiency,
+                    treatment_type: treatment,
+                    kidney_stage: stage
+                })
+            });
+
+            if (res.ok) {
+                document.getElementById('medical-modal').classList.remove('active');
+                alert(`Perfil actualizado! Bienvenido ${user.name}`);
+            } else {
+                const data = await res.json();
+                errorMsg.textContent = data.message || 'Error al guardar perfil';
+            }
+        } catch (err) {
+            console.error(err);
+            errorMsg.textContent = 'Error de conexión';
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
+}
+
+// Modify init to include setupAuth
 const originalInit = init;
 init = async function () {
     await originalInit(); // Wait for original init (rendering)
     setupAuth();
+    setupMedical();
 };
 
 init();

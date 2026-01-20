@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alimentación Renal</title>
-    <link rel="stylesheet" href="styles_v2.css">
+    <link rel="stylesheet" href="styles.css?v=3">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -37,7 +37,7 @@
                         </svg>
                     </button>
 
-                    <div class="custom-select">
+                    <div class="custom-select" id="language-select">
                         <div class="select-selected">
                             <img src="https://flagcdn.com/w40/es.png" alt="es" class="flag-img"> Español
                         </div>
@@ -206,6 +206,101 @@
 
                     <button type="submit" class="btn-primary btn-block" id="auth-submit"
                         data-i18n="loginBtn">Entrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medical Profile Modal -->
+    <div id="medical-modal" class="modal">
+        <div class="modal-content auth-content" style="max-width: 500px;">
+            <div class="auth-body">
+                <h2 id="medical-title" data-i18n="medicalProfileTitle">Perfil Médico</h2>
+                <p class="auth-subtitle" data-i18n="medicalProfileDesc" style="margin-bottom: 2rem; color: #64748b;">
+                    Complete su perfil para personalizar su experiencia.</p>
+
+                <form id="medical-form">
+                    <!-- Insufficiency (Toggle) -->
+                    <div class="input-group-auth">
+                        <label data-i18n="questionInsufficiency"
+                            style="display: block; margin-bottom: 0.8rem; font-weight: 500;">¿Tiene insuficiencia
+                            renal?</label>
+                        <div class="toggle-container">
+                            <span data-i18n="no" style="font-weight: 600; font-size: 0.9rem;">No</span>
+                            <label class="switch">
+                                <input type="checkbox" id="insufficiency-toggle" name="insufficiency">
+                                <span class="slider"></span>
+                            </label>
+                            <span data-i18n="yes"
+                                style="color: var(--primary-color); font-weight: 600; font-size: 0.9rem;">Sí</span>
+                        </div>
+                    </div>
+
+                    <!-- Treatment -->
+                    <div class="input-group-auth">
+                        <label data-i18n="questionTreatment"
+                            style="display: block; margin-bottom: 0.8rem; font-weight: 500;">Tratamiento</label>
+                        <div class="custom-select auth-custom-select" id="treatment-select">
+                            <input type="hidden" id="treatment-type-hidden">
+                            <div class="select-selected" id="treatment-selected-text" data-i18n="selectOption">
+                                Seleccione una opción</div>
+                            <div class="select-items select-hide">
+                                <div data-value="dialysis" data-i18n="dialysis">Diálisis</div>
+                                <div data-value="transplant" data-i18n="transplant">Trasplante</div>
+                                <div data-value="erca" data-i18n="erca">ERCA</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kidney Stage -->
+                    <div class="input-group-auth">
+                        <label data-i18n="questionStage"
+                            style="display: block; margin-bottom: 0.8rem; font-weight: 500;">Estadio de la enfermedad
+                            renal</label>
+                        <div class="stage-grid">
+                            <!-- Items will be styled with CSS tooltips -->
+                            <label class="stage-card" data-tooltip="TFG ≥ 90">
+                                <input type="radio" name="kidney_stage" value="1">
+                                <div class="stage-content">
+                                    <span class="stage-name">Estadio 1</span>
+                                </div>
+                            </label>
+                            <label class="stage-card" data-tooltip="TFG 60-89">
+                                <input type="radio" name="kidney_stage" value="2">
+                                <div class="stage-content">
+                                    <span class="stage-name">Estadio 2</span>
+                                </div>
+                            </label>
+                            <label class="stage-card" data-tooltip="TFG 45-59">
+                                <input type="radio" name="kidney_stage" value="3a">
+                                <div class="stage-content">
+                                    <span class="stage-name">Estadio 3A</span>
+                                </div>
+                            </label>
+                            <label class="stage-card" data-tooltip="TFG 30-48">
+                                <input type="radio" name="kidney_stage" value="3b">
+                                <div class="stage-content">
+                                    <span class="stage-name">Estadio 3b</span>
+                                </div>
+                            </label>
+                            <label class="stage-card" data-tooltip="TFG 15-29">
+                                <input type="radio" name="kidney_stage" value="4">
+                                <div class="stage-content">
+                                    <span class="stage-name">Estadio 4</span>
+                                </div>
+                            </label>
+                            <label class="stage-card" data-tooltip="TFG < 15">
+                                <input type="radio" name="kidney_stage" value="5">
+                                <div class="stage-content">
+                                    <span class="stage-name">Estadio 5</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="error-msg" id="medical-error"></div>
+                    <button type="submit" id="save-medical" class="btn-primary auth-submit" data-i18n="saveBtn"
+                        style="margin-top: 1rem;">Guardar y Continuar</button>
                 </form>
             </div>
         </div>

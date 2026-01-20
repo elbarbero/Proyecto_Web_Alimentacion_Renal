@@ -48,13 +48,13 @@ initial_foods = [
 ]
 
 def init_db():
-    if os.path.exists(DB_NAME):
-        try:
-            os.remove(DB_NAME)
-            print(f"Base de datos {DB_NAME} eliminada para regeneración.")
-        except PermissionError:
-            print(f"Error: No se puede borrar {DB_NAME} porque está en uso. Cierra el servidor primero.")
-            return
+    # if os.path.exists(DB_NAME):
+    #     try:
+    #         os.remove(DB_NAME)
+    #         print(f"Base de datos {DB_NAME} eliminada para regeneración.")
+    #     except PermissionError:
+    #         print(f"Error: No se puede borrar {DB_NAME} porque está en uso. Cierra el servidor primero.")
+    #         return
 
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
@@ -87,6 +87,9 @@ def init_db():
         name TEXT,
         surnames TEXT,
         birthdate TEXT,
+        has_insufficiency INTEGER,
+        treatment_type TEXT,
+        kidney_stage TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     ''')
@@ -103,6 +106,24 @@ def init_db():
         print("Migración: Columna 'birthdate' añadida.")
     except sqlite3.OperationalError:
         pass # Columna ya existe
+
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN has_insufficiency INTEGER")
+        print("Migración: Columna 'has_insufficiency' añadida.")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN treatment_type TEXT")
+        print("Migración: Columna 'treatment_type' añadida.")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN kidney_stage TEXT")
+        print("Migración: Columna 'kidney_stage' añadida.")
+    except sqlite3.OperationalError:
+        pass
 
     cursor.executemany('''
     INSERT INTO foods (id, name, name_en, name_de, name_fr, name_pt, name_ja, image_url, protein, sugar, fat, potassium, phosphorus, salt, calcium)
