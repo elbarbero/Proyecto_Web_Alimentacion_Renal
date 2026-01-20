@@ -17,7 +17,32 @@ const translations = {
         feedbackDesc: "Ayúdanos a mejorar. ¿Qué funcionalidad te gustaría ver?",
         feedbackPlaceholder: "Escribe tu sugerencia aquí...",
         cancel: "Cancelar",
-        send: "Enviar"
+        send: "Enviar",
+        // Auth
+        userBtn: "Usuario",
+        loginBtn: "Entrar",
+        registerBtn: "Registrarse",
+        createAccount: "Crear Cuenta",
+        welcomeBack: "Bienvenido de nuevo",
+        name: "Nombre",
+        surnames: "Apellidos",
+        birthdate: "Fecha de Nacimiento",
+        email: "Email",
+        password: "Contraseña",
+        rememberMe: "Recuérdame",
+        forgotPassword: "¿Olvidaste tu contraseña?",
+        noAccount: "¿No tienes cuenta?",
+        registerLink: "Registrarse",
+        loginLink: "Entrar",
+        // Placeholders
+        placeholderName: "Tu nombre",
+        placeholderSurnames: "Tus apellidos",
+        placeholderEmail: "ejemplo@email.com",
+        placeholderPassword: "••••••••",
+        // Validation
+        validationEmpty: "Completa este campo",
+        validationEmail: "Introduce un email válido",
+        validationDate: "Introduce una fecha válida"
     },
     en: {
         title: "Smart Renal Diet",
@@ -37,7 +62,32 @@ const translations = {
         feedbackDesc: "Help us improve. What features would you like to see?",
         feedbackPlaceholder: "Write your suggestion here...",
         cancel: "Cancel",
-        send: "Send"
+        send: "Send",
+        // Auth
+        userBtn: "User",
+        loginBtn: "Login",
+        registerBtn: "Sign Up",
+        createAccount: "Create Account",
+        welcomeBack: "Welcome Back",
+        name: "Name",
+        surnames: "Surnames",
+        birthdate: "Date of Birth",
+        email: "Email",
+        password: "Password",
+        rememberMe: "Remember me",
+        forgotPassword: "Forgot password?",
+        noAccount: "No account?",
+        registerLink: "Sign Up",
+        loginLink: "Login",
+        // Placeholders
+        placeholderName: "Your name",
+        placeholderSurnames: "Your surnames",
+        placeholderEmail: "example@email.com",
+        placeholderPassword: "••••••••",
+        // Validation
+        validationEmpty: "Please fill out this field",
+        validationEmail: "Please enter a valid email",
+        validationDate: "Please enter a valid date"
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -57,7 +107,32 @@ const translations = {
         feedbackDesc: "Helfen Sie uns, besser zu werden. Welche Funktionen wünschen Sie sich?",
         feedbackPlaceholder: "Schreiben Sie hier Ihren Vorschlag...",
         cancel: "Abbrechen",
-        send: "Senden"
+        send: "Senden",
+        // Auth
+        userBtn: "Benutzer",
+        loginBtn: "Anmelden",
+        registerBtn: "Registrieren",
+        createAccount: "Konto erstellen",
+        welcomeBack: "Willkommen zurück",
+        name: "Name",
+        surnames: "Nachname",
+        birthdate: "Geburtsdatum",
+        email: "E-Mail",
+        password: "Passwort",
+        rememberMe: "Erinnere dich an mich",
+        forgotPassword: "Passwort vergessen?",
+        noAccount: "Kein Konto?",
+        registerLink: "Registrieren",
+        loginLink: "Anmelden",
+        // Placeholders
+        placeholderName: "Dein Name",
+        placeholderSurnames: "Dein Nachname",
+        placeholderEmail: "beispiel@email.com",
+        placeholderPassword: "••••••••",
+        // Validation
+        validationEmpty: "Bitte füllen Sie dieses Feld aus",
+        validationEmail: "Bitte geben Sie eine gültige E-Mail ein",
+        validationDate: "Bitte geben Sie ein gültiges Datum ein"
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -77,7 +152,32 @@ const translations = {
         feedbackDesc: "Aidez-nous à nous améliorer. Quelles fonctionnalités aimeriez-vous voir ?",
         feedbackPlaceholder: "Écrivez votre suggestion ici...",
         cancel: "Annuler",
-        send: "Envoyer"
+        send: "Envoyer",
+        // Auth
+        userBtn: "Utilisateur",
+        loginBtn: "Connexion",
+        registerBtn: "S'inscrire",
+        createAccount: "Créer un compte",
+        welcomeBack: "Bon retour",
+        name: "Prénom",
+        surnames: "Nom",
+        birthdate: "Date de naissance",
+        email: "Email",
+        password: "Mot de passe",
+        rememberMe: "Se souvenir de moi",
+        forgotPassword: "Mot de passe oublié ?",
+        noAccount: "Pas de compte ?",
+        registerLink: "S'inscrire",
+        loginLink: "Connexion",
+        // Placeholders
+        placeholderName: "Votre prénom",
+        placeholderSurnames: "Votre nom",
+        placeholderEmail: "exemple@email.com",
+        placeholderPassword: "••••••••",
+        // Validation
+        validationEmpty: "Veuillez remplir ce champ",
+        validationEmail: "Veuillez entrer un email valide",
+        validationDate: "Veuillez entrer une date valide"
     },
     pt: {
         title: "Dieta Renal Inteligente",
@@ -97,7 +197,32 @@ const translations = {
         feedbackDesc: "Ajude-nos a melhorar. Que funcionalidade gostaria de ver?",
         feedbackPlaceholder: "Escreva sua sugestão aqui...",
         cancel: "Cancelar",
-        send: "Enviar"
+        send: "Enviar",
+        // Auth
+        userBtn: "Usuário",
+        loginBtn: "Entrar",
+        registerBtn: "Registrar",
+        createAccount: "Criar Conta",
+        welcomeBack: "Bem-vindo de volta",
+        name: "Nome",
+        surnames: "Sobrenomes",
+        birthdate: "Data de Nascimento",
+        email: "Email",
+        password: "Senha",
+        rememberMe: "Lembrar de mim",
+        forgotPassword: "Esqueceu a senha?",
+        noAccount: "Não tem conta?",
+        registerLink: "Registrar",
+        loginLink: "Entrar",
+        // Placeholders
+        placeholderName: "Seu nome",
+        placeholderSurnames: "Seus sobrenomes",
+        placeholderEmail: "exemplo@email.com",
+        placeholderPassword: "••••••••",
+        // Validation
+        validationEmpty: "Preencha este campo",
+        validationEmail: "Insira um email válido",
+        validationDate: "Insira uma data válida"
     },
     ja: {
         title: "スマート腎臓食",
@@ -108,6 +233,41 @@ const translations = {
         nutritionalInfo: "栄養情報",
         protein: "タンパク質",
         sugar: "糖質",
+        fat: "脂質",
+        potassium: "カリウム",
+        phosphorus: "リン",
+        salt: "塩分",
+        calcium: "カルシウム",
+        feedbackTitle: "フィードバックを送信",
+        feedbackDesc: "改善にご協力ください。どのような機能をご希望ですか？",
+        feedbackPlaceholder: "提案をここに書いてください...",
+        cancel: "キャンセル",
+        send: "送信",
+        // Auth
+        userBtn: "ユーザー",
+        loginBtn: "ログイン",
+        registerBtn: "登録",
+        createAccount: "アカウント作成",
+        welcomeBack: "お帰りなさい",
+        name: "名前",
+        surnames: "姓",
+        birthdate: "生年月日",
+        email: "メール",
+        password: "パスワード",
+        rememberMe: "ログイン状態を保持",
+        forgotPassword: "パスワードをお忘れですか？",
+        noAccount: "アカウントをお持ちでないですか？",
+        registerLink: "登録",
+        loginLink: "ログイン",
+        // Placeholders
+        placeholderName: "お名前",
+        placeholderSurnames: "姓",
+        placeholderEmail: "example@email.com",
+        placeholderPassword: "••••••••",
+        // Validation
+        validationEmpty: "このフィールドに入力してください",
+        validationEmail: "有効なメールアドレスを入力してください",
+        validationDate: "有効な日付を入力してください",
         fat: "脂質",
         potassium: "カリウム",
         phosphorus: "リン",
@@ -179,6 +339,37 @@ function updateLanguage(lang) {
         );
         renderGrid(filteredFoods);
     }
+
+    // Update Auth Modal Texts if open or just in general to be safe
+    // We pass the current state (isRegistering) to refresh texts
+    if (document.getElementById('auth-modal')) {
+        toggleAuthMode(isRegistering);
+    }
+
+    setupValidation();
+}
+
+function setupValidation() {
+    const inputs = document.querySelectorAll('#auth-form input');
+    inputs.forEach(input => {
+        // Remove old listeners to avoid stacking (simplest way is to overwrite oninvalid)
+        input.oninvalid = function (e) {
+            e.target.setCustomValidity("");
+            if (!e.target.validity.valid) {
+                if (e.target.validity.valueMissing) {
+                    e.target.setCustomValidity(translations[currentLang].validationEmpty);
+                } else if (e.target.validity.typeMismatch && e.target.type === 'email') {
+                    e.target.setCustomValidity(translations[currentLang].validationEmail);
+                } else if (e.target.validity.badInput && e.target.type === 'date') {
+                    e.target.setCustomValidity(translations[currentLang].validationDate);
+                }
+            }
+        };
+
+        input.oninput = function (e) {
+            e.target.setCustomValidity("");
+        };
+    });
 }
 
 function getFoodName(food) {
@@ -433,14 +624,15 @@ function setupAuth() {
 function toggleAuthMode(register) {
     isRegistering = register;
     authError.textContent = '';
+    const t = translations[currentLang];
 
     if (isRegistering) {
         tabLogin.classList.remove('active');
         tabRegister.classList.add('active');
         nameGroup.style.display = 'block';
         // Simple localization for now, ideally use translation keys
-        authTitle.textContent = currentLang === 'en' ? 'Create Account' : 'Crear Cuenta';
-        authSubmit.textContent = currentLang === 'en' ? 'Sign Up' : 'Registrarse';
+        authTitle.textContent = t.createAccount;
+        authSubmit.textContent = t.registerBtn;
         const footer = document.getElementById('auth-footer-text');
         if (footer) footer.style.display = 'none';
 
@@ -451,11 +643,17 @@ function toggleAuthMode(register) {
         tabRegister.classList.remove('active');
         tabLogin.classList.add('active');
         nameGroup.style.display = 'none';
-        authTitle.textContent = currentLang === 'en' ? 'Welcome Back' : 'Bienvenido de nuevo';
-        authSubmit.textContent = currentLang === 'en' ? 'Login' : 'Entrar';
+        authTitle.textContent = t.welcomeBack;
+        authSubmit.textContent = t.loginBtn;
 
         const footer = document.getElementById('auth-footer-text');
-        if (footer) footer.style.display = 'block';
+        if (footer) {
+            footer.style.display = 'block';
+            const span = footer.querySelector('span');
+            const link = footer.querySelector('a');
+            if (span) span.textContent = t.noAccount;
+            if (link) link.textContent = t.registerLink;
+        }
 
         document.getElementById('auth-name').required = false;
         document.getElementById('auth-surnames').required = false;

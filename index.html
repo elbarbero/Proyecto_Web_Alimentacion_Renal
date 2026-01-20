@@ -163,8 +163,8 @@
             <span class="close-modal" id="close-auth">&times;</span>
             <div class="auth-body">
                 <div class="auth-tabs">
-                    <button class="auth-tab active" id="tab-login" data-i18n="login">Iniciar Sesión</button>
-                    <button class="auth-tab" id="tab-register" data-i18n="register">Registrarse</button>
+                    <button class="auth-tab active" id="tab-login" data-i18n="loginBtn">Iniciar Sesión</button>
+                    <button class="auth-tab" id="tab-register" data-i18n="registerBtn">Registrarse</button>
                 </div>
 
                 <h2 id="auth-title" data-i18n="welcomeBack">Bienvenido de nuevo</h2>
@@ -174,12 +174,14 @@
                     <div id="register-fields" style="display: none;">
                         <div class="input-group-auth">
                             <label for="auth-name" data-i18n="name">Nombre</label>
-                            <input type="text" id="auth-name" placeholder="Tu nombre">
+                            <input type="text" id="auth-name" placeholder="Tu nombre"
+                                data-i18n-placeholder="placeholderName">
                         </div>
 
                         <div class="input-group-auth">
                             <label for="auth-surnames" data-i18n="surnames">Apellidos</label>
-                            <input type="text" id="auth-surnames" placeholder="Tus apellidos">
+                            <input type="text" id="auth-surnames" placeholder="Tus apellidos"
+                                data-i18n-placeholder="placeholderSurnames">
                         </div>
 
                         <div class="input-group-auth">
@@ -190,12 +192,14 @@
 
                     <div class="input-group-auth">
                         <label for="auth-email" data-i18n="email">Email</label>
-                        <input type="email" id="auth-email" placeholder="ejemplo@email.com" required>
+                        <input type="email" id="auth-email" placeholder="ejemplo@email.com" required
+                            data-i18n-placeholder="placeholderEmail">
                     </div>
 
                     <div class="input-group-auth">
                         <label for="auth-password" data-i18n="password">Contraseña</label>
-                        <input type="password" id="auth-password" placeholder="••••••••" required>
+                        <input type="password" id="auth-password" placeholder="••••••••" required
+                            data-i18n-placeholder="placeholderPassword">
                     </div>
 
                     <p id="auth-error" class="error-msg"></p>
