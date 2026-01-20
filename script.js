@@ -855,6 +855,36 @@ function setupMedical() {
     const medicalForm = document.getElementById('medical-form');
     if (!medicalForm) return;
 
+    // Logic for disabling/enabling fields
+    const toggle = document.getElementById('insufficiency-toggle');
+    const treatmentGroup = document.getElementById('treatment-group');
+    const stageGroup = document.getElementById('stage-group');
+
+    function updateMedicalVisibility() {
+        if (!toggle || !treatmentGroup || !stageGroup) return;
+
+        if (toggle.checked) {
+            treatmentGroup.classList.remove('disabled-section');
+            stageGroup.classList.remove('disabled-section');
+            // Re-enable inputs if they were disabled (optional, CSS pointer-events handles clicks)
+            // But for keyboard nav / tab index, better to set disabled prop
+            treatmentGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
+            stageGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
+        } else {
+            treatmentGroup.classList.add('disabled-section');
+            stageGroup.classList.add('disabled-section');
+            // Disable inputs
+            treatmentGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+            stageGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+        }
+    }
+
+    if (toggle) {
+        toggle.addEventListener('change', updateMedicalVisibility);
+        // Init state
+        updateMedicalVisibility();
+    }
+
     medicalForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const errorMsg = document.getElementById('medical-error');
@@ -872,11 +902,16 @@ function setupMedical() {
         const user = JSON.parse(storedUser);
 
         // Gather Data
-        const insufficiencyToggle = document.getElementById('insufficiency-toggle');
-        const insufficiency = insufficiencyToggle && insufficiencyToggle.checked ? '1' : '0';
+        const insufficiency = toggle && toggle.checked ? '1' : '0';
 
-        const treatment = document.getElementById('treatment-type-hidden').value;
-        const stage = document.querySelector('input[name="kidney_stage"]:checked')?.value;
+        // Only gather other data if insufficiency is YES
+        let treatment = null;
+        let stage = null;
+
+        if (insufficiency === '1') {
+            treatment = document.getElementById('treatment-type-hidden').value;
+            stage = document.querySelector('input[name="kidney_stage"]:checked')?.value;
+        }
 
         try {
             const res = await fetch('/api/update_profile', {
@@ -885,8 +920,8 @@ function setupMedical() {
                 body: JSON.stringify({
                     email: user.email,
                     has_insufficiency: insufficiency,
-                    treatment_type: treatment,
-                    kidney_stage: stage
+                    treatment_type: treatment || null,
+                    kidney_stage: stage || null
                 })
             });
 

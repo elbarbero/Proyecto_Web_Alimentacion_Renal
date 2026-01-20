@@ -1050,3 +1050,9 @@ input:checked+.slider:before {
     opacity: 0;
     visibility: hidden;
 }
+/* Medical Profile Disabled State */
+.disabled-section {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
