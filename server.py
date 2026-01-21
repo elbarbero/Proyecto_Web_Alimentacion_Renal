@@ -62,7 +62,55 @@ SENDER_EMAIL = os.environ.get("EMAIL_USER", env.get("EMAIL_USER", "nutrirenalweb
 SENDER_PASSWORD = os.environ.get("EMAIL_PASS", env.get("EMAIL_PASS", ""))
 RECIPIENT_EMAIL = os.environ.get("EMAIL_RECIPIENT", env.get("EMAIL_RECIPIENT", "nutrirenalweb@gmail.com"))
 
+RECIPIENT_EMAIL = os.environ.get("EMAIL_RECIPIENT", env.get("EMAIL_RECIPIENT", "nutrirenalweb@gmail.com"))
+
 class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        parsed_path = urllib.parse.urlparse(self.path)
+        if parsed_path.path == '/api/get_user':
+            query_params = urllib.parse.parse_qs(parsed_path.query)
+            user_id = query_params.get('id', [None])[0]
+            
+            if not user_id:
+                self.send_response(400)
+                self.end_headers()
+                return
+
+            try:
+                conn = sqlite3.connect(DB_NAME)
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+                user = cursor.fetchone()
+                conn.close()
+
+                if user:
+                    self.send_response(200)
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({
+                        "id": user['id'], 
+                        "name": user['name'], 
+                        "surnames": user['surnames'],
+                        "birthdate": user['birthdate'],
+                        "email": user['email'],
+                        "has_insufficiency": user['has_insufficiency'],
+                        "treatment_type": user['treatment_type'],
+                        "kidney_stage": user['kidney_stage'],
+                        "avatar_url": user['avatar_url']
+                    }).encode())
+                else:
+                    self.send_response(404)
+                    self.end_headers()
+            except Exception as e:
+                print(f"Error fetching user: {e}")
+                self.send_response(500)
+                self.end_headers()
+            return
+            
+        # Fallback for other GET requests (static files)
+        return super().do_GET()
+
     def do_POST(self):
         if self.path == '/api/feedback':
             content_length = int(self.headers['Content-Length'])

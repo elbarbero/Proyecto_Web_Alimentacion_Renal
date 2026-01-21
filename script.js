@@ -596,6 +596,11 @@ async function init() {
         // Initial Lang
         updateLanguage('es');
 
+        // Set max date for inputs to today
+        const todayStr = new Date().toISOString().split('T')[0];
+        const dateInputs = document.querySelectorAll('input[type="date"]');
+        dateInputs.forEach(input => input.max = todayStr);
+
     } catch (error) {
         console.error("Error cargando alimentos:", error);
         if (gridContainer) {
@@ -801,9 +806,27 @@ function setupDropdownListeners() {
     const logoutBtn = document.getElementById('logout-btn');
 
     if (profileBtn) {
-        profileBtn.addEventListener('click', (e) => {
+        profileBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
             userDropdown.classList.remove('active');
+
+            // Sync with DB
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                try {
+                    const localUser = JSON.parse(storedUser);
+                    const res = await fetch(`/api/get_user?id=${localUser.id}`);
+                    if (res.ok) {
+                        const freshData = await res.json();
+                        // Merge fresh data
+                        const mergedUser = { ...localUser, ...freshData };
+                        localStorage.setItem('user', JSON.stringify(mergedUser));
+                    }
+                } catch (err) {
+                    console.error("Error syncing profile:", err);
+                }
+            }
+
             loadProfileData(); // Pre-fill data
             document.getElementById('medical-modal').classList.add('active'); // Open Modal
         });
@@ -909,6 +932,17 @@ async function handleAuthSubmit(e) {
         payload.name = name;
         payload.surnames = surnames;
         payload.birthdate = birthdate;
+
+        // Validate birthdate
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const birthDateObj = new Date(birthdate);
+
+        if (birthDateObj > today) {
+            authError.textContent = 'La fecha de nacimiento no puede ser futura.';
+            authSubmit.disabled = false;
+            return;
+        }
     }
 
     try {
@@ -948,6 +982,9 @@ async function handleAuthSubmit(e) {
                     const passGroup = document.getElementById('profile-password-group');
                     if (emailGroup) emailGroup.style.display = 'none';
                     if (passGroup) passGroup.style.display = 'none';
+
+                    // Pre-fill data from the just-created user
+                    loadProfileData();
 
                     medicalModal.classList.add('active');
                 }
@@ -1028,27 +1065,6 @@ function setupMedical() {
 
     // Logic for disabling/enabling fields
     const toggle = document.getElementById('insufficiency-toggle');
-    const treatmentGroup = document.getElementById('treatment-group');
-    const stageGroup = document.getElementById('stage-group');
-
-    function updateMedicalVisibility() {
-        if (!toggle || !treatmentGroup || !stageGroup) return;
-
-        if (toggle.checked) {
-            treatmentGroup.classList.remove('disabled-section');
-            stageGroup.classList.remove('disabled-section');
-            // Re-enable inputs if they were disabled (optional, CSS pointer-events handles clicks)
-            // But for keyboard nav / tab index, better to set disabled prop
-            treatmentGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
-            stageGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
-        } else {
-            treatmentGroup.classList.add('disabled-section');
-            stageGroup.classList.add('disabled-section');
-            // Disable inputs
-            treatmentGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
-            stageGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
-        }
-    }
 
     if (toggle) {
         toggle.addEventListener('change', updateMedicalVisibility);
@@ -1119,6 +1135,17 @@ function setupMedical() {
             payload.password = password;
         }
 
+        // Validate birthdate
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const birthDateObj = new Date(birthdate);
+
+        if (birthDateObj > today) {
+            errorMsg.textContent = 'La fecha de nacimiento no puede ser futura.';
+            submitBtn.disabled = false;
+            return;
+        }
+
         try {
             const res = await fetch('/api/update_profile', {
                 method: 'POST',
@@ -1160,6 +1187,26 @@ function setupMedical() {
     });
 }
 
+function updateMedicalVisibility() {
+    const toggle = document.getElementById('insufficiency-toggle');
+    const treatmentGroup = document.getElementById('treatment-group');
+    const stageGroup = document.getElementById('stage-group');
+
+    if (!toggle || !treatmentGroup || !stageGroup) return;
+
+    if (toggle.checked) {
+        treatmentGroup.classList.remove('disabled-section');
+        stageGroup.classList.remove('disabled-section');
+        treatmentGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
+        stageGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
+    } else {
+        treatmentGroup.classList.add('disabled-section');
+        stageGroup.classList.add('disabled-section');
+        treatmentGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+        stageGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+    }
+}
+
 function loadProfileData() {
     const storedUser = localStorage.getItem('user');
     if (!storedUser) return;
@@ -1185,12 +1232,16 @@ function loadProfileData() {
     }
 
     // Medical Data
+    // Medical Data
     const toggle = document.getElementById('insufficiency-toggle');
     if (toggle) {
-        toggle.checked = user.has_insufficiency == '1';
+        // Handle potentially different types (string '1', number 1, boolean true)
+        const val = user.has_insufficiency;
+        const isChecked = val === '1' || val === 1 || val === true || val === 'true';
+        toggle.checked = isChecked;
+
         // Trigger visibility update
-        const event = new Event('change');
-        toggle.dispatchEvent(event);
+        updateMedicalVisibility();
     }
 
     // Show Cancel Button and ensure correct Save Text
@@ -1206,20 +1257,29 @@ function loadProfileData() {
         const select = document.getElementById('treatment-select');
         const hidden = document.getElementById('treatment-type-hidden');
         const selectedText = document.getElementById('treatment-selected-text');
-        if (hidden && selectedText) {
+
+        if (hidden && selectedText && select) {
             hidden.value = user.treatment_type;
-            // Find text label
-            const option = select.querySelector(`[data-value="${user.treatment_type}"]`);
+
+            // Find text label deeply
+            const option = select.querySelector(`.select-items div[data-value="${user.treatment_type}"]`);
             if (option) {
                 selectedText.textContent = option.textContent;
+                selectedText.classList.add('selected-value'); // Helper class if needed
                 selectedText.removeAttribute('data-i18n'); // Remove i18n key to avoid overwrite
             }
         }
     }
 
     if (user.kidney_stage) {
-        const radio = document.querySelector(`input[name="kidney_stage"][value="${user.kidney_stage}"]`);
-        if (radio) radio.checked = true;
+        // Ensure we match string value
+        const val = String(user.kidney_stage);
+        const radio = document.querySelector(`input[name="kidney_stage"][value="${val}"]`);
+        if (radio) {
+            radio.checked = true;
+            // Force change event if needed for custom styling, though :checked css should pass
+            radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
     }
 }
 
