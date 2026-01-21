@@ -29,47 +29,50 @@
                         </svg>
                     </button>
 
-                    <button id="user-btn" class="glass-btn" title="Usuario">
-                        <!-- Icon Logged Out -->
-                        <svg class="icon-logged-out" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        <!-- Icon Logged In (User Check) -->
-                        <svg class="icon-logged-in" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="8.5" cy="7" r="4"></circle>
-                            <polyline points="17 11 19 13 23 9"></polyline>
-                        </svg>
-                        <!-- Avatar Image -->
-                        <img id="user-avatar-img" class="user-avatar-btn" src="" alt="Avatar" style="display: none;">
-                    </button>
-
-                    <!-- User Dropdown Menu -->
-                    <div class="user-dropdown" id="user-dropdown">
-                        <div class="dropdown-item" id="profile-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
+                    <div style="position: relative;">
+                        <button id="user-btn" class="glass-btn" title="Usuario">
+                            <!-- Icon Logged Out -->
+                            <svg class="icon-logged-out" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>
-                            <span data-i18n="profile">Perfil</span>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-item text-danger" id="logout-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                <polyline points="16 17 21 12 16 7"></polyline>
-                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            <!-- Icon Logged In (User Check) -->
+                            <svg class="icon-logged-in" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="8.5" cy="7" r="4"></circle>
+                                <polyline points="17 11 19 13 23 9"></polyline>
                             </svg>
-                            <span data-i18n="logout">Cerrar Sesión</span>
+                            <!-- Avatar Image -->
+                            <img id="user-avatar-img" class="user-avatar-btn" src="" alt="Avatar"
+                                style="display: none;">
+                        </button>
+
+                        <!-- User Dropdown Menu -->
+                        <div class="user-dropdown" id="user-dropdown">
+                            <div class="dropdown-item" id="profile-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                <span data-i18n="profile">Perfil</span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item text-danger" id="logout-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                                <span data-i18n="logout">Cerrar Sesión</span>
+                            </div>
                         </div>
                     </div>
 
@@ -249,7 +252,7 @@
 
     <!-- Medical Profile Modal -->
     <div id="medical-modal" class="modal">
-        <div class="modal-content auth-content" style="max-width: 500px;">
+        <div class="modal-content auth-content profile-compact-mode" style="max-width: 500px;">
             <span class="close-modal" id="close-medical" style="display:none;">&times;</span>
             <div class="auth-body">
                 <h2 id="medical-title" data-i18n="medicalProfileTitle">Perfil Médico</h2>
@@ -280,19 +283,32 @@
                     </div>
 
 
-                    <div class="input-group-auth">
-                        <label for="profile-name" data-i18n="name">Nombre</label>
-                        <input type="text" id="profile-name" placeholder="Tu nombre" required>
-                    </div>
+                    <div class="personal-data-grid">
+                        <div class="input-group-auth">
+                            <label for="profile-name" data-i18n="name">Nombre</label>
+                            <input type="text" id="profile-name" placeholder="Tu nombre" required>
+                        </div>
 
-                    <div class="input-group-auth">
-                        <label for="profile-surnames" data-i18n="surnames">Apellidos</label>
-                        <input type="text" id="profile-surnames" placeholder="Tus apellidos" required>
-                    </div>
+                        <div class="input-group-auth">
+                            <label for="profile-surnames" data-i18n="surnames">Apellidos</label>
+                            <input type="text" id="profile-surnames" placeholder="Tus apellidos" required>
+                        </div>
 
-                    <div class="input-group-auth">
-                        <label for="profile-birthdate" data-i18n="birthdate">Fecha de Nacimiento</label>
-                        <input type="date" id="profile-birthdate" required>
+                        <div class="input-group-auth">
+                            <label for="profile-birthdate" data-i18n="birthdate">Fecha de Nacimiento</label>
+                            <input type="date" id="profile-birthdate" required>
+                        </div>
+
+                        <div class="input-group-auth" id="profile-email-group">
+                            <label for="profile-email" data-i18n="email">Email</label>
+                            <input type="email" id="profile-email" readonly
+                                style="background: #f1f5f9; cursor: not-allowed;">
+                        </div>
+
+                        <div class="input-group-auth" id="profile-password-group">
+                            <label for="profile-password" data-i18n="password">Contraseña</label>
+                            <input type="password" id="profile-password" placeholder="••••••••">
+                        </div>
                     </div>
 
                     <div class="profile-section-title" data-i18n="medicalData" style="margin-top: 2rem;">Datos Médicos
@@ -377,8 +393,12 @@
                     </div>
 
                     <div class="error-msg" id="medical-error"></div>
-                    <button type="submit" id="save-medical" class="btn-primary auth-submit" data-i18n="saveBtn"
-                        style="margin-top: 1rem;">Guardar y Continuar</button>
+                    <div class="modal-footer-actions" style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <button type="button" id="cancel-medical" class="btn-secondary" data-i18n="cancel"
+                            style="display:none; flex: 1;">Cancelar</button>
+                        <button type="submit" id="save-medical" class="btn-primary" data-i18n="saveBtn"
+                            style="flex: 1;">Guardar</button>
+                    </div>
                 </form>
             </div>
         </div>

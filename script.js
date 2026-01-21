@@ -56,12 +56,14 @@
         erca: "ERCA",
         questionStage: "Estadio de la enfermedad renal",
         questionStage: "Estadio de la enfermedad renal",
-        saveBtn: "Guardar y Continuar",
+        questionStage: "Estadio de la enfermedad renal",
+        saveBtn: "Guardar",
         // New Profile
         profile: "Perfil",
         logout: "Cerrar Sesión",
         personalData: "Datos Personales",
-        medicalData: "Datos Médicos"
+        medicalData: "Datos Médicos",
+        cancel: "Cancelar"
     },
     en: {
         title: "Smart Renal Diet",
@@ -940,7 +942,15 @@ async function handleAuthSubmit(e) {
 
             if (isRegistering) {
                 const medicalModal = document.getElementById('medical-modal');
-                if (medicalModal) medicalModal.classList.add('active');
+                if (medicalModal) {
+                    // Hide email and password in first-setup flow
+                    const emailGroup = document.getElementById('profile-email-group');
+                    const passGroup = document.getElementById('profile-password-group');
+                    if (emailGroup) emailGroup.style.display = 'none';
+                    if (passGroup) passGroup.style.display = 'none';
+
+                    medicalModal.classList.add('active');
+                }
             } else {
                 alert(`Hola ${data.name}!`);
             }
@@ -1055,6 +1065,14 @@ function setupMedical() {
         });
     }
 
+    // Cancel Button Logic
+    const cancelMedicalBtn = document.getElementById('cancel-medical');
+    if (cancelMedicalBtn) {
+        cancelMedicalBtn.addEventListener('click', () => {
+            document.getElementById('medical-modal').classList.remove('active');
+        });
+    }
+
     medicalForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const errorMsg = document.getElementById('medical-error');
@@ -1075,6 +1093,7 @@ function setupMedical() {
         const name = document.getElementById('profile-name').value;
         const surnames = document.getElementById('profile-surnames').value;
         const birthdate = document.getElementById('profile-birthdate').value;
+        const password = document.getElementById('profile-password').value; // Optional
         const insufficiency = toggle && toggle.checked ? '1' : '0';
 
         // Only gather other data if insufficiency is YES
@@ -1086,19 +1105,25 @@ function setupMedical() {
             stage = document.querySelector('input[name="kidney_stage"]:checked')?.value;
         }
 
+        const payload = {
+            email: user.email,
+            name: name,
+            surnames: surnames,
+            birthdate: birthdate,
+            has_insufficiency: insufficiency,
+            treatment_type: treatment || null,
+            kidney_stage: stage || null
+        };
+
+        if (password) {
+            payload.password = password;
+        }
+
         try {
             const res = await fetch('/api/update_profile', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: user.email,
-                    name: name,
-                    surnames: surnames,
-                    birthdate: birthdate,
-                    has_insufficiency: insufficiency,
-                    treatment_type: treatment || null,
-                    kidney_stage: stage || null
-                })
+                body: JSON.stringify(payload)
             });
 
             if (res.ok) {
@@ -1112,10 +1137,15 @@ function setupMedical() {
                 localStorage.setItem('user', JSON.stringify(user));
 
                 document.getElementById('medical-modal').classList.remove('active');
-                alert(`Perfil actualizado!`);
 
                 // Refresh avatar if needed (name display)
-                document.getElementById('profile-name-display').textContent = user.name + " " + (user.surnames || "");
+                const nameDisplay = document.getElementById('profile-name-display');
+                if (nameDisplay) nameDisplay.textContent = user.name + " " + (user.surnames || "");
+
+                // Clear password field
+                document.getElementById('profile-password').value = "";
+
+                alert(`Perfil actualizado!`);
 
             } else {
                 const data = await res.json();
@@ -1139,7 +1169,16 @@ function loadProfileData() {
     document.getElementById('profile-name').value = user.name || '';
     document.getElementById('profile-surnames').value = user.surnames || '';
     document.getElementById('profile-birthdate').value = user.birthdate || '';
-    document.getElementById('profile-name-display').textContent = (user.name || '') + " " + (user.surnames || '');
+    document.getElementById('profile-email').value = user.email || '';
+
+    // Ensure Email and Password fields are VISIBLE (edit mode)
+    const emailGroup = document.getElementById('profile-email-group');
+    const passGroup = document.getElementById('profile-password-group');
+    if (emailGroup) emailGroup.style.display = 'block';
+    if (passGroup) passGroup.style.display = 'block';
+
+    const nameDisplay = document.getElementById('profile-name-display');
+    if (nameDisplay) nameDisplay.textContent = (user.name || '') + " " + (user.surnames || '');
 
     if (user.avatar_url) {
         document.getElementById('avatar-preview').src = user.avatar_url;
@@ -1153,6 +1192,14 @@ function loadProfileData() {
         const event = new Event('change');
         toggle.dispatchEvent(event);
     }
+
+    // Show Cancel Button and ensure correct Save Text
+    const cancelBtn = document.getElementById('cancel-medical');
+    if (cancelBtn) cancelBtn.style.display = 'block';
+
+    const t = translations[currentLang];
+    const saveMedicalBtn = document.getElementById('save-medical');
+    if (saveMedicalBtn) saveMedicalBtn.textContent = 'Guardar'; // Override default for profile view
 
     if (user.treatment_type) {
         // Update custom select
