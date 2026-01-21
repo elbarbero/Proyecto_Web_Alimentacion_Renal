@@ -1,4 +1,4 @@
-const translations = {
+﻿const translations = {
     es: {
         title: "Alimentación Renal Inteligente",
         subtitle: "Tu compañera digital para el control nutricional avanzado",
@@ -55,7 +55,13 @@ const translations = {
         transplant: "Trasplante",
         erca: "ERCA",
         questionStage: "Estadio de la enfermedad renal",
-        saveBtn: "Guardar y Continuar"
+        questionStage: "Estadio de la enfermedad renal",
+        saveBtn: "Guardar y Continuar",
+        // New Profile
+        profile: "Perfil",
+        logout: "Cerrar Sesión",
+        personalData: "Datos Personales",
+        medicalData: "Datos Médicos"
     },
     en: {
         title: "Smart Renal Diet",
@@ -113,7 +119,13 @@ const translations = {
         transplant: "Transplant",
         erca: "CKD (Advanced)",
         questionStage: "Kidney Disease Stage",
-        saveBtn: "Save and Continue"
+        questionStage: "Stage of kidney disease",
+        saveBtn: "Save and Continue",
+        // New Profile
+        profile: "Profile",
+        logout: "Log Out",
+        personalData: "Personal Data",
+        medicalData: "Medical Data"
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -229,7 +241,19 @@ const translations = {
         transplant: "Greffe",
         erca: "MRC (Avancé)",
         questionStage: "Stade de la maladie rénale",
-        saveBtn: "Enregistrer et Continuer"
+        no: "Non",
+        questionTreatment: "Traitement",
+        selectOption: "Sélectionnez une option",
+        dialysis: "Dialyse",
+        transplant: "Greffe",
+        erca: "MRC (Avancé)",
+        questionStage: "Stade de la maladie rénale",
+        saveBtn: "Enregistrer et Continuer",
+        // New Profile
+        profile: "Profil",
+        logout: "Se déconnecter",
+        personalData: "Données personnelles",
+        medicalData: "Données médicales"
     },
     pt: {
         title: "Dieta Renal Inteligente",
@@ -287,7 +311,13 @@ const translations = {
         transplant: "Transplante",
         erca: "DRC (Avançado)",
         questionStage: "Estágio da doença renal",
-        saveBtn: "Salvar e Continuar"
+        questionStage: "Estágio da doença renal",
+        saveBtn: "Salvar e Continuar",
+        // New Profile
+        profile: "Perfil",
+        logout: "Sair",
+        personalData: "Dados Pessoais",
+        medicalData: "Dados Médicos"
     },
     ja: {
         title: "スマート腎臓食",
@@ -355,7 +385,13 @@ const translations = {
         transplant: "移植",
         erca: "保存期腎不全",
         questionStage: "腎臓病のステージ",
-        saveBtn: "保存して続行"
+        questionStage: "腎臓病のステージ",
+        saveBtn: "保存して続行",
+        // New Profile
+        profile: "プロフィール",
+        logout: "ログアウト",
+        personalData: "個人データ",
+        medicalData: "医療データ"
     }
 };
 
@@ -712,8 +748,17 @@ let isRegistering = false;
 function setupAuth() {
     if (!userBtn) return;
 
-    userBtn.addEventListener('click', () => {
-        authModal.classList.add('active');
+    userBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent bubbling causing immediate close
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            // Logged In -> Toggle Dropdown
+            const dropdown = document.getElementById('user-dropdown');
+            dropdown.classList.toggle('active');
+        } else {
+            // Logged Out -> Open Auth Modal
+            authModal.classList.add('active');
+        }
     });
 
     closeAuthBtn.addEventListener('click', () => {
@@ -737,13 +782,53 @@ function setupAuth() {
     if (storedUser) {
         const user = JSON.parse(storedUser);
         console.log("Logged in as:", user.name);
+        userBtn.classList.add('user-logged-in'); // Ensure styled logged in
         if (user.avatar_url) {
             updateUserAvatar(user.avatar_url);
         } else {
-            // Default avatar if logged in but no custom avatar
             updateUserAvatar('images/default_avatar.png');
         }
     }
+
+    setupDropdownListeners();
+}
+
+function setupDropdownListeners() {
+    const userDropdown = document.getElementById('user-dropdown');
+    const profileBtn = document.getElementById('profile-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    if (profileBtn) {
+        profileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.classList.remove('active');
+            loadProfileData(); // Pre-fill data
+            document.getElementById('medical-modal').classList.add('active'); // Open Modal
+        });
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.classList.remove('active');
+            logout();
+        });
+    }
+
+    // Close dropdown when clicking outside
+    window.addEventListener('click', (e) => {
+        if (userDropdown && userDropdown.classList.contains('active')) {
+            // If click is NOT on userBtn and NOT on dropdown, close it
+            if (!userBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                userDropdown.classList.remove('active');
+            }
+        }
+    });
+}
+
+function logout() {
+    localStorage.removeItem('user');
+    location.reload(); // Simple reload to clear state
 }
 
 function updateUserAvatar(url) {
@@ -838,6 +923,11 @@ async function handleAuthSubmit(e) {
             const userData = {
                 id: data.userId,
                 name: data.name,
+                surnames: data.surnames,
+                birthdate: data.birthdate,
+                has_insufficiency: data.has_insufficiency,
+                treatment_type: data.treatment_type,
+                kidney_stage: data.kidney_stage,
                 email: email,
                 avatar_url: data.avatar_url || 'images/default_avatar.png'
             };
@@ -956,6 +1046,15 @@ function setupMedical() {
         updateMedicalVisibility();
     }
 
+    // Close button for medical modal
+    const closeMedicalBtn = document.getElementById('close-medical');
+    if (closeMedicalBtn) {
+        closeMedicalBtn.style.display = 'block'; // Ensure it's visible now
+        closeMedicalBtn.addEventListener('click', () => {
+            document.getElementById('medical-modal').classList.remove('active');
+        });
+    }
+
     medicalForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const errorMsg = document.getElementById('medical-error');
@@ -970,9 +1069,12 @@ function setupMedical() {
             submitBtn.disabled = false;
             return;
         }
-        const user = JSON.parse(storedUser);
+        let user = JSON.parse(storedUser);
 
         // Gather Data
+        const name = document.getElementById('profile-name').value;
+        const surnames = document.getElementById('profile-surnames').value;
+        const birthdate = document.getElementById('profile-birthdate').value;
         const insufficiency = toggle && toggle.checked ? '1' : '0';
 
         // Only gather other data if insufficiency is YES
@@ -990,6 +1092,9 @@ function setupMedical() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     email: user.email,
+                    name: name,
+                    surnames: surnames,
+                    birthdate: birthdate,
                     has_insufficiency: insufficiency,
                     treatment_type: treatment || null,
                     kidney_stage: stage || null
@@ -997,8 +1102,21 @@ function setupMedical() {
             });
 
             if (res.ok) {
+                // Update local storage
+                user.name = name;
+                user.surnames = surnames;
+                user.birthdate = birthdate;
+                user.has_insufficiency = insufficiency;
+                user.treatment_type = treatment;
+                user.kidney_stage = stage;
+                localStorage.setItem('user', JSON.stringify(user));
+
                 document.getElementById('medical-modal').classList.remove('active');
-                alert(`Perfil actualizado! Bienvenido ${user.name}`);
+                alert(`Perfil actualizado!`);
+
+                // Refresh avatar if needed (name display)
+                document.getElementById('profile-name-display').textContent = user.name + " " + (user.surnames || "");
+
             } else {
                 const data = await res.json();
                 errorMsg.textContent = data.message || 'Error al guardar perfil';
@@ -1010,6 +1128,52 @@ function setupMedical() {
             submitBtn.disabled = false;
         }
     });
+}
+
+function loadProfileData() {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) return;
+    const user = JSON.parse(storedUser);
+
+    // Populate Fields
+    document.getElementById('profile-name').value = user.name || '';
+    document.getElementById('profile-surnames').value = user.surnames || '';
+    document.getElementById('profile-birthdate').value = user.birthdate || '';
+    document.getElementById('profile-name-display').textContent = (user.name || '') + " " + (user.surnames || '');
+
+    if (user.avatar_url) {
+        document.getElementById('avatar-preview').src = user.avatar_url;
+    }
+
+    // Medical Data
+    const toggle = document.getElementById('insufficiency-toggle');
+    if (toggle) {
+        toggle.checked = user.has_insufficiency == '1';
+        // Trigger visibility update
+        const event = new Event('change');
+        toggle.dispatchEvent(event);
+    }
+
+    if (user.treatment_type) {
+        // Update custom select
+        const select = document.getElementById('treatment-select');
+        const hidden = document.getElementById('treatment-type-hidden');
+        const selectedText = document.getElementById('treatment-selected-text');
+        if (hidden && selectedText) {
+            hidden.value = user.treatment_type;
+            // Find text label
+            const option = select.querySelector(`[data-value="${user.treatment_type}"]`);
+            if (option) {
+                selectedText.textContent = option.textContent;
+                selectedText.removeAttribute('data-i18n'); // Remove i18n key to avoid overwrite
+            }
+        }
+    }
+
+    if (user.kidney_stage) {
+        const radio = document.querySelector(`input[name="kidney_stage"][value="${user.kidney_stage}"]`);
+        if (radio) radio.checked = true;
+    }
 }
 
 // Modify init to include setupAuth

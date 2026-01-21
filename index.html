@@ -49,6 +49,30 @@
                         <img id="user-avatar-img" class="user-avatar-btn" src="" alt="Avatar" style="display: none;">
                     </button>
 
+                    <!-- User Dropdown Menu -->
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="dropdown-item" id="profile-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <span data-i18n="profile">Perfil</span>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item text-danger" id="logout-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            <span data-i18n="logout">Cerrar Sesión</span>
+                        </div>
+                    </div>
+
                     <div class="custom-select" id="language-select">
                         <div class="select-selected">
                             <img src="https://flagcdn.com/w40/es.png" alt="es" class="flag-img"> Español
@@ -73,7 +97,7 @@
 
             <p class="subtitle" data-i18n="subtitle">Tu compañera digital para el control nutricional avanzado</p>
             <p class="description" data-i18n="description">
-                Bienvenido a la herramienta definitiva para pacientes renales.
+                Bienvenido a la herramienta definitiva para pacientes renais.
                 Consulta al instante los valores críticos de tus alimentos (Potasio, Fósforo, Proteínas)
                 y toma decisiones informadas para cuidar tu salud renal con precisión milimétrica.
             </p>
@@ -226,16 +250,18 @@
     <!-- Medical Profile Modal -->
     <div id="medical-modal" class="modal">
         <div class="modal-content auth-content" style="max-width: 500px;">
+            <span class="close-modal" id="close-medical" style="display:none;">&times;</span>
             <div class="auth-body">
                 <h2 id="medical-title" data-i18n="medicalProfileTitle">Perfil Médico</h2>
                 <p class="auth-subtitle" data-i18n="medicalProfileDesc" style="margin-bottom: 2rem; color: #64748b;">
                     Complete su perfil para personalizar su experiencia.</p>
 
                 <form id="medical-form">
-                    <!-- Avatar Upload -->
-                    <div class="input-group-auth"
-                        style="display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem;">
-                        <label data-i18n="avatar" style="margin-bottom: 1rem;">Avatar</label>
+
+                    <!-- Personal Data Section -->
+                    <div class="profile-section-title" data-i18n="personalData">Datos Personales</div>
+
+                    <div class="input-group-auth user-avatar-section">
                         <div class="avatar-preview-container">
                             <img id="avatar-preview" src="images/default_avatar.png" alt="Avatar Preview">
                             <label for="avatar-input" class="avatar-upload-btn">
@@ -250,6 +276,26 @@
                             </label>
                             <input type="file" id="avatar-input" accept="image/*" style="display: none;">
                         </div>
+                        <div class="user-name-display" id="profile-name-display"></div>
+                    </div>
+
+
+                    <div class="input-group-auth">
+                        <label for="profile-name" data-i18n="name">Nombre</label>
+                        <input type="text" id="profile-name" placeholder="Tu nombre" required>
+                    </div>
+
+                    <div class="input-group-auth">
+                        <label for="profile-surnames" data-i18n="surnames">Apellidos</label>
+                        <input type="text" id="profile-surnames" placeholder="Tus apellidos" required>
+                    </div>
+
+                    <div class="input-group-auth">
+                        <label for="profile-birthdate" data-i18n="birthdate">Fecha de Nacimiento</label>
+                        <input type="date" id="profile-birthdate" required>
+                    </div>
+
+                    <div class="profile-section-title" data-i18n="medicalData" style="margin-top: 2rem;">Datos Médicos
                     </div>
 
                     <!-- Insufficiency (Toggle) -->

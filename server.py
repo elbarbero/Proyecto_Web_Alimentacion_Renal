@@ -135,7 +135,13 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(201)
                 self.send_header('Content-type', 'application/json')
                 self.end_headers()
-                self.wfile.write(json.dumps({"status": "success", "userId": user_id, "name": name}).encode())
+                self.wfile.write(json.dumps({
+                    "status": "success", 
+                    "userId": user_id, 
+                    "name": name,
+                    "surnames": surnames,
+                    "birthdate": birthdate
+                }).encode())
 
             except Exception as e:
                 print(f"Error registering user: {e}")
@@ -148,6 +154,9 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 data = json.loads(post_data.decode('utf-8'))
                 email = data.get('email')
+                name = data.get('name')
+                surnames = data.get('surnames')
+                birthdate = data.get('birthdate')
                 has_insufficiency = data.get('has_insufficiency')
                 treatment_type = data.get('treatment_type')
                 kidney_stage = data.get('kidney_stage')
@@ -163,9 +172,9 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                 # Update user
                 cursor.execute("""
                     UPDATE users 
-                    SET has_insufficiency = ?, treatment_type = ?, kidney_stage = ?
+                    SET name = ?, surnames = ?, birthdate = ?, has_insufficiency = ?, treatment_type = ?, kidney_stage = ?
                     WHERE email = ?
-                """, (has_insufficiency, treatment_type, kidney_stage, email))
+                """, (name, surnames, birthdate, has_insufficiency, treatment_type, kidney_stage, email))
                 
                 if cursor.rowcount == 0:
                     conn.close()
@@ -259,20 +268,26 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                 password = data.get('password')
 
                 conn = sqlite3.connect(DB_NAME)
+                conn.row_factory = sqlite3.Row
                 cursor = conn.cursor()
-                cursor.execute("SELECT id, name, password_hash, avatar_url FROM users WHERE email = ?", (email,))
+                cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
                 user = cursor.fetchone()
                 conn.close()
 
-                if user and verify_password(user[2], password):
+                if user and verify_password(user['password_hash'], password):
                     self.send_response(200)
                     self.send_header('Content-type', 'application/json')
                     self.end_headers()
                     self.wfile.write(json.dumps({
                         "status": "success", 
-                        "userId": user[0], 
-                        "name": user[1],
-                        "avatar_url": user[3]
+                        "userId": user['id'], 
+                        "name": user['name'],
+                        "surnames": user['surnames'],
+                        "birthdate": user['birthdate'],
+                        "has_insufficiency": user['has_insufficiency'],
+                        "treatment_type": user['treatment_type'],
+                        "kidney_stage": user['kidney_stage'],
+                        "avatar_url": user['avatar_url']
                     }).encode())
                 else:
                     self.send_response(401)
