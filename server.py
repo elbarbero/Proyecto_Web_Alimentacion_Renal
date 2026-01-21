@@ -187,6 +187,69 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(500)
                 self.end_headers()
 
+        elif self.path == '/api/upload_avatar':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                email = data.get('email')
+                image_data = data.get('image_data')
+
+                if not email or not image_data:
+                    self.send_response(400)
+                    self.end_headers()
+                    return
+
+                # Decode Base64
+                if "," in image_data:
+                    header, encoded = image_data.split(",", 1)
+                else:
+                    encoded = image_data
+                
+                import base64
+                file_content = base64.b64decode(encoded)
+                
+                # Ensure directory exists
+                AVATAR_DIR = "images/avatars"
+                if not os.path.exists(AVATAR_DIR):
+                    os.makedirs(AVATAR_DIR)
+                
+                # Get User ID for filename
+                conn = sqlite3.connect(DB_NAME)
+                cursor = conn.cursor()
+                cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
+                user = cursor.fetchone()
+                
+                if not user:
+                    conn.close()
+                    self.send_response(404)
+                    self.end_headers()
+                    return
+
+                user_id = user[0]
+                filename = f"{user_id}.png"
+                filepath = os.path.join(AVATAR_DIR, filename)
+
+                # Write file
+                with open(filepath, "wb") as f:
+                    f.write(file_content)
+                
+                # Update DB
+                # Store relative path for frontend - using forward slashes for web consistency
+                db_path = f"images/avatars/{filename}"
+                cursor.execute("UPDATE users SET avatar_url = ? WHERE id = ?", (db_path, user_id))
+                conn.commit()
+                conn.close()
+
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "success", "avatar_url": db_path}).encode())
+
+            except Exception as e:
+                print(f"Error uploading avatar: {e}")
+                self.send_response(500)
+                self.end_headers()
         elif self.path == '/api/login':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
@@ -197,7 +260,7 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
 
                 conn = sqlite3.connect(DB_NAME)
                 cursor = conn.cursor()
-                cursor.execute("SELECT id, name, password_hash FROM users WHERE email = ?", (email,))
+                cursor.execute("SELECT id, name, password_hash, avatar_url FROM users WHERE email = ?", (email,))
                 user = cursor.fetchone()
                 conn.close()
 
@@ -205,7 +268,12 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header('Content-type', 'application/json')
                     self.end_headers()
-                    self.wfile.write(json.dumps({"status": "success", "userId": user[0], "name": user[1]}).encode())
+                    self.wfile.write(json.dumps({
+                        "status": "success", 
+                        "userId": user[0], 
+                        "name": user[1],
+                        "avatar_url": user[3]
+                    }).encode())
                 else:
                     self.send_response(401)
                     self.send_header('Content-type', 'application/json')

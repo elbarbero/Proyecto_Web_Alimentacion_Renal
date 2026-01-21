@@ -90,6 +90,7 @@ def init_db():
         has_insufficiency INTEGER,
         treatment_type TEXT,
         kidney_stage TEXT,
+        avatar_url TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     ''')
@@ -108,7 +109,7 @@ def init_db():
         pass # Columna ya existe
 
     try:
-        cursor.execute("ALTER TABLE users ADD COLUMN has_insufficiency INTEGER")
+        cursor.execute("ALTER TABLE users ADD COLUMN has_insufficiency TEXT DEFAULT '0'")
         print("Migración: Columna 'has_insufficiency' añadida.")
     except sqlite3.OperationalError:
         pass
@@ -122,6 +123,12 @@ def init_db():
     try:
         cursor.execute("ALTER TABLE users ADD COLUMN kidney_stage TEXT")
         print("Migración: Columna 'kidney_stage' añadida.")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN avatar_url TEXT")
+        print("Migración: Columna 'avatar_url' añadida.")
     except sqlite3.OperationalError:
         pass
 

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alimentación Renal</title>
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="styles.css?v=8">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -30,11 +30,23 @@
                     </button>
 
                     <button id="user-btn" class="glass-btn" title="Usuario">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- Icon Logged Out -->
+                        <svg class="icon-logged-out" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
+                        <!-- Icon Logged In (User Check) -->
+                        <svg class="icon-logged-in" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="8.5" cy="7" r="4"></circle>
+                            <polyline points="17 11 19 13 23 9"></polyline>
+                        </svg>
+                        <!-- Avatar Image -->
+                        <img id="user-avatar-img" class="user-avatar-btn" src="" alt="Avatar" style="display: none;">
                     </button>
 
                     <div class="custom-select" id="language-select">
@@ -220,6 +232,26 @@
                     Complete su perfil para personalizar su experiencia.</p>
 
                 <form id="medical-form">
+                    <!-- Avatar Upload -->
+                    <div class="input-group-auth"
+                        style="display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem;">
+                        <label data-i18n="avatar" style="margin-bottom: 1rem;">Avatar</label>
+                        <div class="avatar-preview-container">
+                            <img id="avatar-preview" src="images/default_avatar.png" alt="Avatar Preview">
+                            <label for="avatar-input" class="avatar-upload-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                                    </path>
+                                    <circle cx="12" cy="13" r="4"></circle>
+                                </svg>
+                            </label>
+                            <input type="file" id="avatar-input" accept="image/*" style="display: none;">
+                        </div>
+                    </div>
+
                     <!-- Insufficiency (Toggle) -->
                     <div class="input-group-auth">
                         <label data-i18n="questionInsufficiency"

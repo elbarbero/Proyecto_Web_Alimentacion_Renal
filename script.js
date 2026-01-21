@@ -737,9 +737,22 @@ function setupAuth() {
     if (storedUser) {
         const user = JSON.parse(storedUser);
         console.log("Logged in as:", user.name);
-        // Visual indicator could be added here
-        userBtn.style.color = '#3b82f6';
-        userBtn.style.borderColor = '#3b82f6';
+        if (user.avatar_url) {
+            updateUserAvatar(user.avatar_url);
+        } else {
+            // Default avatar if logged in but no custom avatar
+            updateUserAvatar('images/default_avatar.png');
+        }
+    }
+}
+
+function updateUserAvatar(url) {
+    const userBtn = document.getElementById('user-btn');
+    const avatarImg = document.getElementById('user-avatar-img');
+
+    if (userBtn && avatarImg) {
+        userBtn.classList.add('has-avatar');
+        avatarImg.src = url;
     }
 }
 
@@ -822,14 +835,18 @@ async function handleAuthSubmit(e) {
 
         if (res.ok) {
             // Success
-            localStorage.setItem('user', JSON.stringify({
+            const userData = {
                 id: data.userId,
                 name: data.name,
-                email: email // Save email for profile update
-            }));
+                email: email,
+                avatar_url: data.avatar_url || 'images/default_avatar.png'
+            };
+
+            localStorage.setItem('user', JSON.stringify(userData));
             authModal.classList.remove('active');
-            userBtn.style.color = '#3b82f6';
-            userBtn.style.borderColor = '#3b82f6';
+            userBtn.classList.add('user-logged-in');
+
+            updateUserAvatar(userData.avatar_url);
 
             if (isRegistering) {
                 const medicalModal = document.getElementById('medical-modal');
@@ -854,6 +871,60 @@ async function handleAuthSubmit(e) {
 function setupMedical() {
     const medicalForm = document.getElementById('medical-form');
     if (!medicalForm) return;
+
+    // Avatar Upload Logic
+    const avatarInput = document.getElementById('avatar-input');
+    const avatarPreview = document.getElementById('avatar-preview');
+
+    if (avatarInput) {
+        avatarInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    // Update preview
+                    avatarPreview.src = e.target.result;
+
+                    // Auto upload
+                    const storedUser = localStorage.getItem('user');
+                    if (storedUser) {
+                        const user = JSON.parse(storedUser);
+                        uploadAvatar(user.email, e.target.result);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    async function uploadAvatar(email, base64Image) {
+        try {
+            const res = await fetch('/api/upload_avatar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: email,
+                    image_data: base64Image
+                })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                // Update local storage
+                const storedUser = localStorage.getItem('user');
+                if (storedUser) {
+                    const user = JSON.parse(storedUser);
+                    user.avatar_url = data.avatar_url;
+                    localStorage.setItem('user', JSON.stringify(user));
+
+                    // Update UI immediately
+                    updateUserAvatar(data.avatar_url);
+                }
+            }
+        } catch (err) {
+            console.error("Error uploading avatar", err);
+        }
+    }
 
     // Logic for disabling/enabling fields
     const toggle = document.getElementById('insufficiency-toggle');

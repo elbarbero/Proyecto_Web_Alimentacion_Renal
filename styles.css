@@ -1050,9 +1050,114 @@ input:checked+.slider:before {
     opacity: 0;
     visibility: hidden;
 }
+
 /* Medical Profile Disabled State */
 .disabled-section {
     opacity: 0.5;
     pointer-events: none;
     transition: opacity 0.3s ease;
+}
+
+/* Logged-in User State */
+#user-btn.user-logged-in {
+    border-color: var(--primary-color);
+    background-color: #eff6ff;
+    color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+#user-btn.user-logged-in svg {
+    stroke-width: 2.5;
+}
+
+/* Icon Switching */
+#user-btn .icon-logged-in {
+    display: none;
+}
+
+#user-btn.user-logged-in .icon-logged-out {
+    display: none;
+}
+
+#user-btn.user-logged-in .icon-logged-in {
+    display: block !important;
+    /* Ensure it overrides inline style if any */
+}
+
+/* User Avatar Styles */
+.user-avatar-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary-color);
+}
+
+.avatar-preview-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#avatar-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.avatar-upload-btn {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    background: #ffffff;
+    /* White background */
+    color: #475569;
+    /* Slate 600 */
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+    padding: 0;
+    /* Enforce zero padding */
+    box-sizing: border-box;
+    /* Ensure border doesn't add size */
+}
+
+.avatar-upload-btn svg {
+    display: block;
+    stroke-width: 2;
+    margin: 0;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    transform: translateY(6px);
+    /* Visual correction: Push down further */
+}
+
+.avatar-upload-btn:hover {
+    transform: scale(1.1);
+    background: #f1f5f9;
+    /* Slate 100 */
+    color: var(--primary-color);
+}
+
+/* Hide SVG icons when avatar is present */
+#user-btn.has-avatar .icon-logged-in,
+#user-btn.has-avatar .icon-logged-out {
+    display: none !important;
+}
+
+#user-btn.has-avatar .user-avatar-btn {
+    display: block !important;
 }
