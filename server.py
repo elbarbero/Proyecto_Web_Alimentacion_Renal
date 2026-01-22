@@ -411,6 +411,7 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                 foods.append({
                     "id": row["id"],
                     "name": row["name"],
+                    "category": row["category"],
                     "names": {
                         "es": row["name"],
                         "en": row["name_en"],

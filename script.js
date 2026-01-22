@@ -63,7 +63,18 @@
         logout: "Cerrar Sesión",
         personalData: "Datos Personales",
         medicalData: "Datos Médicos",
-        cancel: "Cancelar"
+        cancel: "Cancelar",
+        // Categories
+        catAll: "Todo",
+        catFruits: "Frutas y Verduras",
+        catProteins: "Proteínas Animales",
+        catDairy: "Lácteos y Yogures",
+        catCarbs: "Carbohidratos",
+        catGrains: "Granos y Legumbres",
+        catDrinks: "Bebidas y Dulces",
+        catFats: "Grasas y Aceites",
+        catOthers: "Otros",
+        catSnacks: "Snacks y Bolsas"
     },
     en: {
         title: "Smart Renal Diet",
@@ -127,7 +138,8 @@
         profile: "Profile",
         logout: "Log Out",
         personalData: "Personal Data",
-        medicalData: "Medical Data"
+        medicalData: "Medical Data",
+        catSnacks: "Snacks and Chips"
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -185,7 +197,8 @@
         transplant: "Transplantation",
         erca: "CKD (Fortgeschritten)",
         questionStage: "Stadium der Nierenerkrankung",
-        saveBtn: "Speichern und Fortfahren"
+        saveBtn: "Speichern und Fortfahren",
+        catSnacks: "Snacks und Tüten"
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -255,7 +268,8 @@
         profile: "Profil",
         logout: "Se déconnecter",
         personalData: "Données personnelles",
-        medicalData: "Données médicales"
+        medicalData: "Données médicales",
+        catSnacks: "Snacks et Sachets"
     },
     pt: {
         title: "Dieta Renal Inteligente",
@@ -319,7 +333,8 @@
         profile: "Perfil",
         logout: "Sair",
         personalData: "Dados Pessoais",
-        medicalData: "Dados Médicos"
+        medicalData: "Dados Médicos",
+        catSnacks: "Snacks e Aperitivos"
     },
     ja: {
         title: "スマート腎臓食",
@@ -393,7 +408,8 @@
         profile: "プロフィール",
         logout: "ログアウト",
         personalData: "個人データ",
-        medicalData: "医療データ"
+        medicalData: "医療データ",
+        catSnacks: "スナック菓子"
     }
 };
 
@@ -404,11 +420,29 @@ let currentLang = 'es';
 let pendingAvatarUpload = null;
 
 // DOM Elements
+// DOM Elements
 const gridContainer = document.getElementById('food-grid');
 const modal = document.getElementById('food-modal');
 const closeModalBtn = document.querySelector('.close-modal');
 const gramsInput = document.getElementById('grams-input');
 const searchInput = document.getElementById('search-input');
+const categoryTabsContainer = document.getElementById('category-tabs');
+
+// Categories Configuration
+const categories = [
+    { id: 'all', key: 'catAll', label: 'Todo' },
+    { id: 'fruits_veg', key: 'catFruits', label: 'Frutas y Verduras' },
+    { id: 'animal_protein', key: 'catProteins', label: 'Proteínas Animales' },
+    { id: 'dairy', key: 'catDairy', label: 'Lácteos y Yogures' },
+    { id: 'carbs', key: 'catCarbs', label: 'Carbohidratos' },
+    { id: 'grains_legumes', key: 'catGrains', label: 'Granos y Legumbres' },
+    { id: 'sweets_drinks', key: 'catDrinks', label: 'Bebidas y Dulces' },
+    { id: 'oils_fats', key: 'catFats', label: 'Grasas y Aceites' },
+    { id: 'others', key: 'catOthers', label: 'Otros' },
+    { id: 'snacks', key: 'catSnacks', label: 'Snacks' }
+];
+
+let activeCategory = 'all';
 
 // Feedback Elements
 const feedbackBtn = document.getElementById('feedback-btn');
@@ -449,12 +483,7 @@ function updateLanguage(lang) {
 
     // Update Grid if loaded
     if (foodDatabase.length > 0) {
-        // preserve filter if any
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        const filteredFoods = foodDatabase.filter(food =>
-            getFoodName(food).toLowerCase().includes(searchTerm)
-        );
-        renderGrid(filteredFoods);
+        filterAndRender();
     }
 
     // Update Auth Modal Texts if open or just in general to be safe
@@ -590,9 +619,10 @@ async function init() {
         // Setup Logic
         setupEventListeners();
         setupCustomSelects(); // Updated generic function
+        renderTabs(); // Render filters
 
         // Default render
-        renderGrid(foodDatabase);
+        filterAndRender();
 
         // Initial Lang
         updateLanguage('es');
@@ -608,6 +638,52 @@ async function init() {
             gridContainer.innerHTML = '<p>Error al cargar los alimentos. Asegúrate de que el servidor (server.py) esté corriendo.</p>';
         }
     }
+}
+
+function renderTabs() {
+    categoryTabsContainer.innerHTML = '';
+    categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = `category-tab ${cat.id === activeCategory ? 'active' : ''}`;
+        btn.textContent = cat.label; // Will be updated by translate
+        btn.setAttribute('data-i18n', cat.key);
+        btn.setAttribute('data-cat', cat.id);
+
+        btn.addEventListener('click', () => {
+            activeCategory = cat.id;
+
+            // Update UI
+            document.querySelectorAll('.category-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            filterAndRender();
+        });
+
+        categoryTabsContainer.appendChild(btn);
+    });
+}
+
+// Helper to remove accents/diacritics
+function normalizeText(text) {
+    if (!text) return "";
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+function filterAndRender() {
+    const searchTerm = normalizeText(searchInput.value.trim());
+
+    const filtered = foodDatabase.filter(food => {
+        // Text Match (Accent and Case Insensitive)
+        const name = getFoodName(food);
+        const matchesText = normalizeText(name).includes(searchTerm);
+
+        // Category Match
+        const matchesCategory = activeCategory === 'all' || food.category === activeCategory;
+
+        return matchesText && matchesCategory;
+    });
+
+    renderGrid(filtered);
 }
 
 // Render Logic
@@ -711,11 +787,7 @@ function setupEventListeners() {
     });
 
     searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase().trim();
-        const filteredFoods = foodDatabase.filter(food =>
-            getFoodName(food).toLowerCase().includes(searchTerm)
-        );
-        renderGrid(filteredFoods);
+        filterAndRender();
     });
 
     // Feedback Listeners
