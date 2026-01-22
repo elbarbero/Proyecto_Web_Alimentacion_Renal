@@ -42,12 +42,29 @@ def apply_method(food, method):
     new_food["salt"] = round(new_food["salt"] * mods["na_mult"], 2)
     new_food["calcium"] = round(new_food["calcium"], 0)
     
-    new_food["image_query"] = f"{method} {new_food['image_query']}"
+    
+    # Specific fix for Potatoes visuals as per user request
+    if "potato" in new_food['image_query']:
+        if method == "fried": 
+            new_food['image_query'] = "french fries"
+        elif method == "boiled": 
+            new_food['image_query'] = "boiled potatoes pot"
+        elif method == "roasted": 
+            new_food['image_query'] = "roasted potatoes oven"
+        elif method == "grilled": 
+            new_food['image_query'] = "grilled sliced potatoes"
+        elif method == "battered": 
+            new_food['image_query'] = "battered fried potato"
+    else:
+        new_food["image_query"] = f"{method} {new_food['image_query']}"
+        
     return new_food
 
 def get_image_url(query):
     base_url = "https://tse2.mm.bing.net/th"
-    params = {"q": query, "w": "500", "h": "500", "c": "7", "rs": "1", "p": "0"}
+    # Enforcing "real food", "close up", and "no people" to comply with user request
+    refined_query = f"{query} fresh food close up photography no people -cartoon -illustration -clipart"
+    params = {"q": refined_query, "w": "500", "h": "500", "c": "7", "rs": "1", "p": "0"}
     return f"{base_url}?{urllib.parse.urlencode(params)}"
 
 BASE_DB = [

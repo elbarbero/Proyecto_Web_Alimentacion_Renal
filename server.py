@@ -403,7 +403,7 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
             conn = sqlite3.connect(DB_NAME)
             conn.row_factory = sqlite3.Row # Para acceder por nombre de columna
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM foods")
+            cursor.execute("SELECT * FROM foods ORDER BY name ASC")
             rows = cursor.fetchall()
             
             foods = []
