@@ -401,6 +401,7 @@
 let currentFood = null;
 let foodDatabase = [];
 let currentLang = 'es';
+let pendingAvatarUpload = null;
 
 // DOM Elements
 const gridContainer = document.getElementById('food-grid');
@@ -862,7 +863,12 @@ function updateUserAvatar(url) {
 
     if (userBtn && avatarImg) {
         userBtn.classList.add('has-avatar');
-        avatarImg.src = url;
+        // Cache busting
+        if (url.includes('?')) {
+            avatarImg.src = `${url}&t=${new Date().getTime()}`;
+        } else {
+            avatarImg.src = `${url}?t=${new Date().getTime()}`;
+        }
     }
 }
 
@@ -1021,13 +1027,8 @@ function setupMedical() {
                 reader.onload = function (e) {
                     // Update preview
                     avatarPreview.src = e.target.result;
-
-                    // Auto upload
-                    const storedUser = localStorage.getItem('user');
-                    if (storedUser) {
-                        const user = JSON.parse(storedUser);
-                        uploadAvatar(user.email, e.target.result);
-                    }
+                    // Store pending upload
+                    pendingAvatarUpload = e.target.result;
                 };
                 reader.readAsDataURL(file);
             }
@@ -1047,20 +1048,12 @@ function setupMedical() {
 
             if (res.ok) {
                 const data = await res.json();
-                // Update local storage
-                const storedUser = localStorage.getItem('user');
-                if (storedUser) {
-                    const user = JSON.parse(storedUser);
-                    user.avatar_url = data.avatar_url;
-                    localStorage.setItem('user', JSON.stringify(user));
-
-                    // Update UI immediately
-                    updateUserAvatar(data.avatar_url);
-                }
+                return data.avatar_url;
             }
         } catch (err) {
             console.error("Error uploading avatar", err);
         }
+        return null;
     }
 
     // Logic for disabling/enabling fields
@@ -1154,6 +1147,16 @@ function setupMedical() {
             });
 
             if (res.ok) {
+                // Check if we have a pending avatar upload
+                if (pendingAvatarUpload) {
+                    const newAvatarUrl = await uploadAvatar(user.email, pendingAvatarUpload);
+                    if (newAvatarUrl) {
+                        user.avatar_url = newAvatarUrl;
+                        // Force UI update for avatar immediately
+                        updateUserAvatar(newAvatarUrl);
+                    }
+                }
+
                 // Update local storage
                 user.name = name;
                 user.surnames = surnames;
@@ -1171,6 +1174,9 @@ function setupMedical() {
 
                 // Clear password field
                 document.getElementById('profile-password').value = "";
+
+                // Reset pending
+                pendingAvatarUpload = null;
 
                 alert(`Perfil actualizado!`);
 
@@ -1212,6 +1218,11 @@ function loadProfileData() {
     if (!storedUser) return;
     const user = JSON.parse(storedUser);
 
+    // Reset Pending Avatar
+    pendingAvatarUpload = null;
+    const avatarInput = document.getElementById('avatar-input');
+    if (avatarInput) avatarInput.value = '';
+
     // Populate Fields
     document.getElementById('profile-name').value = user.name || '';
     document.getElementById('profile-surnames').value = user.surnames || '';
@@ -1228,7 +1239,9 @@ function loadProfileData() {
     if (nameDisplay) nameDisplay.textContent = (user.name || '') + " " + (user.surnames || '');
 
     if (user.avatar_url) {
-        document.getElementById('avatar-preview').src = user.avatar_url;
+        const url = user.avatar_url;
+        const timestamp = new Date().getTime();
+        document.getElementById('avatar-preview').src = url.includes('?') ? `${url}&t=${timestamp}` : `${url}?t=${timestamp}`;
     }
 
     // Medical Data

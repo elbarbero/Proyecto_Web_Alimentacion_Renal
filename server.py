@@ -3,6 +3,8 @@ import socketserver
 import json
 import sqlite3
 import os
+import urllib.parse
+
 
 PORT = 8000
 DB_NAME = "renal_diet.db"
@@ -67,8 +69,10 @@ RECIPIENT_EMAIL = os.environ.get("EMAIL_RECIPIENT", env.get("EMAIL_RECIPIENT", "
 class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed_path = urllib.parse.urlparse(self.path)
+        
         if parsed_path.path == '/api/get_user':
             query_params = urllib.parse.parse_qs(parsed_path.query)
+            # urllib.parse.parse_qs returns a list for each key, get the first one
             user_id = query_params.get('id', [None])[0]
             
             if not user_id:
@@ -106,6 +110,15 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                 print(f"Error fetching user: {e}")
                 self.send_response(500)
                 self.end_headers()
+            return
+
+        elif self.path == '/api/foods':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            
+            foods = self.get_foods()
+            self.wfile.write(json.dumps(foods).encode())
             return
             
         # Fallback for other GET requests (static files)
@@ -383,18 +396,7 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
             print(f">> ERROR CRÍTICO enviando email: {e}")
             return False, f"Failed to send email: {e}"
 
-    def do_GET(self):
-        # Rutas de API
-        if self.path == '/api/foods':
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            
-            foods = self.get_foods()
-            self.wfile.write(json.dumps(foods).encode())
-        else:
-            # Servir archivos estáticos (HTML, CSS, JS) normalmente
-            return http.server.SimpleHTTPRequestHandler.do_GET(self)
+
 
     def get_foods(self):
         try:
