@@ -55,8 +55,6 @@
         transplant: "Trasplante",
         erca: "ERCA",
         questionStage: "Estadio de la enfermedad renal",
-        questionStage: "Estadio de la enfermedad renal",
-        questionStage: "Estadio de la enfermedad renal",
         saveBtn: "Guardar",
         // New Profile
         profile: "Perfil",
@@ -64,6 +62,12 @@
         personalData: "Datos Personales",
         medicalData: "Datos Médicos",
         cancel: "Cancelar",
+        stage1: "Estadio 1",
+        stage2: "Estadio 2",
+        stage3a: "Estadio 3A",
+        stage3b: "Estadio 3B",
+        stage4: "Estadio 4",
+        stage5: "Estadio 5",
         // Categories
         catAll: "Todos",
         catDairy: "Leche y derivados (lácteos)",
@@ -137,6 +141,16 @@
         questionStage: "Kidney Disease Stage",
         questionStage: "Stage of kidney disease",
         saveBtn: "Save and Continue",
+        profile: "Profile",
+        logout: "Logout",
+        personalData: "Personal Data",
+        medicalData: "Medical Data",
+        stage1: "Stage 1",
+        stage2: "Stage 2",
+        stage3a: "Stage 3A",
+        stage3b: "Stage 3B",
+        stage4: "Stage 4",
+        stage5: "Stage 5",
         // New Profile
         catAll: "All",
         catDairy: "Dairy & Derivatives",
@@ -209,7 +223,29 @@
         erca: "CKD (Fortgeschritten)",
         questionStage: "Stadium der Nierenerkrankung",
         saveBtn: "Speichern und Fortfahren",
-        catSnacks: "Snacks und Tüten"
+        catAll: "Alle",
+        catDairy: "Milchprodukte (Laktose)",
+        catProteins: "Fleisch, Fisch und Eier",
+        catLegumesNutsGroup: "Hülsenfrüchte und Nüsse",
+        catVeg: "Gemüse",
+        catFruits: "Obst",
+        catCarbs: "Getreide, Nudeln und Brot",
+        catFats: "Fette und Öle",
+        catSweets: "Süßigkeiten und Zucker",
+        catLegumesSpec: "Hülsenfrüchte (Spezifisch)",
+        catNutsSpec: "Nüsse (Spezifisch)",
+        catTubersSpec: "Knollen (Spezifisch)",
+        catDrinks: "Getränke (Wasser/Tee)",
+        profile: "Profil",
+        logout: "Abmelden",
+        personalData: "Persönliche Daten",
+        medicalData: "Medizinische Daten",
+        stage1: "Stadium 1",
+        stage2: "Stadium 2",
+        stage3a: "Stadium 3A",
+        stage3b: "Stadium 3B",
+        stage4: "Stadium 4",
+        stage5: "Stadium 5"
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -267,20 +303,30 @@
         transplant: "Greffe",
         erca: "MRC (Avancé)",
         questionStage: "Stade de la maladie rénale",
-        no: "Non",
-        questionTreatment: "Traitement",
-        selectOption: "Sélectionnez une option",
-        dialysis: "Dialyse",
-        transplant: "Greffe",
-        erca: "MRC (Avancé)",
-        questionStage: "Stade de la maladie rénale",
         saveBtn: "Enregistrer et Continuer",
-        // New Profile
         profile: "Profil",
         logout: "Se déconnecter",
         personalData: "Données personnelles",
         medicalData: "Données médicales",
-        catSnacks: "Snacks et Sachets"
+        stage1: "Stade 1",
+        stage2: "Stade 2",
+        stage3a: "Stade 3A",
+        stage3b: "Stade 3B",
+        stage4: "Stade 4",
+        stage5: "Stade 5",
+        catAll: "Tout",
+        catDairy: "Laitages et dérivés",
+        catProteins: "Viandes, poissons et œufs",
+        catLegumesNutsGroup: "Légumineuses et fruits à coque",
+        catVeg: "Légumes et verdures",
+        catFruits: "Fruits",
+        catCarbs: "Céréales, pâtes et pain",
+        catFats: "Graisses et huiles",
+        catSweets: "Sucres et douceurs",
+        catLegumesSpec: "Légumineuses (Spécifique)",
+        catNutsSpec: "Fruits à coque (Spécifique)",
+        catTubersSpec: "Tubercules (Spécifique)",
+        catDrinks: "Boissons (eau/infusions)"
     },
     pt: {
         title: "Dieta Renal Inteligente",
@@ -338,14 +384,30 @@
         transplant: "Transplante",
         erca: "DRC (Avançado)",
         questionStage: "Estágio da doença renal",
-        questionStage: "Estágio da doença renal",
         saveBtn: "Salvar e Continuar",
-        // New Profile
         profile: "Perfil",
         logout: "Sair",
         personalData: "Dados Pessoais",
         medicalData: "Dados Médicos",
-        catSnacks: "Snacks e Aperitivos"
+        stage1: "Estágio 1",
+        stage2: "Estágio 2",
+        stage3a: "Estágio 3A",
+        stage3b: "Estágio 3B",
+        stage4: "Estágio 4",
+        stage5: "Estágio 5",
+        catAll: "Todos",
+        catDairy: "Leites e derivados (lácteos)",
+        catProteins: "Carnes, peixes e ovos",
+        catLegumesNutsGroup: "Leguminosas e frutos secos",
+        catVeg: "Verduras e hortaliças",
+        catFruits: "Frutas",
+        catCarbs: "Cereais, massas, pão e derivados",
+        catFats: "Gorduras, óleos e manteigas",
+        catSweets: "Açúcares e doces",
+        catLegumesSpec: "Leguminosas (específico)",
+        catNutsSpec: "Frutos secos (específico)",
+        catTubersSpec: "Tubérculos (específico)",
+        catDrinks: "Bebidas (água/infusões)"
     },
     ja: {
         title: "スマート腎臓食",
@@ -391,14 +453,6 @@
         validationEmpty: "このフィールドに入力してください",
         validationEmail: "有効なメールアドレスを入力してください",
         validationDate: "有効な日付を入力してください",
-        fat: "脂質",
-        potassium: "カリウム",
-        phosphorus: "リン",
-        salt: "塩分",
-        calcium: "カルシウム",
-        feedbackTitle: "提案を送る",
-        feedbackDesc: "改善にご協力ください。どのような機能が必要ですか？",
-        feedbackPlaceholder: "ここに提案を書いてください...",
         cancel: "キャンセル",
         send: "送信",
         // Medical Profile
@@ -413,14 +467,31 @@
         transplant: "移植",
         erca: "保存期腎不全",
         questionStage: "腎臓病のステージ",
-        questionStage: "腎臓病のステージ",
         saveBtn: "保存して続行",
         // New Profile
+        catAll: "すべて",
+        catDairy: "乳製品",
+        catProteins: "肉・魚・卵",
+        catLegumesNutsGroup: "豆類・ナッツ類",
+        catVeg: "野菜類",
+        catFruits: "果物類",
+        catCarbs: "穀物・パスタ・パン",
+        catFats: "油脂・バター類",
+        catSweets: "砂糖・菓子類",
+        catLegumesSpec: "豆類（詳細）",
+        catNutsSpec: "ナッツ類（詳細）",
+        catTubersSpec: "芋類（詳細）",
+        catDrinks: "飲み物（水・お茶）",
         profile: "プロフィール",
         logout: "ログアウト",
         personalData: "個人データ",
         medicalData: "医療データ",
-        catSnacks: "スナック菓子"
+        stage1: "ステージ 1",
+        stage2: "ステージ 2",
+        stage3a: "ステージ 3A",
+        stage3b: "ステージ 3B",
+        stage4: "ステージ 4",
+        stage5: "ステージ 5"
     }
 };
 
@@ -572,22 +643,22 @@ function setupCustomSelects() {
                     updateLanguage(value);
                 } else {
                     // For others (treatment), we act like a select
-                    // Update text (and keep translation key if needed, or just text)
-                    selected.textContent = this.textContent;
+                    // Update text and keep translation key if exists
+                    const key = this.getAttribute('data-i18n');
+                    if (key) {
+                        selected.setAttribute('data-i18n', key);
+                        selected.textContent = translations[currentLang][key] || this.textContent;
+                    } else {
+                        selected.textContent = this.textContent;
+                        selected.removeAttribute('data-i18n');
+                    }
+
                     // Update hidden input if exists
                     if (hiddenInput) {
                         hiddenInput.value = value;
                     }
 
-                    // Specific logic for treatment to ensure i18n key update?
-                    // Actually, if we just set textContent, we lose data-i18n on the selected box if we overwrite it.
-                    // Better approach: Set text, but also update translations if needed.
-                    // For now, simple text replacement is fine, but let's check if we need to persist the key.
-                    // The 'selected' div has `data-i18n="selectOption"` initially.
-                    // When we pick an option, we should probably set the text to the translated value of that option.
-                    // The `updateLanguage` function will try to re-translate `selectOption` if we don't handle this.
-                    // Fix: Remove data-i18n from selected element once a user makes a choice, OR manage it.
-                    selected.removeAttribute('data-i18n');
+                    selected.classList.add('selected-value');
                 }
 
                 // Close dropdown
@@ -1351,7 +1422,7 @@ function loadProfileData() {
 
     const t = translations[currentLang];
     const saveMedicalBtn = document.getElementById('save-medical');
-    if (saveMedicalBtn) saveMedicalBtn.textContent = 'Guardar'; // Override default for profile view
+    if (saveMedicalBtn) saveMedicalBtn.textContent = t.saveBtn;
 
     if (user.treatment_type) {
         // Update custom select
@@ -1365,9 +1436,15 @@ function loadProfileData() {
             // Find text label deeply
             const option = select.querySelector(`.select-items div[data-value="${user.treatment_type}"]`);
             if (option) {
-                selectedText.textContent = option.textContent;
-                selectedText.classList.add('selected-value'); // Helper class if needed
-                selectedText.removeAttribute('data-i18n'); // Remove i18n key to avoid overwrite
+                const key = option.getAttribute('data-i18n');
+                if (key) {
+                    selectedText.setAttribute('data-i18n', key);
+                    selectedText.textContent = t[key] || option.textContent;
+                } else {
+                    selectedText.textContent = option.textContent;
+                    selectedText.removeAttribute('data-i18n');
+                }
+                selectedText.classList.add('selected-value');
             }
         }
     }

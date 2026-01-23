@@ -293,12 +293,14 @@
                     <div class="personal-data-grid">
                         <div class="input-group-auth">
                             <label for="profile-name" data-i18n="name">Nombre</label>
-                            <input type="text" id="profile-name" placeholder="Tu nombre" required>
+                            <input type="text" id="profile-name" data-i18n-placeholder="placeholderName"
+                                placeholder="Tu nombre" required>
                         </div>
 
                         <div class="input-group-auth">
                             <label for="profile-surnames" data-i18n="surnames">Apellidos</label>
-                            <input type="text" id="profile-surnames" placeholder="Tus apellidos" required>
+                            <input type="text" id="profile-surnames" data-i18n-placeholder="placeholderSurnames"
+                                placeholder="Tus apellidos" required>
                         </div>
 
                         <div class="input-group-auth">
@@ -314,7 +316,8 @@
 
                         <div class="input-group-auth" id="profile-password-group">
                             <label for="profile-password" data-i18n="password">Contraseña</label>
-                            <input type="password" id="profile-password" placeholder="••••••••">
+                            <input type="password" id="profile-password" data-i18n-placeholder="placeholderPassword"
+                                placeholder="••••••••">
                         </div>
                     </div>
 
@@ -363,37 +366,37 @@
                             <label class="stage-card" data-tooltip="TFG ≥ 90">
                                 <input type="radio" name="kidney_stage" value="1">
                                 <div class="stage-content">
-                                    <span class="stage-name">Estadio 1</span>
+                                    <span class="stage-name" data-i18n="stage1">Estadio 1</span>
                                 </div>
                             </label>
                             <label class="stage-card" data-tooltip="TFG 60-89">
                                 <input type="radio" name="kidney_stage" value="2">
                                 <div class="stage-content">
-                                    <span class="stage-name">Estadio 2</span>
+                                    <span class="stage-name" data-i18n="stage2">Estadio 2</span>
                                 </div>
                             </label>
                             <label class="stage-card" data-tooltip="TFG 45-59">
                                 <input type="radio" name="kidney_stage" value="3a">
                                 <div class="stage-content">
-                                    <span class="stage-name">Estadio 3A</span>
+                                    <span class="stage-name" data-i18n="stage3a">Estadio 3A</span>
                                 </div>
                             </label>
                             <label class="stage-card" data-tooltip="TFG 30-48">
                                 <input type="radio" name="kidney_stage" value="3b">
                                 <div class="stage-content">
-                                    <span class="stage-name">Estadio 3b</span>
+                                    <span class="stage-name" data-i18n="stage3b">Estadio 3b</span>
                                 </div>
                             </label>
                             <label class="stage-card" data-tooltip="TFG 15-29">
                                 <input type="radio" name="kidney_stage" value="4">
                                 <div class="stage-content">
-                                    <span class="stage-name">Estadio 4</span>
+                                    <span class="stage-name" data-i18n="stage4">Estadio 4</span>
                                 </div>
                             </label>
                             <label class="stage-card" data-tooltip="TFG < 15">
                                 <input type="radio" name="kidney_stage" value="5">
                                 <div class="stage-content">
-                                    <span class="stage-name">Estadio 5</span>
+                                    <span class="stage-name" data-i18n="stage5">Estadio 5</span>
                                 </div>
                             </label>
                         </div>
