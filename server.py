@@ -401,36 +401,71 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
     def get_foods(self):
         try:
             conn = sqlite3.connect(DB_NAME)
-            conn.row_factory = sqlite3.Row # Para acceder por nombre de columna
+            conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM foods ORDER BY name ASC")
-            rows = cursor.fetchall()
             
+            # Fetch all foods
+            cursor.execute("SELECT id, image_url FROM foods")
+            foods_rows = cursor.fetchall()
+            
+            # Fetch all categories per food
+            cursor.execute("""
+                SELECT fc.food_id, c.key 
+                FROM food_categories fc
+                JOIN categories c ON fc.category_id = c.id
+            """)
+            cat_rows = cursor.fetchall()
+            cat_dict = {}
+            for row in cat_rows:
+                if row['food_id'] not in cat_dict:
+                    cat_dict[row['food_id']] = []
+                cat_dict[row['food_id']].append(row['key'])
+            
+            # Fetch all translations
+            cursor.execute("SELECT food_id, lang, name FROM food_translations")
+            trans_rows = cursor.fetchall()
+            trans_dict = {}
+            for row in trans_rows:
+                if row['food_id'] not in trans_dict:
+                    trans_dict[row['food_id']] = {}
+                trans_dict[row['food_id']][row['lang']] = row['name']
+                
+            # Fetch all nutrients
+            cursor.execute("""
+                SELECT fn.food_id, n.key as nutrient_key, fn.value 
+                FROM food_nutrients fn
+                JOIN nutrients n ON fn.nutrient_id = n.id
+            """)
+            nut_rows = cursor.fetchall()
+            nut_dict = {}
+            for row in nut_rows:
+                if row['food_id'] not in nut_dict:
+                    nut_dict[row['food_id']] = {}
+                nut_dict[row['food_id']][row['nutrient_key']] = row['value']
+
             foods = []
-            for row in rows:
+            for f in foods_rows:
+                f_id = f['id']
+                names = trans_dict.get(f_id, {})
+                # Use Spanish name as default 'name' property for compatibility, or English if missing
+                default_name = names.get('es', names.get('en', 'Unknown'))
+                
+                # Get categories as comma-separated string for frontend compatibility
+                categories_list = cat_dict.get(f_id, [])
+                category_string = ",".join(categories_list)
+                
                 foods.append({
-                    "id": row["id"],
-                    "name": row["name"],
-                    "category": row["category"],
-                    "names": {
-                        "es": row["name"],
-                        "en": row["name_en"],
-                        "de": row["name_de"],
-                        "fr": row["name_fr"],
-                        "pt": row["name_pt"],
-                        "ja": row["name_ja"]
-                    },
-                    "image": row["image_url"],
-                    "nutrients": {
-                        "protein": row["protein"],
-                        "sugar": row["sugar"],
-                        "fat": row["fat"],
-                        "potassium": row["potassium"],
-                        "phosphorus": row["phosphorus"],
-                        "salt": row["salt"],
-                        "calcium": row["calcium"]
-                    }
+                    "id": f_id,
+                    "name": default_name,
+                    "category": category_string,
+                    "names": names,
+                    "image": f['image_url'],
+                    "nutrients": nut_dict.get(f_id, {})
                 })
+            
+            # Sort by name ES for consistency
+            foods.sort(key=lambda x: x['name'])
+            
             conn.close()
             return foods
         except Exception as e:

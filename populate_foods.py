@@ -397,22 +397,68 @@ def populate():
     # DB Interaction
     conn = sqlite3.connect('renal_diet.db')
     cursor = conn.cursor()
-    cursor.execute('DROP TABLE IF EXISTS foods')
-    cursor.execute('''CREATE TABLE foods
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  name TEXT, name_en TEXT, name_de TEXT, name_fr TEXT, name_pt TEXT, name_ja TEXT,
-                  category TEXT, image_url TEXT,
-                  protein REAL, sugar REAL, fat REAL,
-                  potassium REAL, phosphorus REAL, salt REAL, calcium REAL)''')
     
-    data = []
-    for i, f in enumerate(generated, 1):
-        data.append((i, f["name"], f["name_en"], f["name_de"], f["name_fr"], f["name_pt"], f["name_ja"], f["category"],
-                     get_image_url(f["image_query"]), f["protein"], f["sugar"], f["fat"], f["potassium"], f["phosphorus"], f["salt"], f["calcium"]))
+    # 1. Clear existing data (preserving table structure)
+    print("Limpiando datos existentes...")
+    cursor.execute('DELETE FROM food_nutrients')
+    cursor.execute('DELETE FROM food_translations')
+    cursor.execute('DELETE FROM foods')
+    # Nos aseguramos de resetear los autoincrementales
+    cursor.execute('DELETE FROM sqlite_sequence WHERE name IN ("foods", "food_translations", "categories")')
+    
+    # 2. Asegurar que las categorías existen
+    # Extraemos categorías únicas de los datos generados
+    unique_categories = set(f["category"] for f in generated)
+    for cat_key in unique_categories:
+        cursor.execute("INSERT OR IGNORE INTO categories (key) VALUES (?)", (cat_key,))
+    
+    # Obtener mapeo de categorías
+    cursor.execute("SELECT id, key FROM categories")
+    category_map = {key: id_ for id_, key in cursor.fetchall()}
+    
+    # 3. Obtener mapeo de nutrientes
+    cursor.execute("SELECT id, key FROM nutrients")
+    nutrient_map = {key: id_ for id_, key in cursor.fetchall()}
+    
+    # 4. Insertar datos
+    print(f"Insertando {len(generated)} alimentos...")
+    for f in generated:
+        # a. Insertar food
+        cursor.execute("INSERT INTO foods (category_id, image_url) VALUES (?, ?)", 
+                       (category_map[f["category"]], get_image_url(f["image_query"])))
+        food_id = cursor.lastrowid
         
-    cursor.executemany('INSERT INTO foods VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', data)
+        # b. Insertar Traducciones
+        translations = [
+            ('es', f['name']),
+            ('en', f['name_en']),
+            ('de', f['name_de']),
+            ('fr', f['name_fr']),
+            ('pt', f['name_pt']),
+            ('ja', f['name_ja'])
+        ]
+        for lang, name in translations:
+            if name:
+                cursor.execute("INSERT INTO food_translations (food_id, lang, name) VALUES (?, ?, ?)", 
+                               (food_id, lang, name))
+        
+        # c. Insertar Nutrientes
+        nut_values = [
+            ('protein', f['protein']),
+            ('sugar', f['sugar']),
+            ('fat', f['fat']),
+            ('potassium', f['potassium']),
+            ('phosphorus', f['phosphorus']),
+            ('salt', f['salt']),
+            ('calcium', f['calcium'])
+        ]
+        for nut_key, val in nut_values:
+            if val is not None:
+                cursor.execute("INSERT INTO food_nutrients (food_id, nutrient_id, value) VALUES (?, ?, ?)", 
+                               (food_id, nutrient_map[nut_key], val))
+
     conn.commit()
-    print(f"Generated {len(generated)} items.")
+    print(f"Base de datos actualizada con {len(generated)} items.")
     conn.close()
 
 if __name__ == "__main__":

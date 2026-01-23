@@ -48,37 +48,52 @@ initial_foods = [
 ]
 
 def init_db():
-    # if os.path.exists(DB_NAME):
-    #     try:
-    #         os.remove(DB_NAME)
-    #         print(f"Base de datos {DB_NAME} eliminada para regeneración.")
-    #     except PermissionError:
-    #         print(f"Error: No se puede borrar {DB_NAME} porque está en uso. Cierra el servidor primero.")
-    #         return
-
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
-    cursor.execute('''
+    # 1. Crear Tablas Profesionales
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS categories (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        key TEXT UNIQUE NOT NULL, 
+        icon_url TEXT, 
+        color_hex TEXT
+    )""")
+    
+    cursor.execute("""
     CREATE TABLE IF NOT EXISTS foods (
-        id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL,
-        name_en TEXT,
-        name_de TEXT,
-        name_fr TEXT,
-        name_pt TEXT,
-        name_ja TEXT,
-        category TEXT,
-        image_url TEXT,
-        protein REAL,
-        sugar REAL,
-        fat REAL,
-        potassium REAL,
-        phosphorus REAL,
-        salt REAL,
-        calcium REAL
-    )
-    ''')
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        category_id INTEGER, 
+        image_url TEXT, 
+        FOREIGN KEY(category_id) REFERENCES categories(id)
+    )""")
+    
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS food_translations (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        food_id INTEGER, 
+        lang TEXT, 
+        name TEXT, 
+        FOREIGN KEY(food_id) REFERENCES foods(id)
+    )""")
+    
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS nutrients (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        key TEXT UNIQUE NOT NULL, 
+        name_es TEXT, 
+        unit TEXT
+    )""")
+    
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS food_nutrients (
+        food_id INTEGER, 
+        nutrient_id INTEGER, 
+        value REAL, 
+        PRIMARY KEY(food_id, nutrient_id), 
+        FOREIGN KEY(food_id) REFERENCES foods(id), 
+        FOREIGN KEY(nutrient_id) REFERENCES nutrients(id)
+    )""")
 
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS users (
@@ -96,22 +111,20 @@ def init_db():
     )
     ''')
     
-    # ... (migrations omitted for brevity, keeping existing flow)
-
-    try:
-        cursor.execute("ALTER TABLE foods ADD COLUMN category TEXT")
-        print("Migración: Columna 'category' añadida a foods.")
-    except sqlite3.OperationalError:
-        pass
-
-    cursor.executemany('''
-    INSERT INTO foods (id, name, name_en, name_de, name_fr, name_pt, name_ja, category, image_url, protein, sugar, fat, potassium, phosphorus, salt, calcium)
-    VALUES (?, ?, ?, ?, ?, ?, ?, "others", ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', initial_foods)
+    # 2. Inicializar Catálogos
+    nutrients_data = [
+        ('protein', 'Proteínas', 'g'),
+        ('sugar', 'Azúcares', 'g'),
+        ('fat', 'Grasas', 'g'),
+        ('potassium', 'Potasio', 'mg'),
+        ('phosphorus', 'Fósforo', 'mg'),
+        ('salt', 'Sal', 'g'),
+        ('calcium', 'Calcio', 'mg')
+    ]
+    cursor.executemany("INSERT OR IGNORE INTO nutrients (key, name_es, unit) VALUES (?, ?, ?)", nutrients_data)
 
     conn.commit()
-    print(f"Base de datos {DB_NAME} creada e inicializada con {len(initial_foods)} alimentos incluyendo CALCIO.")
-    
+    print(f"Base de datos {DB_NAME} inicializada con el esquema profesional.")
     conn.close()
 
 if __name__ == "__main__":
