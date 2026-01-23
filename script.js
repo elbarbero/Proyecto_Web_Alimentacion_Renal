@@ -65,16 +65,19 @@
         medicalData: "Datos Médicos",
         cancel: "Cancelar",
         // Categories
-        catAll: "Todo",
-        catFruits: "Frutas y Verduras",
-        catProteins: "Proteínas Animales",
-        catDairy: "Lácteos y Yogures",
-        catCarbs: "Carbohidratos",
-        catGrains: "Granos y Legumbres",
-        catDrinks: "Bebidas y Dulces",
-        catFats: "Grasas y Aceites",
-        catOthers: "Otros",
-        catSnacks: "Snacks y Bolsas"
+        catAll: "Todos",
+        catDairy: "Leche y derivados (lácteos)",
+        catProteins: "Carnes, pescados y huevos",
+        catLegumesNutsGroup: "Legumbres y frutos secos",
+        catVeg: "Verduras y hortalizas",
+        catFruits: "Frutas",
+        catCarbs: "Cereales, pasta, pan y derivados",
+        catFats: "Grasas, aceites y mantequillas",
+        catSweets: "Azúcares y dulces",
+        catLegumesSpec: "Legumbres (específico)",
+        catNutsSpec: "Frutos secos (específico)",
+        catTubersSpec: "Tubérculos (específico)",
+        catDrinks: "Bebidas (agua/infusiones)"
     },
     en: {
         title: "Smart Renal Diet",
@@ -135,11 +138,19 @@
         questionStage: "Stage of kidney disease",
         saveBtn: "Save and Continue",
         // New Profile
-        profile: "Profile",
-        logout: "Log Out",
-        personalData: "Personal Data",
-        medicalData: "Medical Data",
-        catSnacks: "Snacks and Chips"
+        catAll: "All",
+        catDairy: "Dairy & Derivatives",
+        catProteins: "Meat, Fish & Eggs",
+        catLegumesNutsGroup: "Legumes & Nuts",
+        catVeg: "Vegetables",
+        catFruits: "Fruits",
+        catCarbs: "Cereals & Pasta",
+        catFats: "Fats & Oils",
+        catSweets: "Sweets & Sugars",
+        catLegumesSpec: "Legumes (Specific)",
+        catNutsSpec: "Nuts (Specific)",
+        catTubersSpec: "Tubers (Specific)",
+        catDrinks: "Drinks"
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -431,15 +442,18 @@ const categoryTabsContainer = document.getElementById('category-tabs');
 // Categories Configuration
 const categories = [
     { id: 'all', key: 'catAll', label: 'Todo' },
-    { id: 'fruits_veg', key: 'catFruits', label: 'Frutas y Verduras' },
-    { id: 'animal_protein', key: 'catProteins', label: 'Proteínas Animales' },
-    { id: 'dairy', key: 'catDairy', label: 'Lácteos y Yogures' },
-    { id: 'carbs', key: 'catCarbs', label: 'Carbohidratos' },
-    { id: 'grains_legumes', key: 'catGrains', label: 'Granos y Legumbres' },
-    { id: 'sweets_drinks', key: 'catDrinks', label: 'Bebidas y Dulces' },
-    { id: 'oils_fats', key: 'catFats', label: 'Grasas y Aceites' },
-    { id: 'others', key: 'catOthers', label: 'Otros' },
-    { id: 'snacks', key: 'catSnacks', label: 'Snacks' }
+    { id: 'dairy', key: 'catDairy', label: 'Leche y derivados' },
+    { id: 'proteins', key: 'catProteins', label: 'Carnes, pescados y huevos' },
+    { id: 'legumes_nuts_group', key: 'catLegumesNutsGroup', label: 'Legumbres y frutos secos' },
+    { id: 'vegetables', key: 'catVeg', label: 'Verduras y hortalizas' },
+    { id: 'fruits', key: 'catFruits', label: 'Frutas' },
+    { id: 'carbs', key: 'catCarbs', label: 'Cereales, pasta, pan' },
+    { id: 'fats', key: 'catFats', label: 'Grasas y aceites' },
+    { id: 'sweets', key: 'catSweets', label: 'Azúcares y dulces' },
+    { id: 'legumes_spec', key: 'catLegumesSpec', label: 'Legumbres (específico)' },
+    { id: 'nuts_spec', key: 'catNutsSpec', label: 'Frutos secos (específico)' },
+    { id: 'tubers_spec', key: 'catTubersSpec', label: 'Tubérculos (específico)' },
+    { id: 'drinks', key: 'catDrinks', label: 'Bebidas' }
 ];
 
 let activeCategory = 'all';
@@ -677,8 +691,10 @@ function filterAndRender() {
         const name = getFoodName(food);
         const matchesText = normalizeText(name).includes(searchTerm);
 
-        // Category Match
-        const matchesCategory = activeCategory === 'all' || food.category === activeCategory;
+        // Category Match (Supporting comma-separated strings)
+        const matchesCategory = activeCategory === 'all' ||
+            food.category === activeCategory ||
+            (food.category && food.category.split(',').map(c => c.trim()).includes(activeCategory));
 
         return matchesText && matchesCategory;
     });

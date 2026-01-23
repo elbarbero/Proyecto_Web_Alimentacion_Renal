@@ -73,10 +73,9 @@ def get_image_url(query):
 
 BASE_DB = [
     {
-        "category": "fruits_veg",
+        "category": "vegetables",
         "methods": ["raw", "boiled", "fried", "roasted", "grilled"],
         "items": [
-            {"n":"Patata", "en":"Potato", "de":"Kartoffel", "fr":"Pomme de terre", "pt":"Batata", "ja":"ジャガイモ", "q": "raw brown potato whole", "p":2.0,"s":0.8,"f":0.1,"k":421,"ph":57,"sa":0.01,"ca":12},
             {"n":"Zanahoria", "en":"Carrot", "de":"Karotte", "fr":"Carotte", "pt":"Cenoura", "ja":"人参", "q": "bunch of fresh carrots", "p":0.9,"s":4.7,"f":0.2,"k":320,"ph":35,"sa":0.06,"ca":33},
             {"n":"Espinacas", "en":"Spinach", "de":"Spinat", "fr":"Épinards", "pt":"Espinafre", "ja":"ほうれん草", "q": "fresh baby spinach leaves bowl", "p":2.9,"s":0.4,"f":0.4,"k":558,"ph":49,"sa":0.07,"ca":99},
             {"n":"Brócoli", "en":"Broccoli", "de":"Brokkoli", "fr":"Brocoli", "pt":"Brócolis", "ja":"ブロッコリー", "q": "fresh green broccoli head", "p":2.8,"s":1.7,"f":0.4,"k":316,"ph":66,"sa":0.03,"ca":47},
@@ -93,9 +92,8 @@ BASE_DB = [
             {"n":"Champiñones", "en":"Mushrooms", "de":"Pilze", "fr":"Champignons", "pt":"Cogumelos", "ja":"マッシュルーム", "q": "fresh white mushrooms", "p":3.1,"s":1.6,"f":0.3,"k":318,"ph":86,"sa":0.01,"ca":3},
             {"n":"Espárragos", "en":"Asparagus", "de":"Spargel", "fr":"Asperges", "pt":"Espargos", "ja":"アスパラガス", "q": "asparagus", "p":2.2,"s":1.9,"f":0.1,"k":202,"ph":52,"sa":0.01,"ca":24},
             {"n":"Judías Verdes", "en":"Green Beans", "de":"Grüne Bohnen", "fr":"Haricots Verts", "pt":"Feijão Verde", "ja":"インゲン", "q": "green beans", "p":1.8,"s":3.3,"f":0.1,"k":211,"ph":38,"sa":0.01,"ca":37},
-            {"n":"Guisantes", "en":"Peas", "de":"Erbsen", "fr":"Petits Pois", "pt":"Ervilhas", "ja":"グリーンピース", "q": "peas", "p":5.4,"s":5.7,"f":0.4,"k":244,"ph":108,"sa":0.01,"ca":25},
-            {"n":"Batata", "en":"Sweet Potato", "de":"Süßkartoffel", "fr":"Patate douce", "pt":"Batata Doce", "ja":"サツマイモ", "q": "sweet potato", "p":1.6,"s":4.2,"f":0.1,"k":337,"ph":47,"sa":0.05,"ca":30},
-            {"n":"Calabaza", "en":"Pumpkin", "de":"Kürbis", "fr":"Citrouille", "pt":"Abóbora", "ja":"カボチャ", "q": "pumpkin", "p":1.0,"s":2.8,"f":0.1,"k":340,"ph":44,"sa":0.01,"ca":21},
+            {"n":"Guisantes", "en":"Peas", "de":"Erbsen", "fr":"Petits Pois", "pt":"Ervilhas", "ja":"グリーンピース", "q": "fresh green peas bowl", "p":5.4,"s":5.7,"f":0.4,"k":244,"ph":108,"sa":0.01,"ca":25},
+            {"n":"Calabaza", "en":"Pumpkin", "de":"Kürbis", "fr":"Citrouille", "pt":"Abóbora", "ja":"カボチャ", "q": "fresh pumpkin sliced", "p":1.0,"s":2.8,"f":0.1,"k":340,"ph":44,"sa":0.01,"ca":21},
             {"n":"Puerro", "en":"Leek", "de":"Lauch", "fr":"Poireau", "pt":"Alho-poró", "ja":"ネギ", "q": "fresh green leek onion", "p":1.5,"s":3.9,"f":0.3,"k":180,"ph":35,"sa":0.02,"ca":59},
             {"n":"Remolacha", "en":"Beetroot", "de":"Rote Bete", "fr":"Betterave", "pt":"Beterraba", "ja":"ビーツ", "q": "fresh beetroot bulb purple", "p":1.6,"s":6.8,"f":0.2,"k":325,"ph":40,"sa":0.08,"ca":16},
             {"n":"Rábano", "en":"Radish", "de":"Radieschen", "fr":"Radis", "pt":"Rabanete", "ja":"大根", "q": "fresh red radish bulb", "p":0.7,"s":1.9,"f":0.1,"k":233,"ph":20,"sa":0.04,"ca":25},
@@ -103,17 +101,31 @@ BASE_DB = [
             {"n":"Kale", "en":"Kale", "de":"Grünkohl", "fr":"Chou frisé", "pt":"Couve Kale", "ja":"ケール", "q": "fresh green kale leaves", "p":4.3,"s":2.3,"f":0.9,"k":491,"ph":92,"sa":0.04,"ca":150},
             {"n":"Bok Choy", "en":"Bok Choy", "de":"Pak Choi", "fr":"Bok Choy", "pt":"Bok Choy", "ja":"チンゲン菜", "q": "fresh bok choy cabbage", "p":1.5,"s":1.2,"f":0.2,"k":252,"ph":37,"sa":0.06,"ca":105},
             {"n":"Okra", "en":"Okra", "de":"Okra", "fr":"Gombo", "pt":"Quiabo", "ja":"オクラ", "q": "fresh green okra pods", "p":1.9,"s":1.5,"f":0.2,"k":299,"ph":61,"sa":0.01,"ca":82},
-            {"n":"Yuca", "en":"Cassava", "de":"Maniok", "fr":"Manioc", "pt":"Mandioca", "ja":"キャッサバ", "q": "raw cassava root", "p":1.4,"s":1.7,"f":0.3,"k":271,"ph":27,"sa":0.01,"ca":16},
-            {"n":"Ñame", "en":"Yam", "de":"Yamswurzel", "fr":"Igname", "pt":"Inhame", "ja":"山芋", "q": "raw yam root", "p":1.5,"s":0.5,"f":0.2,"k":816,"ph":55,"sa":0.01,"ca":17}, # High K!
             {"n":"Daikon", "en":"Daikon Radish", "de":"Daikon", "fr":"Daikon", "pt":"Nabo Daikon", "ja":"大根", "q": "raw daikon radish whole", "p":0.6,"s":2.5,"f":0.1,"k":227,"ph":23,"sa":0.02,"ca":27},
             {"n":"Hinojo", "en":"Fennel", "de":"Fenchel", "fr":"Fenouil", "pt":"Funcho", "ja":"フェンネル", "q": "fresh fennel bulb root", "p":1.2,"s":3.9,"f":0.2,"k":414,"ph":50,"sa":0.05,"ca":49},
             {"n":"Col de Bruselas", "en":"Brussels Sprouts", "de":"Rosenkohl", "fr":"Choux de Bruxelles", "pt":"Couve de Bruxelas", "ja":"芽キャベツ", "q": "fresh green brussels sprouts", "p":3.4,"s":2.2,"f":0.3,"k":389,"ph":69,"sa":0.02,"ca":42},
-            {"n":"Maíz Dulce", "en":"Sweet Corn", "de":"Mais", "fr":"Maïs", "pt":"Milho", "ja":"とうもろこし", "q": "fresh ear of sweet corn", "p":3.2,"s":6.3,"f":1.2,"k":270,"ph":89,"sa":0.01,"ca":2},
+            {"n":"Maíz Dulce", "en":"Sweet Corn", "de":"Mais", "fr":"Maïs", "pt":"Milho", "ja":"とうもろこし", "q": "yellow sweet corn cob", "p":3.2,"s":6.3,"f":1.2,"k":270,"ph":89,"sa":0.01,"ca":2},
             {"n":"Acelga", "en":"Chard", "de":"Mangold", "fr":"Blette", "pt":"Acelga", "ja":"フダンソウ", "q": "fresh chard leaves green", "p":1.8,"s":1.1,"f":0.2,"k":379,"ph":46,"sa":0.2,"ca":51},
         ]
     },
     {
-        "category": "fruits_veg",
+        "category": "tubers_spec,legumes_nuts_group",
+        "methods": ["raw", "boiled", "fried", "roasted", "grilled"],
+        "items": [
+            {"n":"Patata", "en":"Potato", "de":"Kartoffel", "fr":"Pomme de terre", "pt":"Batata", "ja":"ジャガイモ", "q": "raw brown potato whole", "p":2.0,"s":0.8,"f":0.1,"k":421,"ph":57,"sa":0.01,"ca":12},
+        ]
+    },
+    {
+        "category": "tubers_spec",
+        "methods": ["raw", "boiled", "fried", "roasted", "grilled"],
+        "items": [
+            {"n":"Batata", "en":"Sweet Potato", "de":"Süßkartoffel", "fr":"Patate douce", "pt":"Batata Doce", "ja":"サツマイモ", "q": "sweet potato", "p":1.6,"s":4.2,"f":0.1,"k":337,"ph":47,"sa":0.05,"ca":30},
+            {"n":"Yuca", "en":"Cassava", "de":"Maniok", "fr":"Manioc", "pt":"Mandioca", "ja":"キャッサバ", "q": "raw cassava root", "p":1.4,"s":1.7,"f":0.3,"k":271,"ph":27,"sa":0.01,"ca":16},
+            {"n":"Ñame", "en":"Yam", "de":"Yamswurzel", "fr":"Igname", "pt":"Inhame", "ja":"山芋", "q": "raw yam root", "p":1.5,"s":0.5,"f":0.2,"k":816,"ph":55,"sa":0.01,"ca":17}, # High K!
+        ]
+    },
+    {
+        "category": "fruits",
         "methods": ["raw"],
         "items": [
             {"n":"Manzana", "en":"Apple", "de":"Apfel", "fr":"Pomme", "pt":"Maçã", "ja":"リンゴ", "q": "fresh red apple isolated", "p":0.3,"s":10.0,"f":0.2,"k":107,"ph":11,"sa":0.01,"ca":6},
@@ -151,11 +163,11 @@ BASE_DB = [
             {"n":"Durian", "en":"Durian", "de":"Durian", "fr":"Durian", "pt":"Durian", "ja":"ドリアン", "q": "fresh durian fruit opened", "p":1.5,"s":27.0,"f":5.3,"k":436,"ph":39,"sa":0.01,"ca":6},
             {"n":"Maracuyá", "en":"Passion Fruit", "de":"Maracuja", "fr":"Fruit de la Passion", "pt":"Maracujá", "ja":"パッションフルーツ", "q": "fresh passion fruit halved", "p":2.2,"s":11.2,"f":0.7,"k":348,"ph":68,"sa":0.03,"ca":12},
             {"n":"Guayaba", "en":"Guava", "de":"Guave", "fr":"Goyave", "pt":"Goiaba", "ja":"グアバ", "q": "fresh guava fruit isolated", "p":2.6,"s":9.0,"f":1.0,"k":417,"ph":40,"sa":0.01,"ca":18},
-            {"n":"Dátiles", "en":"Dates", "de":"Datteln", "fr":"Dattes", "pt":"Tâmaras", "ja":"デーツ", "q": "fresh dried dates fruit bowl", "p":2.5,"s":63.0,"f":0.4,"k":656,"ph":62,"sa":0.01,"ca":39}, # Very High K
+            {"n":"Dátiles", "en":"Dates", "de":"Datteln", "fr":"Dattes", "pt":"Tâmaras", "ja":"デーツ", "q": "fresh dried dates fruit bowl", "p":2.5,"s":63.0,"f":0.4,"k":656,"ph":62,"sa":0.01,"ca":39},
         ]
     },    
     {
-        "category": "animal_protein",
+        "category": "proteins",
         "methods": ["raw", "boiled", "fried", "roasted", "grilled", "battered"],
         "items": [
             {"n":"Pollo (Pechuga)", "en":"Chicken Breast", "de":"Hähnchenbrust", "fr":"Blanc de Poulet", "pt":"Peito de Frango", "ja":"鶏胸肉", "q": "raw chicken breast pocket", "p":23.0,"s":0.0,"f":1.2,"k":256,"ph":196,"sa":0.06,"ca":15},
@@ -178,10 +190,11 @@ BASE_DB = [
             {"n":"Chorizo", "en":"Chorizo", "de":"Chorizo", "fr":"Chorizo", "pt":"Chouriço", "ja":"チョリソー", "q": "spanish chorizo spicy", "p":22.0,"s":2.0,"f":30.0,"k":380,"ph":240,"sa":3.5,"ca":18},
             {"n":"Jamón Serrano", "en":"Cured Ham", "de":"Rohschinken", "fr":"Jambon Cru", "pt":"Presunto", "ja":"生ハム", "q": "spanish serrano ham slices", "p":30.0,"s":0.0,"f":16.0,"k":350,"ph":220,"sa":5.0,"ca":12},
             {"n":"Jamón York", "en":"Cooked Ham", "de":"Kochschinken", "fr":"Jambon Blanc", "pt":"Fiambre", "ja":"ハム", "q": "sliced deli cooked ham", "p":19.0,"s":1.0,"f":3.0,"k":300,"ph":180,"sa":2.0,"ca":10},
+            {"n":"Huevo", "en":"Egg", "de":"Ei", "fr":"Œuf", "pt":"Ovo", "ja":"卵", "q": "fresh raw egg", "p":12.5,"s":0.4,"f":10.0,"k":126,"ph":198,"sa":0.1,"ca":56},
         ]
     },    
     {
-        "category": "animal_protein",
+        "category": "proteins",
         "methods": ["raw", "boiled", "fried", "roasted", "grilled", "battered"],
         "items": [
             {"n":"Salmón", "en":"Salmon", "de":"Lachs", "fr":"Saumon", "pt":"Salmão", "ja":"サーモン", "q": "fresh raw salmon fillet", "p":20.0,"s":0.0,"f":13.0,"k":363,"ph":200,"sa":0.05,"ca":12},
@@ -216,10 +229,22 @@ BASE_DB = [
             {"n":"Anguila", "en":"Eel", "de":"Aal", "fr":"Anguille", "pt":"Enguia", "ja":"ウナギ", "q": "fresh eel meat raw", "p":18.0,"s":0.0,"f":11.0,"k":230,"ph":220,"sa":0.1,"ca":20},
             {"n":"Caviar", "en":"Caviar", "de":"Kaviar", "fr":"Caviar", "pt":"Caviar", "ja":"キャビア", "q": "black sturgeon caviar tin", "p":25.0,"s":0.0,"f":18.0,"k":180,"ph":350,"sa":1.5,"ca":275},
         ]
+    },    
+    {
+        "category": "legumes_nuts_group,legumes_spec",
+        "methods": ["boiled"],
+        "items": [
+            {"n":"Quinoa", "en":"Quinoa", "de":"Quinoa", "fr":"Quinoa", "pt":"Quinoa", "ja":"キヌア", "q": "cooked quinoa bowl", "p":4.4,"s":0.0,"f":1.9,"k":172,"ph":152,"sa":0.01,"ca":17},
+            {"n":"Lentejas", "en":"Lentils", "de":"Linsen", "fr":"Lentilles", "pt":"Lentilhas", "ja":"レンズ豆", "q": "cooked brown lentils bowl", "p":9.0,"s":0.0,"f":0.4,"k":369,"ph":180,"sa":0.01,"ca":19},
+            {"n":"Garbanzos", "en":"Chickpeas", "de":"Kichererbsen", "fr":"Pois Chiches", "pt":"Grão de Bico", "ja":"ひよこ豆", "q": "cooked chickpeas bowl", "p":8.9,"s":0.0,"f":2.6,"k":291,"ph":168,"sa":0.01,"ca":49},
+            {"n":"Judías Blancas", "en":"White Beans", "de":"Weiße Bohnen", "fr":"Haricots Blancs", "pt":"Feijão Branco", "ja":"白インゲン豆", "q": "cooked white beans bowl", "p":9.0,"s":0.0,"f":0.5,"k":400,"ph":140,"sa":0.01,"ca":60},
+            {"n":"Judías Negras", "en":"Black Beans", "de":"Haricots Noirs", "fr":"Haricots Noirs", "pt":"Feijão Preto", "ja":"黒豆", "q": "cooked black beans bowl", "p":8.9,"s":0.0,"f":0.5,"k":355,"ph":140,"sa":0.01,"ca":27},
+            {"n":"Soja", "en":"Soybeans", "de":"Sojabohnen", "fr":"Soja", "pt":"Soja", "ja":"大豆", "q": "cooked soybeans bowl", "p":16.6,"s":3.0,"f":9.0,"k":515,"ph":245,"sa":0.01,"ca":102},
+        ]
     },
     {
         "category": "carbs",
-        "methods": ["boiled"], 
+        "methods": ["boiled"],
         "items": [
             {"n":"Arroz Blanco", "en":"White Rice", "de":"Weißer Reis", "fr":"Riz Blanc", "pt":"Arroz Branco", "ja":"白米", "q": "bowl of white rice", "p":2.7,"s":0.0,"f":0.3,"k":35,"ph":43,"sa":0.01,"ca":10},
             {"n":"Arroz Integral", "en":"Brown Rice", "de":"Brauner Reis", "fr":"Riz Brun", "pt":"Arroz Integral", "ja":"玄米", "q": "bowl of brown rice", "p":2.6,"s":0.0,"f":0.9,"k":43,"ph":83,"sa":0.01,"ca":23},
@@ -238,63 +263,6 @@ BASE_DB = [
             {"n":"Cebada", "en":"Barley", "de":"Gerste", "fr":"Orge", "pt":"Cevada", "ja":"大麦", "q": "cooked barley", "p":2.3,"s":0.0,"f":0.4,"k":93,"ph":54,"sa":0.01,"ca":11},
             {"n":"Centeno", "en":"Rye", "de":"Roggen", "fr":"Seigle", "pt":"Centeio", "ja":"ライ麦", "q": "rye bread slices", "p":10.3,"s":1.0,"f":1.6,"k":510,"ph":332,"sa":0.01,"ca":24},
         ]
-    },
-    {
-        "category": "grains_legumes",
-        "methods": ["boiled"],
-        "items": [
-            {"n":"Quinoa", "en":"Quinoa", "de":"Quinoa", "fr":"Quinoa", "pt":"Quinoa", "ja":"キヌア", "q": "cooked quinoa bowl", "p":4.4,"s":0.0,"f":1.9,"k":172,"ph":152,"sa":0.01,"ca":17},
-            {"n":"Lentejas", "en":"Lentils", "de":"Linsen", "fr":"Lentilles", "pt":"Lentilhas", "ja":"レンズ豆", "q": "cooked brown lentils bowl", "p":9.0,"s":0.0,"f":0.4,"k":369,"ph":180,"sa":0.01,"ca":19},
-            {"n":"Garbanzos", "en":"Chickpeas", "de":"Kichererbsen", "fr":"Pois Chiches", "pt":"Grão de Bico", "ja":"ひよこ豆", "q": "cooked chickpeas bowl", "p":8.9,"s":0.0,"f":2.6,"k":291,"ph":168,"sa":0.01,"ca":49},
-            {"n":"Judías Blancas", "en":"White Beans", "de":"Weiße Bohnen", "fr":"Haricots Blancs", "pt":"Feijão Branco", "ja":"白インゲン豆", "q": "cooked white beans bowl", "p":9.0,"s":0.0,"f":0.5,"k":400,"ph":140,"sa":0.01,"ca":60},
-            {"n":"Judías Negras", "en":"Black Beans", "de":"Schwarze Bohnen", "fr":"Haricots Noirs", "pt":"Feijão Preto", "ja":"黒豆", "q": "cooked black beans bowl", "p":8.9,"s":0.0,"f":0.5,"k":355,"ph":140,"sa":0.01,"ca":27},
-            {"n":"Soja", "en":"Soybeans", "de":"Sojabohnen", "fr":"Soja", "pt":"Soja", "ja":"大豆", "q": "cooked soybeans bowl", "p":16.6,"s":3.0,"f":9.0,"k":515,"ph":245,"sa":0.01,"ca":102},
-        ]
-    },
-    {
-        "category": "animal_protein",
-        "methods": ["raw", "boiled", "fried"],
-        "items": [
-            {"n":"Huevo", "en":"Egg", "de":"Ei", "fr":"Œuf", "pt":"Ovo", "ja":"卵", "q": "fresh raw egg", "p":12.5,"s":0.4,"f":10.0,"k":126,"ph":198,"sa":0.1,"ca":56},
-        ]
-    },
-    {
-        "category": "sweets_drinks",
-        "methods": ["raw"],
-        "items": [
-             {"n":"Chocolate Negro", "en":"Dark Chocolate", "de":"Dunkle Schokolade", "fr":"Chocolat Noir", "pt":"Chocolate Preto", "ja":"ダークチョコレート", "q": "dark chocolate bar pieces", "p":4.9,"s":24.0,"f":42.0,"k":715,"ph":308,"sa":0.02,"ca":73},
-             {"n":"Chocolate con Leche", "en":"Milk Chocolate", "de":"Milchschokolade", "fr":"Chocolat au Lait", "pt":"Chocolate de Leite", "ja":"ミルクチョコレート", "q": "milk chocolate bar pieces", "p":7.7,"s":51.0,"f":29.0,"k":372,"ph":216,"sa":0.2,"ca":189},
-             {"n":"Galletas", "en":"Biscuits", "de":"Kekse", "fr":"Biscuits", "pt":"Bolachas", "ja":"ビスケット", "q": "set of sweet cookies", "p":7.0,"s":20.0,"f":12.0,"k":100,"ph":90,"sa":0.8,"ca":30},
-             {"n":"Miel", "en":"Honey", "de":"Honig", "fr":"Miel", "pt":"Mel", "ja":"蜂蜜", "q": "honey jar with dipper", "p":0.3,"s":82.0,"f":0.0,"k":52,"ph":4,"sa":0.0,"ca":6},
-             {"n":"Mermelada", "en":"Jam", "de":"Marmelade", "fr":"Confiture", "pt":"Compota", "ja":"ジャム", "q": "fruit jam jar", "p":0.5,"s":60.0,"f":0.0,"k":80,"ph":10,"sa":0.0,"ca":15},
-             {"n":"Azúcar", "en":"Sugar", "de":"Zucker", "fr":"Sucre", "pt":"Açúcar", "ja":"砂糖", "q": "white sugar cubes bowl", "p":0.0,"s":100.0,"f":0.0,"k":0,"ph":0,"sa":0.0,"ca":0},
-             {"n":"Coca Cola", "en":"Cola", "de":"Cola", "fr":"Coca", "pt":"Coca", "ja":"コーラ", "q": "cola soda glass with ice", "p":0.0,"s":10.6,"f":0.0,"k":0,"ph":15,"sa":0.01,"ca":2},
-             {"n":"Zumo Naranja", "en":"Orange Juice", "de":"Orangensaft", "fr":"Jus d'Orange", "pt":"Sumo de Laranja", "ja":"オレンジジュース", "q": "fresh orange juice glass", "p":0.7,"s":8.4,"f":0.2,"k":200,"ph":17,"sa":0.0,"ca":11},
-             {"n":"Café", "en":"Coffee", "de":"Kaffee", "fr":"Café", "pt":"Café", "ja":"コーヒー", "q": "black coffee cup steaming", "p":0.1,"s":0.0,"f":0.0,"k":49,"ph":3,"sa":0.0,"ca":2},
-             {"n":"Té", "en":"Tea", "de":"Tee", "fr":"Thé", "pt":"Chá", "ja":"お茶", "q": "cup of green tea steaming", "p":0.0,"s":0.0,"f":0.0,"k":37,"ph":0,"sa":0.0,"ca":0},
-             {"n":"Vino Tinto", "en":"Red Wine", "de":"Rotwein", "fr":"Vin Rouge", "pt":"Vinho Tinto", "ja":"赤ワイン", "q": "red wine glass bottle", "p":0.2,"s":0.6,"f":0.0,"k":127,"ph":23,"sa":0.01,"ca":8},
-             {"n":"Cerveza", "en":"Beer", "de":"Bier", "fr":"Bière", "pt":"Cerveja", "ja":"ビール", "q": "glass of beer with foam", "p":0.5,"s":3.6,"f":0.0,"k":27,"ph":14,"sa":0.01,"ca":4},
-             {"n":"Turrón", "en":"Nougat", "de":"Nougat", "fr":"Nougat", "pt":"Torrão", "ja":"ヌガー", "q": "spanish nougat bars", "p":12.0,"s":45.0,"f":30.0,"k":300,"ph":250,"sa":0.05,"ca":60},
-             {"n":"Helado", "en":"Ice Cream", "de":"Eiscreme", "fr":"Glace", "pt":"Gelado", "ja":"アイスクリーム", "q": "ice cream scoop bowl", "p":3.5,"s":21.0,"f":11.0,"k":199,"ph":105,"sa":0.08,"ca":128},
-             {"n":"Gelatina", "en":"Jelly", "de":"Götterspeise", "fr":"Gelée", "pt":"Gelatina", "ja":"ゼリー", "q": "fruit jelly dessert", "p":1.2,"s":14.0,"f":0.0,"k":10,"ph":5,"sa":0.02,"ca":3},
-        ]
-    },
-    {
-        "category": "snacks",
-        "methods": ["raw"],
-        "items": [
-            {"n":"Patatas Chips", "en":"Potato Chips", "de":"Kartoffelchips", "fr":"Chips", "pt":"Batatas Chips", "ja":"ポテトチップス", "q": "bag of crispy potato chips", "p":5.3,"s":0.5,"f":33.0,"k":1275,"ph":160,"sa":1.5,"ca":18},
-            {"n":"Nachos", "en":"Nachos", "de":"Nachos", "fr":"Nachos", "pt":"Nachos", "ja":"ナチョス", "q": "corn tortilla chips bowl", "p":7.0,"s":1.0,"f":25.0,"k":200,"ph":250,"sa":1.0,"ca":150},
-            {"n":"Palomitas", "en":"Popcorn", "de":"Popcorn", "fr":"Pop-corn", "pt":"Pipocas", "ja":"ポップコーン", "q": "bowl of salted popcorn", "p":12.0,"s":0.5,"f":4.0,"k":329,"ph":350,"sa":1.0,"ca":10},
-            {"n":"Ganchitos", "en":"Cheese Puffs", "de":"Erdnussflips", "fr":"Puffs au Fromage", "pt":"Aperitivos de Queijo", "ja":"チーズスナック", "q": "cheese puff snacks bowl", "p":6.0,"s":5.0,"f":35.0,"k":150,"ph":200,"sa":2.0,"ca":100},
-            {"n":"Barrita Energética", "en":"Energy Bar", "de":"Energieriegel", "fr":"Barre Énergétique", "pt":"Barra Energética", "ja":"エネルギーバー", "q": "nutritional energy bar", "p":10.0,"s":30.0,"f":10.0,"k":300,"ph":200,"sa":0.5,"ca":50},
-            {"n":"Chocolatina", "en":"Chocolate Bar", "de":"Schokoladenriegel", "fr":"Barre chocolatée", "pt":"Barra de Chocolate", "ja":"チョコレートバー", "q": "milk chocolate wafer bar", "p":4.0,"s":50.0,"f":25.0,"k":200,"ph":150,"sa":0.4,"ca":100},
-            {"n":"Gominolas", "en":"Gummy Bears", "de":"Gummibärchen", "fr":"Gummy Bears", "pt":"Gomas", "ja":"グミ", "q": "colorful gummy bear candies bowl", "p":6.0,"s":50.0,"f":0.1,"k":5,"ph":5,"sa":0.1,"ca":10},
-            {"n":"Caramelos", "en":"Hard Candies", "de":"Bonbons", "fr":"Bonbons", "pt":"Rebuçados", "ja":"キャンディー", "q": "wrapped hard candies pile", "p":0.0,"s":95.0,"f":0.0,"k":1,"ph":1,"sa":0.05,"ca":5},
-            {"n":"Regaliz", "en":"Licorice", "de":"Lakritz", "fr":"Réglisse", "pt":"Alcaçuz", "ja":"リコリス", "q": "black licorice candy sticks", "p":3.0,"s":70.0,"f":0.5,"k":50,"ph":30,"sa":0.5,"ca":10},
-            {"n":"Pretzels", "en":"Pretzels", "de":"Brezeln", "fr":"Pretzels", "pt":"Pretzels", "ja":"プレッツェル", "q": "salted mini pretzels bowl", "p":10.0,"s":2.0,"f":3.0,"k":150,"ph":120,"sa":3.0,"ca":30},
-            {"n":"Galletas de Arroz", "en":"Rice Cakes", "de":"Reiswaffeln", "fr":"Galettes de Riz", "pt":"Bolachas de Arroz", "ja":"ポン菓子", "q": "puffed rice cakes stack", "p":7.0,"s":1.0,"f":3.0,"k":250,"ph":300,"sa":1.0,"ca":10},
-        ]
     }
 ]
 
@@ -312,9 +280,7 @@ def populate():
                 "protein":item["p"], "sugar":item["s"], "fat":item["f"], "potassium":item["k"], "phosphorus":item["ph"], "salt":item["sa"], "calcium":item["ca"],
                 "category": cat["category"]
             })
-            
             for method in cat["methods"]:
-                # apply_method is defined in global scope
                 generated.append(apply_method(base, method))
 
     # 2. Fixed additions
@@ -328,52 +294,105 @@ def populate():
     # Dairy
     generated.append(make_item("dairy", "Leche Entera", "Whole Milk", "Vollmilch", "Lait Entier", "Leite Gordo", "牛乳", "glass of fresh whole milk", 3.2, 4.8, 3.6, 150, 93, 0.1, 120))
     generated.append(make_item("dairy", "Leche Desnatada", "Skim Milk", "Magermilch", "Lait Écrémé", "Leite Magro", "無脂肪牛乳", "glass of skim milk", 3.4, 5.0, 0.1, 156, 96, 0.1, 122))
-    generated.append(make_item("dairy", "Yogur", "Yogurt", "Joghurt", "Yaourt", "Iogurte", "ヨーグルト", "plain yogurt bowl", 3.5, 4.7, 3.3, 141, 135, 0.1, 140))
+    generated.append(make_item("dairy", "Yogur Natural", "Natural Yogurt", "Naturjoghurt", "Yaourt Nature", "Iogurte Natural", "プレーンヨーグルト", "natural yogurt bowl", 3.5, 4.7, 3.3, 155, 95, 0.05, 121))
+    generated.append(make_item("dairy", "Yogur Griego", "Greek Yogurt", "Griechischer Joghurt", "Yaourt Grec", "Iogurte Grego", "ギリシャヨーグルト", "creamy greek yogurt bowl", 10.0, 3.0, 5.0, 141, 135, 0.04, 110))
+    generated.append(make_item("dairy", "Yogur Desnatado", "Low-fat Yogurt", "Fettarmer Joghurt", "Yaourt 0%", "Iogurte Magro", "低脂肪ヨーグルト", "low fat yogurt bowl", 5.3, 7.0, 0.1, 234, 137, 0.07, 183))
+    generated.append(make_item("dairy", "Yogur de Fresa", "Strawberry Yogurt", "Erdbeerjoghurt", "Yaourt à la Fraise", "Iogurte de Morango", "イチゴヨーグルト", "strawberry yogurt bowl", 3.0, 15.0, 2.5, 180, 100, 0.05, 110))
+    generated.append(make_item("dairy", "Yogur de Vainilla", "Vanilla Yogurt", "Vanillejoghurt", "Yaourt Vanille", "Iogurte de Baunilha", "バニラヨーグルト", "vanilla yogurt bowl", 3.2, 14.0, 2.8, 170, 95, 0.05, 110))
+    generated.append(make_item("dairy", "Yogur de Coco", "Coconut Yogurt", "Kokosjoghurt", "Yaourt Coco", "Iogurte de Coco", "ココナッツヨーグルト", "coconut yogurt bowl", 3.0, 12.0, 4.0, 160, 90, 0.05, 100))
+    generated.append(make_item("dairy", "Yogur de Soja", "Soy Yogurt", "Sojajoghurt", "Yaourt au Soja", "Iogurte de Soja", "豆乳ヨーグルト", "dairy free soy yogurt bowl", 4.0, 2.0, 2.0, 120, 50, 0.04, 120))
+    generated.append(make_item("dairy", "Yogur Sin Lactosa", "Lactose-free Yogurt", "Laktosefreier Joghurt", "Yaourt Sans Lactose", "Iogurte Sem Lactose", "乳糖不使用ヨーグルト", "lactose free yogurt bowl", 3.5, 4.7, 3.3, 155, 95, 0.05, 121))
+    generated.append(make_item("dairy", "Yogur de Sabores", "Flavored Yogurt", "Fruchtjoghurt", "Yaourt aux Fruits", "Iogurte de Aromas", "フルーツヨーグルト", "fruit flavored yogurt bowl", 3.0, 15.0, 3.0, 180, 120, 0.1, 130))
     generated.append(make_item("dairy", "Queso Fresco", "Fresh Cheese", "Frischkäse", "Fromage Frais", "Queijo Fresco", "フレッシュチーズ", "fresh white cheese block", 12.0, 3.0, 10.0, 180, 220, 0.5, 550))
     generated.append(make_item("dairy", "Queso Cheddar", "Cheddar", "Cheddar", "Cheddar", "Cheddar", "チェダー", "cheddar cheese block", 25.0, 0.1, 33.0, 98, 512, 1.8, 721))
     generated.append(make_item("dairy", "Queso Parmesano", "Parmesan", "Parmesan", "Parmesan", "Parmesão", "パルメザン", "parmesan cheese wedge", 35.0, 0.0, 29.0, 125, 694, 1.5, 1109))
     generated.append(make_item("dairy", "Queso Mozzarella", "Mozzarella", "Mozzarella", "Mozzarella", "Mozzarella", "モッツァレラ", "fresh mozzarella ball in water", 18.0, 1.0, 17.0, 76, 354, 0.6, 505))
-    generated.append(make_item("dairy", "Yogur Griego", "Greek Yogurt", "Griechischer Joghurt", "Yaourt Grec", "Iogurte Grego", "ギリシャヨーグルト", "creamy greek yogurt bowl", 10.0, 3.0, 5.0, 141, 135, 0.05, 110))
-    generated.append(make_item("dairy", "Kefir", "Kefir", "Kefir", "Kéfir", "Kefir", "ケフィア", "glass of kefir drink", 3.0, 4.0, 3.0, 150, 100, 0.1, 120))
-    generated.append(make_item("dairy", "Skyr", "Skyr", "Skyr", "Skyr", "Skyr", "スキル", "skyr yogurt bowl", 11.0, 3.0, 0.2, 150, 140, 0.05, 110))
-    generated.append(make_item("dairy", "Yogur de Soja", "Soy Yogurt", "Sojajoghurt", "Yaourt au Soja", "Iogurte de Soja", "豆乳ヨーグルト", "dairy free soy yogurt bowl", 4.0, 2.0, 2.0, 120, 50, 0.05, 120))
-    generated.append(make_item("dairy", "Yogur de Sabores", "Flavored Yogurt", "Fruchtjoghurt", "Yaourt aux Fruits", "Iogurte de Aromas", "フルーツヨーグルト", "fruit flavored yogurt bowl", 3.0, 15.0, 3.0, 180, 120, 0.1, 130))
+    generated.append(make_item("dairy", "Kefir", "Kefir", "Kefir", "Kéfir", "Kefir", "ケフィア", "glass of kefir drink", 3.0, 4.0, 3.0, 150, 100, 0.04, 120))
+    generated.append(make_item("dairy", "Skyr", "Skyr", "Skyr", "Skyr", "Skyr", "スキル", "skyr yogurt bowl", 11.0, 4.0, 0.2, 150, 140, 0.05, 110))
+    generated.append(make_item("dairy", "Ayran", "Ayran", "Ayran", "Ayran", "Ayran", "アイラン", "glass of ayran drink", 2.0, 1.5, 1.5, 80, 60, 0.5, 70))
+    generated.append(make_item("dairy", "Petit Suisse", "Petit Suisse", "Fruchtzwerge", "Petit Suisse", "Petit Suisse", "プチスイス", "petit suisse yogurt cup", 7.0, 12.0, 3.0, 120, 100, 0.03, 90))
+    generated.append(make_item("dairy", "Cuajada", "Curd", "Quark", "Caillé", "Coalhada", "凝乳", "curd dessert bowl", 4.0, 4.0, 5.0, 130, 100, 0.04, 140))
+    generated.append(make_item("dairy", "Yogur Líquido", "Drinking Yogurt", "Trinkjoghurt", "Yaourt à Boire", "Iogurte Líquido", "飲むヨーグルト", "drinking yogurt bottle", 3.0, 12.0, 1.5, 140, 90, 0.05, 110))
     
-    # Nuts
-    generated.append(make_item("grains_legumes", "Nueces", "Walnuts", "Walnüsse", "Noix", "Nozes", "くるみ", "bowl of raw whole walnuts", 15.0, 2.6, 65.0, 441, 346, 0.01, 98))
-    generated.append(make_item("grains_legumes", "Almendras", "Almonds", "Mandeln", "Amandes", "Amêndoas", "アーモンド", "bowl of raw almonds with skin", 21.0, 4.0, 49.0, 705, 481, 0.01, 264))
-    generated.append(make_item("grains_legumes", "Pistachos", "Pistachios", "Pistazien", "Pistaches", "Pistaches", "ピスタチオ", "bowl of shelled pistachios roasted", 20.0, 7.0, 45.0, 1025, 490, 0.01, 105))
-    generated.append(make_item("grains_legumes", "Anacardos", "Cashews", "Cashewkerne", "Noix de cajou", "Caju", "カシューナッツ", "bowl of raw cashews", 18.0, 5.9, 44.0, 660, 593, 0.01, 37))
-    generated.append(make_item("grains_legumes", "Avellanas", "Hazelnuts", "Haselnüsse", "Noisettes", "Avelãs", "ヘーゼルナッツ", "bowl of raw hazelnuts", 15.0, 4.0, 60.0, 680, 290, 0.0, 114))
-    generated.append(make_item("grains_legumes", "Cacahuetes", "Peanuts", "Erdnüsse", "Cacahuètes", "Amendoins", "ピーナッツ", "bowl of roasted peanuts unsalted", 26.0, 4.0, 49.0, 705, 376, 0.01, 92))
-    generated.append(make_item("grains_legumes", "Nueces de Macadamia", "Macadamia", "Macadamia", "Macadamia", "Macadâmia", "マカダミア", "bowl of raw macadamia nuts", 8.0, 4.6, 75.8, 368, 188, 0.01, 85))
-    generated.append(make_item("grains_legumes", "Nueces Pecanas", "Pecans", "Pekannüsse", "Noix de Pécan", "Nozes Pecã", "ピーカンナッツ", "bowl of raw pecan nuts", 9.0, 4.0, 72.0, 410, 277, 0.0, 70))
-    generated.append(make_item("grains_legumes", "Piñones", "Pine Nuts", "Pinienkerne", "Pignons", "Pinhões", "松の実", "bowl of raw pine nuts", 13.7, 3.7, 68.4, 597, 575, 0.0, 16))
-    generated.append(make_item("grains_legumes", "Pipas de Girasol", "Sunflower Seeds", "Sonnenblumenkerne", "Graines de Tournesol", "Sementes de Girassol", "ひまわりの種", "bowl of raw sunflower seeds", 21.0, 2.6, 51.0, 645, 660, 0.01, 78))
-    generated.append(make_item("grains_legumes", "Pipas de Calabaza", "Pumpkin Seeds", "Kürbiskerne", "Graines de Citrouille", "Sementes de Abóbora", "かぼちゃの種", "bowl of raw pumpkin seeds", 30.0, 1.0, 49.0, 809, 1233, 0.01, 46))
-    generated.append(make_item("grains_legumes", "Nueces de Brasil", "Brazil Nuts", "Paranüsse", "Noix du Brésil", "Castanha do Pará", "ブラジルナッツ", "bowl of raw brazil nuts", 14.0, 2.3, 67.0, 659, 725, 0.0, 160))
+    # Nuts (Special Category: legumes_nuts_group,nuts_spec)
+    generated.append(make_item("legumes_nuts_group,nuts_spec", "Nueces", "Walnuts", "Walnüsse", "Noix", "Nozes", "くるみ", "bowl of raw whole walnuts", 15.0, 2.6, 65.0, 441, 346, 0.01, 98))
+    generated.append(make_item("legumes_nuts_group,nuts_spec", "Almendras", "Almonds", "Mandeln", "Amandes", "Amêndoas", "アーモンド", "bowl of raw almonds with skin", 21.0, 4.0, 49.0, 705, 481, 0.01, 264))
+    generated.append(make_item("legumes_nuts_group,nuts_spec", "Pistachos", "Pistachios", "Pistazien", "Pistaches", "Pistaches", "ピスタチオ", "bowl of shelled pistachios roasted", 20.0, 7.0, 45.0, 1025, 490, 0.01, 105))
+    generated.append(make_item("legumes_nuts_group,nuts_spec", "Anacardos", "Cashews", "Cashewkerne", "Noix de cajou", "Caju", "カシューナッツ", "bowl of raw cashews", 18.0, 5.9, 44.0, 660, 593, 0.01, 37))
+    generated.append(make_item("legumes_nuts_group,nuts_spec", "Avellanas", "Hazelnuts", "Haselnüsse", "Noisettes", "Avelãs", "ヘーゼルナッツ", "bowl of raw hazelnuts", 15.0, 4.0, 60.0, 680, 290, 0.0, 114))
+    generated.append(make_item("legumes_nuts_group,nuts_spec", "Cacahuetes", "Peanuts", "Erdnüsse", "Cacahuètes", "Amendoins", "ピーナッツ", "bowl of roasted peanuts unsalted", 26.0, 4.0, 49.0, 705, 376, 0.01, 92))
+    generated.append(make_item("legumes_nuts_group,nuts_spec", "Nueces de Macadamia", "Macadamia", "Macadamia", "Macadamia", "Macadâmia", "マカダミア", "bowl of raw macadamia nuts", 8.0, 4.6, 75.8, 368, 188, 0.01, 85))
+    generated.append(make_item("legumes_nuts_group,nuts_spec", "Nueces Pecanas", "Pecans", "Pekannüsse", "Noix de Pécan", "Nozes Pecã", "ピーカンナッツ", "bowl of raw pecan nuts", 9.0, 4.0, 72.0, 410, 277, 0.0, 70))
+    generated.append(make_item("legumes_nuts_group,nuts_spec", "Piñones", "Pine Nuts", "Pinienkerne", "Pignons", "Pinhões", "松の実", "bowl of raw pine nuts", 13.7, 3.7, 68.4, 597, 575, 0.0, 16))
+    generated.append(make_item("legumes_nuts_group,nuts_spec", "Pipas de Girasol", "Sunflower Seeds", "Sonnenblumenkerne", "Graines de Tournesol", "Sementes de Girassol", "ひまわりの種", "bowl of raw sunflower seeds", 21.0, 2.6, 51.0, 645, 660, 0.01, 78))
+    generated.append(make_item("legumes_nuts_group,nuts_spec", "Pipas de Calabaza", "Pumpkin Seeds", "Kürbiskerne", "Graines de Citrouille", "Sementes de Abóbora", "かぼちゃの種", "bowl of raw pumpkin seeds", 30.0, 1.0, 49.0, 809, 1233, 0.01, 46))
+    generated.append(make_item("legumes_nuts_group,nuts_spec", "Nueces de Brasil", "Brazil Nuts", "Paranüsse", "Noix du Brésil", "Castanha do Pará", "ブラジルナッツ", "bowl of raw brazil nuts", 14.0, 2.3, 67.0, 659, 725, 0.0, 160))
     
-    # Oils
-    generated.append(make_item("oils_fats", "Aceite de Oliva", "Olive Oil", "Olivenöl", "Huile d'Olive", "Azeite", "オリーブオイル", "olive oil glass bottle", 0.0, 0.0, 100.0, 0, 0, 0.0, 0))
-    generated.append(make_item("oils_fats", "Mantequilla", "Butter", "Butter", "Beurre", "Manteiga", "バター", "block of fresh dairy butter", 0.9, 0.1, 81.0, 24, 24, 0.01, 24))
-    generated.append(make_item("oils_fats", "Mayonesa", "Mayonnaise", "Mayonnaise", "Mayonnaise", "Maionese", "マヨネーズ", "mayonnaise sauce in a bowl", 1.0, 1.0, 75.0, 20, 28, 0.6, 12))
+    # Fats
+    generated.append(make_item("fats", "Aceite de Oliva", "Olive Oil", "Olivenöl", "Huile d'Olive", "Azeite", "オリーブオイル", "olive oil glass bottle", 0.0, 0.0, 100.0, 0, 0, 0.0, 0))
+    generated.append(make_item("fats", "Mantequilla", "Butter", "Butter", "Beurre", "Manteiga", "バター", "block of fresh dairy butter", 0.9, 0.1, 81.0, 24, 24, 0.01, 24))
+    generated.append(make_item("fats", "Mayonesa", "Mayonnaise", "Mayonnaise", "Mayonnaise", "Maionese", "マヨネーズ", "mayonnaise sauce in a bowl", 1.0, 1.0, 75.0, 20, 28, 0.6, 12))
     
-    # Substitutes
-    generated.append(make_item("grains_legumes", "Tofu", "Tofu", "Tofu", "Tofu", "Tofu", "豆腐", "fresh white tofu block", 8.0, 0.5, 4.8, 121, 97, 0.01, 350))
-    generated.append(make_item("grains_legumes", "Seitán", "Seitan", "Seitan", "Seitan", "Seitan", "セイタン", "seitan wheat gluten pieces", 75.0, 0.0, 1.9, 100, 260, 0.05, 142))
-    generated.append(make_item("grains_legumes", "Tempeh", "Tempeh", "Tempeh", "Tempeh", "Tempeh", "テンペ", "fermented tempeh block", 19.0, 0.0, 11.0, 412, 266, 0.01, 111))
+    # Substitutes (Proteins)
+    generated.append(make_item("proteins", "Tofu", "Tofu", "Tofu", "Tofu", "Tofu", "豆腐", "fresh white tofu block", 8.0, 0.5, 4.8, 121, 97, 0.01, 350))
+    generated.append(make_item("proteins", "Seitán", "Seitan", "Seitan", "Seitan", "Seitan", "セイタン", "seitan wheat gluten pieces", 75.0, 0.0, 1.9, 100, 260, 0.05, 142))
+    generated.append(make_item("proteins", "Tempeh", "Tempeh", "Tempeh", "Tempeh", "Tempeh", "テンペ", "fermented tempeh block", 19.0, 0.0, 11.0, 412, 266, 0.01, 111))
+    
+    # Sweets
+    generated.append(make_item("sweets", "Chocolate Negro", "Dark Chocolate", "Dark Chocolate", "Chocolat Noir", "Chocolate Preto", "ダークチョコレート", "dark chocolate pieces", 4.9, 24.0, 42.0, 715, 308, 0.02, 73))
+    generated.append(make_item("sweets", "Chocolate con Leche", "Milk Chocolate", "Milchschokolade", "Chocolat au Lait", "Chocolate de Leite", "ミルクチョコレート", "milk chocolate bar", 7.7, 51.0, 29.0, 372, 216, 0.2, 189))
+    generated.append(make_item("sweets", "Galletas", "Biscuits", "Kekse", "Biscuits", "Bolachas", "ビスケット", "plate of crispy biscuits", 7.0, 20.0, 12.0, 100, 90, 0.8, 30))
+    generated.append(make_item("sweets", "Miel", "Honey", "Honig", "Miel", "Mel", "蜂蜜", "honey jar with dipper", 0.3, 82.0, 0.0, 52, 4, 0.0, 6))
+    generated.append(make_item("sweets", "Mermelada", "Jam", "Marmelade", "Confiture", "Compota", "ジャム", "fruit jam jar", 0.5, 60.0, 0.0, 80, 10, 0.0, 15))
+    generated.append(make_item("sweets", "Azúcar", "Sugar", "Zucker", "Sucre", "Açúcar", "砂糖", "white sugar cubes bowl", 0.0, 100.0, 0.0, 0, 0, 0.0, 0))
+    generated.append(make_item("sweets", "Turrón", "Nougat", "Nougat", "Nougat", "Torrão", "ヌガー", "piece of sweet nougat", 12.0, 45.0, 30.0, 300, 250, 0.05, 60))
+    generated.append(make_item("sweets", "Helado", "Ice Cream", "Eiscreme", "Glace", "Gelado", "アイスクリーム", "scoop of vanilla ice cream", 3.5, 21.0, 11.0, 199, 105, 0.08, 128))
+    generated.append(make_item("sweets", "Gelatina", "Jelly", "Götterspeise", "Gelée", "Gelatina", "ゼリー", "fruit jelly bowl", 1.2, 14.0, 0.0, 10, 5, 0.02, 3))
 
-    # Juices
-    generated.append(make_item("sweets_drinks", "Zumo de Naranja", "Orange Juice", "Orangensaft", "Jus d'Orange", "Sumo de Laranja", "オレンジジュース", "fresh orange juice glass bottle", 0.7, 8.4, 0.2, 200, 17, 0.0, 11))
-    generated.append(make_item("sweets_drinks", "Zumo de Manzana", "Apple Juice", "Apfelsaft", "Jus de Pomme", "Sumo de Maçã", "リンゴジュース", "fresh apple juice glass", 0.1, 9.6, 0.1, 101, 7, 0.0, 5))
-    generated.append(make_item("sweets_drinks", "Zumo de Piña", "Pineapple Juice", "Ananassaft", "Jus d'Ananas", "Sumo de Abacaxi", "パイナップルジュース", "fresh pineapple juice glass", 0.4, 12.0, 0.1, 130, 8, 0.0, 13))
-    
-    # Others
-    generated.append(make_item("others", "Sal de Mesa", "Table Salt", "Tafelsalz", "Sel de Table", "Sal de Mesa", "食塩", "pile of white table salt", 0.0, 0.0, 0.0, 0, 0, 100.0, 0))
-    generated.append(make_item("others", "Vinagre", "Vinegar", "Essig", "Vinaigre", "Vinagre", "酢", "glass bottle of clear vinegar", 0.0, 0.0, 0.0, 2, 2, 0.0, 6))
-    generated.append(make_item("others", "Pimienta Negra", "Black Pepper", "Schwarzer Pfeffer", "Poivre Noir", "Pimenta Preta", "黒胡椒", "ground black pepper powder", 10.0, 0.0, 3.0, 1300, 150, 0.05, 400))
-    generated.append(make_item("others", "Orégano", "Oregano", "Oregano", "Origan", "Orégano", "オレガノ", "dried oregano herb leaves", 9.0, 0.0, 4.0, 1260, 148, 0.05, 1597))
-    generated.append(make_item("others", "Perejil", "Parsley", "Petersilie", "Persil", "Salsa", "パセリ", "fresh green parsley sprigs", 3.0, 0.0, 0.8, 554, 58, 0.05, 138))
+    # Drinks
+    generated.append(make_item("drinks", "Agua", "Water", "Wasser", "Eau", "Água", "水", "glass of pure mineral water", 0.0, 0.0, 0.0, 0, 0, 0.0, 5))
+    generated.append(make_item("drinks", "Infusión de Manzanilla", "Camomile Tea", "Kamillentee", "Camomille", "Camomila", "カモミールティー", "cup of camomile tea", 0.0, 0.0, 0.0, 10, 0, 0.0, 2))
+    generated.append(make_item("drinks", "Té", "Tea", "Tee", "Thé", "Chá", "お茶", "cup of hot black tea", 0.0, 0.0, 0.0, 37, 0, 0.0, 0))
+    generated.append(make_item("drinks", "Vino Tinto", "Red Wine", "Rotwein", "Vin Rouge", "Vinho Tinto", "赤ワイン", "glass of red wine", 0.2, 0.6, 0.0, 127, 23, 0.01, 8))
+    generated.append(make_item("drinks", "Cerveza", "Beer", "Bier", "Bière", "Cerveja", "ビール", "glass of cold beer", 0.5, 3.6, 0.0, 27, 14, 0.01, 4))
+    generated.append(make_item("drinks", "Coca Cola", "Cola", "Cola", "Coca", "Coca", "コーラ", "glass of cola soda with ice", 0.0, 10.6, 0.0, 0, 15, 0.01, 2))
+    generated.append(make_item("drinks", "Café", "Coffee", "Kaffee", "Café", "Café", "コーヒー", "black coffee cup steaming", 0.1, 0.0, 0.0, 49, 3, 0.0, 2))
+    generated.append(make_item("drinks", "Zumo de Naranja", "Orange Juice", "Orangensaft", "Jus d'Orange", "Sumo de Laranja", "オレンジジュース", "fresh orange juice glass", 0.7, 8.4, 0.2, 200, 17, 0.0, 11))
+    generated.append(make_item("drinks", "Zumo de Manzana", "Apple Juice", "Apfelsaft", "Jus de Pomme", "Sumo de Maçã", "リンゴジュース", "fresh apple juice glass", 0.1, 9.6, 0.1, 101, 7, 0.0, 5))
+    generated.append(make_item("drinks", "Zumo de Piña", "Pineapple Juice", "Ananassaft", "Jus d'Ananas", "Sumo de Abacaxi", "パイナップルジュース", "fresh pineapple juice glass", 0.4, 12.0, 0.1, 130, 8, 0.0, 13))
+    generated.append(make_item("drinks", "Zumo de Uva", "Grape Juice", "Traubensaft", "Jus de Raisin", "Sumo de Uva", "ブドウジュース", "glass of purple grape juice", 0.4, 14.0, 0.1, 119, 12, 0.0, 9))
+    generated.append(make_item("drinks", "Zumo de Tomate", "Tomato Juice", "Tomatensaft", "Jus de Tomate", "Sumo de Tomate", "トマトジュース", "glass of red tomato juice", 0.8, 2.6, 0.1, 217, 19, 0.05, 8))
+    generated.append(make_item("drinks", "Zumo de Pomelo", "Grapefruit Juice", "Grapefruitsaft", "Jus de Pamplemousse", "Sumo de Toranja", "グレープフルーツジュース", "glass of grapefruit juice", 0.5, 9.0, 0.1, 162, 15, 0.0, 9))
+    generated.append(make_item("drinks", "Zumo de Zanahoria", "Carrot Juice", "Karottensaft", "Jus de Carotte", "Sumo de Cenoura", "人参ジュース", "glass of carrot juice", 0.9, 3.9, 0.1, 292, 29, 0.04, 24))
+    generated.append(make_item("drinks", "Zumo de Melocotón", "Peach Juice", "Pfirsichsaft", "Jus de Pêche", "Sumo de Pêssego", "桃ジュース", "glass of peach juice", 0.4, 8.0, 0.1, 120, 12, 0.0, 5))
+    generated.append(make_item("drinks", "Zumo de Pera", "Pear Juice", "Birnensaft", "Jus de Poire", "Sumo de Pêra", "洋梨ジュース", "glass of pear juice", 0.2, 9.0, 0.1, 80, 8, 0.0, 6))
+    generated.append(make_item("drinks", "Zumo de Arándanos", "Cranberry Juice", "Cranberrysaft", "Jus de Canneberge", "Sumo de Arando", "クランベリージュース", "glass of cranberry juice", 0.0, 12.0, 0.0, 77, 13, 0.0, 5))
+    generated.append(make_item("drinks", "Zumo de Mango", "Mango Juice", "Mangosaft", "Jus de Mangue", "Sumo de Manga", "マンゴージュース", "glass of mango juice", 0.5, 13.0, 0.2, 110, 10, 0.0, 10))
+    generated.append(make_item("drinks", "Zumo de Granada", "Pomegranate Juice", "Granatapfelsaft", "Jus de Grenade", "Sumo de Romã", "ザクロジュース", "glass of pomegranate juice", 0.2, 13.0, 0.0, 214, 25, 0.0, 11))
+    generated.append(make_item("drinks", "Zumo de Limón", "Lemon Juice", "Zitronensaft", "Jus de Citron", "Sumo de Limão", "レモン汁", "glass of fresh lemon juice", 0.4, 2.5, 0.0, 103, 8, 0.0, 7))
+    generated.append(make_item("drinks", "Zumo de Lima", "Lime Juice", "Limettensaft", "Jus de Citron Vert", "Sumo de Lima", "ライム果汁", "glass of fresh lime juice", 0.4, 1.7, 0.0, 117, 10, 0.0, 10))
+    generated.append(make_item("drinks", "Zumo Multifruta", "Multifruit Juice", "Multivitaminsaft", "Jus Multifruits", "Sumo Multifrutas", "ミックスジュース", "glass of mixed multifruit juice", 0.5, 11.0, 0.1, 150, 15, 0.0, 10))
+    generated.append(make_item("drinks", "Limonada", "Lemonade", "Limonade", "Limonade", "Limonada", "レモネード", "glass of fresh lemonade with ice", 0.1, 10.0, 0.0, 10, 2, 0.0, 2))
+
+    # Snacks (Mixed under carbs/sweets)
+    generated.append(make_item("carbs", "Patatas Chips", "Potato Chips", "Kartoffelchips", "Chips de Pomme de Terre", "Batatas Chips", "ポテトチップス", "bowl of crispy potato chips", 6.5, 0.5, 35.0, 1200, 160, 1.5, 25))
+    generated.append(make_item("carbs", "Nachos", "Nachos", "Nachos", "Nachos", "Nachos", "ナチョス", "plate of crispy nachos", 7.0, 1.0, 25.0, 250, 180, 1.0, 80))
+    generated.append(make_item("carbs", "Palomitas", "Popcorn", "Popcorn", "Pop-corn", "Pipocas", "ポップコーン", "bowl of salted popcorn", 12.0, 0.5, 4.0, 329, 350, 1.0, 10))
+    generated.append(make_item("carbs", "Ganchitos", "Cheese Curls", "Käsebällchen", "Soufflés au Fromage", "Ganchitos", "チーズスナック", "bowl of orange cheese curls", 6.0, 2.0, 34.0, 200, 150, 2.0, 50))
+    generated.append(make_item("sweets", "Barrita Energética", "Energy Bar", "Energieriegel", "Barre Énergétique", "Barra Energética", "エナジーバー", "oat cereal energy bar", 10.0, 30.0, 15.0, 250, 200, 0.5, 80))
+    generated.append(make_item("sweets", "Chocolatina", "Chocolate Bar", "Schokoriegel", "Barre Chocolatee", "Chocolate", "チョコレートバー", "sweet chocolate candy bar", 5.0, 50.0, 30.0, 200, 150, 0.2, 100))
+    generated.append(make_item("sweets", "Gominolas", "Gummy Bears", "Gummibärchen", "Gummies", "Gomas", "グミ", "colorful gummy bears bowl", 6.0, 46.0, 0.0, 5, 5, 0.1, 10))
+    generated.append(make_item("sweets", "Caramelos", "Hard Candy", "Bonbons", "Bonbons", "Rebuçados", "キャンディ", "colorful wrapped hard candies", 0.0, 98.0, 0.0, 2, 0, 0.05, 5))
+    generated.append(make_item("sweets", "Regaliz", "Licorice", "Lakritz", "Réglisse", "Alcaçuz", "リコリス", "black licorice sticks", 3.0, 70.0, 0.5, 100, 50, 0.1, 40))
+    generated.append(make_item("carbs", "Pretzels", "Pretzels", "Pretzels", "Bretzels", "Pretzels", "プレッツェル", "salted crispy pretzels", 10.0, 2.0, 5.0, 150, 100, 3.0, 30))
+    generated.append(make_item("carbs", "Galletas de Arroz", "Rice Cakes", "Reiswaffeln", "Galettes de Riz", "Bolachas de Arroz", "ポン菓子", "crispy puffed rice cakes", 8.0, 1.0, 3.0, 100, 250, 0.5, 10))
+
+    # Others (Salt, Peppers, Herbs)
+    generated.append(make_item("fats", "Sal de Mesa", "Table Salt", "Tafelsalz", "Sel de Table", "Sal de Mesa", "食塩", "pile of white table salt", 0.0, 0.0, 0.0, 0, 0, 100.0, 0))
+    generated.append(make_item("drinks", "Vinagre", "Vinegar", "Essig", "Vinaigre", "Vinagre", "酢", "glass bottle of clear vinegar", 0.0, 0.0, 0.0, 2, 2, 0.0, 6))
+    generated.append(make_item("fats", "Pimienta Negra", "Black Pepper", "Schwarzer Pfeffer", "Poivre Noir", "Pimenta Preta", "黒胡椒", "ground black pepper powder", 10.0, 0.0, 3.0, 1300, 150, 0.05, 400))
+    generated.append(make_item("fats", "Orégano", "Oregano", "Oregano", "Origan", "Orégano", "オレガノ", "dried oregano herb leaves", 9.0, 0.0, 4.0, 1260, 148, 0.05, 1597))
+    generated.append(make_item("fats", "Perejil", "Parsley", "Petersilie", "Persil", "Salsa", "パセリ", "fresh green parsley sprigs", 3.0, 0.0, 0.8, 554, 58, 0.05, 138))
 
     # DB Interaction
     conn = sqlite3.connect('renal_diet.db')
