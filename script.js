@@ -656,6 +656,7 @@ function setupCustomSelects() {
                     // Update hidden input if exists
                     if (hiddenInput) {
                         hiddenInput.value = value;
+                        hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
                     }
 
                     selected.classList.add('selected-value');
@@ -884,17 +885,152 @@ function setupEventListeners() {
     sendFeedbackBtn.addEventListener('click', sendFeedback);
 }
 
+// --- Nephrologist Logic ---
+class Nephrologist {
+    static getTrafficColor(nutrient, value, userProfile) {
+        if (!userProfile) return ''; // Default color if no profile
+
+        const v = parseFloat(value);
+        if (isNaN(v)) return '';
+
+        // Check Insufficiency Flag
+        // It might be stored as '1', 1, true, or 'true'
+        const hasInsufficiency = userProfile.has_insufficiency === '1' || userProfile.has_insufficiency === 1 || userProfile.has_insufficiency === true || userProfile.has_insufficiency === 'true';
+
+        // 1. HEALTHY / NO INSUFFICIENCY
+        // If user says "No" to insufficiency, we use standard healthy adult guidelines (very loose for these specific renal nutrients)
+        if (!hasInsufficiency) {
+            // Healthy limits (per meal approx)
+            // Potassium: RDA ~4700mg/day -> ~1500mg/meal is fine.
+            // Phosphorus: RDA ~700mg/day -> ~250mg is norm, but high P isn't toxic for healthy kidneys usually.
+            // Protein: 20-30g is standard meal. High protein is fine.
+            // Salt: <6g/day -> <2g/meal.
+
+            // We only warn if it's REALLY high (Traffic Light for General Population)
+            const healthyLimits = {
+                potassium: { green: 1000, yellow: 2000 },
+                phosphorus: { green: 500, yellow: 1000 },
+                protein: { green: 40, yellow: 80 },
+                salt: { green: 1.5, yellow: 3.0 },
+                calcium: { green: 400, yellow: 800 }
+            };
+
+            if (v <= healthyLimits[nutrient].green) return 'traffic-green';
+            if (v <= healthyLimits[nutrient].yellow) return 'traffic-yellow';
+            return 'traffic-red';
+        }
+
+        // 2. RENAL INSUFFICIENCY LOGIC
+        // Default Renal Limits (Conservative baseline)
+        let limits = {
+            potassium: { green: 200, yellow: 400 }, // mg - Strict
+            phosphorus: { green: 150, yellow: 300 }, // mg - Strict
+            protein: { green: 10, yellow: 25 },    // g - Low Protein baseline
+            salt: { green: 0.5, yellow: 1.2 },     // g
+            calcium: { green: 100, yellow: 300 }    // mg
+        };
+
+        const stage = userProfile.kidney_stage; // 1, 2, 3a, 3b, 4, 5
+        const treatment = userProfile.treatment_type; // dialysis, transplant, erca
+
+        // ADJUSTMENTS BY STAGE/TREATMENT
+
+        // A) STAGE 1-2 (Mild) OR Functional Transplant
+        // Usually less restrictions unless specific lab values are off.
+        if (['1', '2', '3a'].includes(stage)) {
+            // General "Good Function" limits
+            limits.potassium = { green: 400, yellow: 800 };
+            limits.phosphorus = { green: 300, yellow: 600 };
+            limits.protein = { green: 20, yellow: 40 };
+
+            // If Transplant specific adjustments needed, they can be here.
+            // But generally, Stage 1-2 Transplant is similar to Stage 1-2 Native for these nutrients.
+        }
+
+        // B) STAGE 3b-4 (Pre-dialysis) -> Strict
+        // Applies to Native AND Transplant with failing function
+        if (['3b', '4'].includes(stage) && treatment !== 'dialysis') {
+            limits.potassium = { green: 200, yellow: 400 };
+            limits.phosphorus = { green: 150, yellow: 300 };
+            limits.protein = { green: 10, yellow: 25 };
+            limits.salt = { green: 0.5, yellow: 1.0 };
+        }
+
+        // B.2) STAGE 5 (Pre-dialysis) -> Very Strict
+        // Applies to Native AND Transplant with failing function
+        if (stage === '5' && treatment !== 'dialysis') {
+            limits.potassium = { green: 150, yellow: 350 };
+            limits.phosphorus = { green: 120, yellow: 250 };
+            limits.protein = { green: 8, yellow: 20 };
+            limits.salt = { green: 0.4, yellow: 0.8 };
+        }
+
+        // C) DIALYSIS (Overrides everything)
+        if (treatment === 'dialysis') {
+            limits.potassium = { green: 200, yellow: 500 };
+            limits.phosphorus = { green: 200, yellow: 400 };
+            limits.protein = { green: 60, yellow: 100 };
+        }
+
+        // D) TRANSPLANT (Specifics)
+        // Only apply "Transplant Loose Rules" if we haven't already hit a strict stage criteria
+        // or if we are in the "Good Function" zone.
+        if (treatment === 'transplant' && ['1', '2', '3a'].includes(stage)) {
+            // Transplant patients often have slightly better tolerance or diff meds
+            // but let's just ensure they are loose.
+            limits.potassium = { green: 800, yellow: 1500 };
+            limits.phosphorus = { green: 400, yellow: 800 };
+            limits.protein = { green: 30, yellow: 60 };
+            // Note: This overrides Block A for these stages.
+        }
+
+        // Get Color
+        if (v <= limits[nutrient].green) return 'traffic-green';
+        if (v <= limits[nutrient].yellow) return 'traffic-yellow';
+        return 'traffic-red';
+    }
+}
+
 function updateNutrients(grams) {
     if (!currentFood) return;
     const ratio = grams / 100;
     const n = currentFood.nutrients;
-    valProtein.textContent = (n.protein * ratio).toFixed(1) + 'g';
-    valSugar.textContent = (n.sugar * ratio).toFixed(1) + 'g';
-    valFat.textContent = (n.fat * ratio).toFixed(1) + 'g';
-    valPotassium.textContent = (n.potassium * ratio).toFixed(0) + 'mg';
-    valPhosphorus.textContent = (n.phosphorus * ratio).toFixed(0) + 'mg';
-    valSalt.textContent = (n.salt * ratio).toFixed(2) + 'g';
-    valCalcium.textContent = (n.calcium * ratio).toFixed(0) + 'mg';
+
+    // Calculate raw values
+    const vProteins = (n.protein * ratio).toFixed(1);
+    const vSugar = (n.sugar * ratio).toFixed(1);
+    const vFat = (n.fat * ratio).toFixed(1);
+    const vPotassium = (n.potassium * ratio).toFixed(0);
+    const vPhosphorus = (n.phosphorus * ratio).toFixed(0);
+    const vSalt = (n.salt * ratio).toFixed(2);
+    const vCalcium = (n.calcium * ratio).toFixed(0);
+
+    // Update Text
+    valProtein.textContent = vProteins + 'g';
+    valSugar.textContent = vSugar + 'g';
+    valFat.textContent = vFat + 'g';
+    valPotassium.textContent = vPotassium + 'mg';
+    valPhosphorus.textContent = vPhosphorus + 'mg';
+    valSalt.textContent = vSalt + 'g';
+    valCalcium.textContent = vCalcium + 'mg'; // Fixed typo in variable name if existing
+
+    // Apply Colors
+    const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+
+    // Reset classes
+    [valProtein, valPotassium, valPhosphorus, valSalt, valCalcium].forEach(el => {
+        el.classList.remove('traffic-green', 'traffic-yellow', 'traffic-red');
+        // Also remove any default colors text-xxx if present (though we removed them from CSS)
+    });
+
+    // Apply new classes
+    if (user) {
+        valProtein.classList.add(Nephrologist.getTrafficColor('protein', vProteins, user));
+        valPotassium.classList.add(Nephrologist.getTrafficColor('potassium', vPotassium, user));
+        valPhosphorus.classList.add(Nephrologist.getTrafficColor('phosphorus', vPhosphorus, user));
+        valSalt.classList.add(Nephrologist.getTrafficColor('salt', vSalt, user));
+        valCalcium.classList.add(Nephrologist.getTrafficColor('calcium', vCalcium, user));
+    }
 }
 
 // --- Auth Logic ---
@@ -1224,6 +1360,12 @@ function setupMedical() {
         updateMedicalVisibility();
     }
 
+    // Listener for Treatment Change
+    const treatmentHidden = document.getElementById('treatment-type-hidden');
+    if (treatmentHidden) {
+        treatmentHidden.addEventListener('change', updateMedicalVisibility);
+    }
+
     // Close button for medical modal
     const closeMedicalBtn = document.getElementById('close-medical');
     if (closeMedicalBtn) {
@@ -1339,6 +1481,12 @@ function setupMedical() {
 
                 alert(`Perfil actualizado!`);
 
+                // Update current food modal if open to reflect new traffic lights immediately
+                if (currentFood && modal.classList.contains('active')) {
+                    const currentGrams = parseFloat(gramsInput.value) || 0;
+                    updateNutrients(currentGrams);
+                }
+
             } else {
                 const data = await res.json();
                 errorMsg.textContent = data.message || 'Error al guardar perfil';
@@ -1356,14 +1504,23 @@ function updateMedicalVisibility() {
     const toggle = document.getElementById('insufficiency-toggle');
     const treatmentGroup = document.getElementById('treatment-group');
     const stageGroup = document.getElementById('stage-group');
+    const treatmentHidden = document.getElementById('treatment-type-hidden');
 
     if (!toggle || !treatmentGroup || !stageGroup) return;
 
     if (toggle.checked) {
         treatmentGroup.classList.remove('disabled-section');
-        stageGroup.classList.remove('disabled-section');
         treatmentGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
-        stageGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
+
+        // Check if Dialysis is selected
+        if (treatmentHidden && treatmentHidden.value === 'dialysis') {
+            stageGroup.classList.add('disabled-section');
+            stageGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+            // Optional: clear selection or style it differently? keeping it just disabled for now
+        } else {
+            stageGroup.classList.remove('disabled-section');
+            stageGroup.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
+        }
     } else {
         treatmentGroup.classList.add('disabled-section');
         stageGroup.classList.add('disabled-section');

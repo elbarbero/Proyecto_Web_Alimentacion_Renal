@@ -1392,3 +1392,16 @@ input:checked+.slider:before {
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
     border-color: transparent;
 }
+
+/* Traffic Light System */
+.traffic-green {
+    color: #10b981 !important;
+}
+
+.traffic-yellow {
+    color: #f59e0b !important;
+}
+
+.traffic-red {
+    color: #ef4444 !important;
+}
