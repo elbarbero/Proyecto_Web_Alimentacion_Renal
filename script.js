@@ -1145,6 +1145,18 @@ function setupAuth() {
             dropdown.classList.toggle('active');
         } else {
             // Logged Out -> Open Auth Modal
+            // RESET STATE: Always show login/main view
+            if (document.getElementById('auth-form')) document.getElementById('auth-form').style.display = 'block';
+            if (document.getElementById('forgot-password-view')) document.getElementById('forgot-password-view').style.display = 'none';
+            if (document.getElementById('reset-password-view')) document.getElementById('reset-password-view').style.display = 'none';
+
+            // Ensure tabs are visible
+            const tabs = document.querySelector('.auth-tabs');
+            if (tabs) tabs.style.display = 'flex';
+
+            // Reset to Login Mode by default
+            toggleAuthMode(false);
+
             authModal.classList.add('active');
         }
     });
