@@ -476,7 +476,10 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                 self.wfile.write(json.dumps({"error": "Configuration error (missing API Key)"}).encode())
                 return
 
-            api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={gemini_key}"
+            # Switch to gemini-flash-lite-latest
+            # The ONLY model currently working for this key (others returned 429).
+            # "Lite" models are cost-effective and have different quota pools.
+            api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key={gemini_key}"
             headers = {
                 "Content-Type": "application/json"
             }

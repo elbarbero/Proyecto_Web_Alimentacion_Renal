@@ -1444,8 +1444,10 @@ input:checked+.slider:before {
 
 .chat-window {
     display: none;
-    width: 360px;
-    height: 500px;
+    width: 400px;
+    height: 600px;
+    max-width: 90vw;
+    max-height: 80vh;
     background: white;
     border-radius: 16px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
