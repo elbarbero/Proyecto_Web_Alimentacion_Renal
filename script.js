@@ -34,6 +34,17 @@
         noAccount: "¿No tienes cuenta?",
         registerLink: "Registrarse",
         loginLink: "Entrar",
+        // Forgot Password
+        forgotPasswordTitle: "Recuperar Contraseña",
+        forgotPasswordDesc: "Ingresa tu email y te enviaremos un enlace para restablecerla.",
+        sendLink: "Enviar enlace",
+        backToLogin: "Volver",
+        resetPasswordTitle: "Nueva Contraseña",
+        resetPasswordDesc: "Introduce tu nueva contraseña.",
+        newPassword: "Nueva Contraseña",
+        changePassword: "Cambiar Contraseña",
+        linkSent: "Revisa tu correo. Si existe, hemos enviado un enlace.",
+        passwordChanged: "Contraseña actualizada exitosamente.",
         // Placeholders
         placeholderName: "Tu nombre",
         placeholderSurnames: "Tus apellidos",
@@ -118,6 +129,17 @@
         noAccount: "No account?",
         registerLink: "Sign Up",
         loginLink: "Login",
+        // Forgot Password
+        forgotPasswordTitle: "Recover Password",
+        forgotPasswordDesc: "Enter your email and we'll send you a reset link.",
+        sendLink: "Send Link",
+        backToLogin: "Back to Login",
+        resetPasswordTitle: "New Password",
+        resetPasswordDesc: "Enter your new password.",
+        newPassword: "New Password",
+        changePassword: "Change Password",
+        linkSent: "Check your email. If it exists, we sent a link.",
+        passwordChanged: "Password updated successfully.",
         // Placeholders
         placeholderName: "Your name",
         placeholderSurnames: "Your surnames",
@@ -537,6 +559,22 @@ const cancelFeedbackBtn = document.getElementById('cancel-feedback');
 const sendFeedbackBtn = document.getElementById('send-feedback');
 const feedbackText = document.getElementById('feedback-text');
 
+// Auth View Switching Elements
+const forgotPasswordBtn = document.getElementById('forgot-password-btn');
+const authBody = document.querySelector('.auth-body:not(#forgot-password-view):not(#reset-password-view)'); // The main login/register body
+const forgotView = document.getElementById('forgot-password-view');
+const backToLoginBtn = document.getElementById('back-to-login');
+const forgotForm = document.getElementById('forgot-form');
+const forgotMsg = document.getElementById('forgot-msg');
+const forgotError = document.getElementById('forgot-error');
+
+// Reset Password Elements
+const resetView = document.getElementById('reset-password-view');
+const resetForm = document.getElementById('reset-form');
+const resetMsg = document.getElementById('reset-msg');
+const resetError = document.getElementById('reset-error');
+
+
 // Modal Elements
 const mImg = document.getElementById('modal-img');
 const mName = document.getElementById('modal-name');
@@ -706,6 +744,53 @@ async function init() {
         setupEventListeners();
         setupCustomSelects(); // Updated generic function
         renderTabs(); // Render filters
+
+        // Check for Reset Token in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const resetToken = urlParams.get('reset_token');
+        if (resetToken) {
+            openAuthModal(false, true); // Custom function behavior or manual
+            // Manually show Reset View
+            document.getElementById('auth-modal').style.display = 'block';
+            authBody.style.display = 'none';
+            forgotView.style.display = 'none';
+            resetView.style.display = 'block';
+
+            // Handle Reset Submit
+            resetForm.onsubmit = async (e) => {
+                e.preventDefault();
+                const newPassword = document.getElementById('reset-new-password').value;
+                resetError.textContent = '';
+                resetMsg.style.display = 'none';
+
+                try {
+                    const res = await fetch('/api/reset_password', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token: resetToken, password: newPassword })
+                    });
+                    const data = await res.json();
+
+                    if (data.status === 'success') {
+                        resetMsg.textContent = translations[currentLang].passwordChanged;
+                        resetMsg.style.display = 'block';
+                        setTimeout(() => {
+                            // Clear URL
+                            window.history.replaceState({}, document.title, "/");
+                            // Go to login logic
+                            resetView.style.display = 'none';
+                            authBody.style.display = 'block';
+                            toggleAuthMode(false); // Switch to login
+                        }, 2000);
+                    } else {
+                        resetError.textContent = data.message || "Error";
+                    }
+                } catch (err) {
+                    resetError.textContent = "Error de conexión";
+                }
+            };
+        }
+
 
         // Default render
         filterAndRender();
@@ -1758,13 +1843,329 @@ function addMessage(text, className, save = true) {
     }
 }
 
-// Modify init to include setupAuth
-const originalInit = init;
+// Password Reset Logic
+function setupPasswordReset() {
+    // 1. View Switching
+    if (forgotPasswordBtn) {
+        forgotPasswordBtn.addEventListener('click', () => {
+            if (authBody) authBody.style.display = 'none';
+            if (forgotView) forgotView.style.display = 'block';
+            if (resetView) resetView.style.display = 'none';
+        });
+    }
+
+    if (backToLoginBtn) {
+        backToLoginBtn.addEventListener('click', () => {
+            if (authBody) authBody.style.display = 'block';
+            if (forgotView) forgotView.style.display = 'none';
+            if (resetView) resetView.style.display = 'none';
+            toggleAuthMode(false);
+        });
+    }
+
+    // 2. Forgot Request Submit
+    if (forgotForm) {
+        forgotForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('forgot-email').value;
+            forgotError.textContent = '';
+            forgotMsg.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/request_password_reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                // Always show success to avoid enumeration
+                forgotMsg.textContent = translations[currentLang].linkSent;
+                forgotMsg.style.display = 'block';
+            } catch (err) {
+                forgotMsg.textContent = translations[currentLang].linkSent; // Fake success on error too? Or generic error.
+                forgotMsg.style.display = 'block';
+            }
+        });
+    }
+
+    // 3. Check for Reset Token in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const resetToken = urlParams.get('reset_token');
+
+    if (resetToken) {
+        // Open Modal
+        openAuthModal(false, true);
+
+        // Ensure Reset View is visible
+        setTimeout(() => {
+            const authModal = document.getElementById('auth-modal');
+            if (authModal) authModal.style.display = 'block';
+
+            if (authBody) authBody.style.display = 'none';
+            if (forgotView) forgotView.style.display = 'none';
+            if (resetView) resetView.style.display = 'block';
+        }, 100);
+
+        // Handle Reset Submit
+        if (resetForm) {
+            resetForm.onsubmit = async (e) => {
+                e.preventDefault();
+                const newPassword = document.getElementById('reset-new-password').value;
+                resetError.textContent = '';
+                resetMsg.style.display = 'none';
+
+                try {
+                    const res = await fetch('/api/reset_password', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token: resetToken, password: newPassword })
+                    });
+                    const data = await res.json();
+
+                    if (data.status === 'success') {
+                        resetMsg.textContent = translations[currentLang].passwordChanged;
+                        resetMsg.style.display = 'block';
+                        setTimeout(() => {
+                            // Clear URL
+                            window.history.replaceState({}, document.title, "/");
+                            // Go back to login
+                            if (resetView) resetView.style.display = 'none';
+                            if (authBody) authBody.style.display = 'block';
+                            toggleAuthMode(false);
+                        }, 2000);
+                    } else {
+                        resetError.textContent = data.message || "Error";
+                    }
+                } catch (err) {
+                    resetError.textContent = "Error de conexión";
+                }
+            };
+        }
+    }
+}
+
+// FIX: New Robust Password Reset Logic (Version 4 - Final Definitive)
+function setupPasswordResetFixed() {
+    console.log("Initializing setupPasswordResetFixed...");
+
+    // 1. Define elements safely
+    const forgotPasswordBtn = document.getElementById('forgot-password-btn');
+    const authForm = document.getElementById('auth-form');
+    const forgotView = document.getElementById('forgot-password-view');
+    const resetView = document.getElementById('reset-password-view');
+    const backToLoginBtn = document.getElementById('back-to-login');
+    const forgotForm = document.getElementById('forgot-form');
+    const resetForm = document.getElementById('reset-form');
+    const authModal = document.getElementById('auth-modal');
+    // authBody is used in toggleAuthMode, but here we can rely on specific view toggling
+
+    // Helper to switch views explicitly
+    const switchView = (viewName) => {
+        console.log("Switching view to:", viewName);
+        // Hide all known auth views first
+        if (authForm) authForm.style.display = 'none';
+        if (forgotView) forgotView.style.display = 'none';
+        if (resetView) resetView.style.display = 'none';
+
+        // Handle tabs if present
+        const tabs = document.querySelector('.auth-tabs');
+        if (tabs) tabs.style.display = 'none';
+
+        // Show specific view
+        if (viewName === 'main') {
+            if (authForm) authForm.style.display = 'block';
+            if (tabs) tabs.style.display = 'flex';
+        } else if (viewName === 'forgot') {
+            if (forgotView) forgotView.style.display = 'block';
+        } else if (viewName === 'reset') {
+            if (resetView) resetView.style.display = 'block';
+        }
+    };
+
+    // 2. Setup Listeners
+    if (forgotPasswordBtn) {
+        // Clone and replace to remove old listeners if any
+        const newBtn = forgotPasswordBtn.cloneNode(true);
+        forgotPasswordBtn.parentNode.replaceChild(newBtn, forgotPasswordBtn);
+
+        newBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchView('forgot');
+        });
+    }
+
+    if (backToLoginBtn) {
+        // Clone and replace
+        const newBtn = backToLoginBtn.cloneNode(true);
+        backToLoginBtn.parentNode.replaceChild(newBtn, backToLoginBtn);
+
+        newBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchView('main');
+        });
+    }
+
+    // 3. Handle Forgot Request
+    if (forgotForm) {
+        forgotForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const emailElem = document.getElementById('forgot-email');
+            const email = emailElem ? emailElem.value : '';
+            const forgotMsg = document.getElementById('forgot-msg');
+            const forgotError = document.getElementById('forgot-error');
+
+            if (forgotError) forgotError.textContent = '';
+            if (forgotMsg) forgotMsg.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/request_password_reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                // Always show success to avoid enumeration
+                if (forgotMsg) {
+                    const text = (translations[currentLang] && translations[currentLang].linkSent) || "Enlace enviado";
+                    forgotMsg.textContent = text;
+                    forgotMsg.style.display = 'block';
+                }
+            } catch (err) {
+                if (forgotMsg) {
+                    const text = (translations[currentLang] && translations[currentLang].linkSent) || "Enlace enviado";
+                    forgotMsg.textContent = text;
+                    forgotMsg.style.display = 'block';
+                }
+            }
+        });
+    }
+
+    // 4. Handle Reset Token from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const resetToken = urlParams.get('reset_token');
+
+    if (resetToken) {
+        console.log("Reset token found:", resetToken);
+        // Force Modal to Open
+        if (authModal) {
+            authModal.classList.add('active');
+            authModal.style.display = 'flex'; // Ensure flex layout for centering
+        }
+
+        // Switch to Reset View with slight delay to allow modal render
+        setTimeout(() => {
+            switchView('reset');
+        }, 100);
+
+        // Handle Reset Password Submit
+        if (resetForm) {
+            resetForm.onsubmit = async (e) => {
+                e.preventDefault();
+                const passElem = document.getElementById('reset-new-password');
+                const newPassword = passElem ? passElem.value : '';
+                const resetMsg = document.getElementById('reset-msg');
+                const resetError = document.getElementById('reset-error');
+
+                if (resetError) resetError.textContent = '';
+                if (resetMsg) resetMsg.style.display = 'none';
+
+                try {
+                    const res = await fetch('/api/reset_password', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token: resetToken, password: newPassword })
+                    });
+                    const data = await res.json();
+
+                    if (data.status === 'success') {
+                        if (resetMsg) {
+                            const text = (translations[currentLang] && translations[currentLang].passwordChanged) || "Contraseña cambiada";
+                            resetMsg.textContent = text;
+                            resetMsg.style.display = 'block';
+                        }
+                        setTimeout(() => {
+                            // Clear URL
+                            window.history.replaceState({}, document.title, "/");
+                            // Go back to login
+                            switchView('main');
+                        }, 2000);
+                    } else {
+                        if (resetError) resetError.textContent = data.message || "Error";
+                    }
+                } catch (err) {
+                    console.error(err);
+                    if (resetError) resetError.textContent = "Error de conexión";
+                }
+            };
+        }
+    }
+}
+
+// FIX: Modal Closing Monkey Patch
+// Ensure that removing 'active' class also clears inline display style
+if (document.getElementById('auth-modal')) {
+    const _authModal = document.getElementById('auth-modal');
+    const originalRemove = _authModal.classList.remove.bind(_authModal.classList);
+
+    _authModal.classList.remove = function (...args) {
+        // If we represent the classList as an object/shim, this might be tricky, 
+        // but since we are patching the instance method, it works for this element.
+        originalRemove(...args);
+        if (args.includes('active')) {
+            _authModal.style.display = ''; // Clear inline style
+        }
+    };
+
+    // Also patch Close Button to be sure
+    const closeAuthBtn = document.getElementById('close-auth');
+    if (closeAuthBtn) {
+        const newClose = closeAuthBtn.cloneNode(true);
+        closeAuthBtn.parentNode.replaceChild(newClose, closeAuthBtn);
+        newClose.addEventListener('click', () => {
+            _authModal.classList.remove('active');
+            _authModal.style.display = '';
+        });
+    }
+}
+
+
+// MAIN INITIALIZATION
+// Replaces previous init wrappers
 init = async function () {
-    await originalInit(); // Wait for original init (rendering)
-    setupAuth();
-    setupMedical();
-    loadChatHistory();
+    console.log("Starting App Initialization...");
+
+    // 1. Fetch Data
+    try {
+        const response = await fetch('/api/foods');
+        if (!response.ok) throw new Error('Error al cargar datos');
+        foodDatabase = await response.json();
+
+        // Initial Render
+        filterAndRender();
+
+        // Render Tabs
+        renderTabs();
+    } catch (error) {
+        console.error("Error cargando alimentos:", error);
+        if (typeof gridContainer !== 'undefined' && gridContainer) {
+            gridContainer.innerHTML = '<p style="color: white; text-align: center; margin-top: 2rem;">Error al cargar los alimentos. Asegúrate de que el servidor esté corriendo.</p>';
+        }
+    }
+
+    // 2. Setup Modules
+    // Use try-catch for each to prevent one failure stopping others
+    try { setupEventListeners(); } catch (e) { console.error("Setup Listeners failed", e); }
+    try { setupCustomSelects(); } catch (e) { console.error("Setup Selects failed", e); }
+    try { setupAuth(); } catch (e) { console.error("Setup Auth failed", e); }
+    try { setupMedical(); } catch (e) { console.error("Setup Medical failed", e); }
+    try { loadChatHistory(); } catch (e) { console.error("Load Chat failed", e); }
+
+    // 3. Setup Fixed Password Reset
+    try { setupPasswordResetFixed(); } catch (e) { console.error("Setup Reset failed", e); }
+
+    // 4. Initial Language
+    updateLanguage('es');
+
+    console.log("App Initialization Complete.");
 };
 
+// Run
 init();

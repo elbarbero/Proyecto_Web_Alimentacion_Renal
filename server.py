@@ -16,6 +16,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import hashlib
 import binascii
+import secrets
+import time
 
 def hash_password(password):
     """Hash a password for storing."""
@@ -58,6 +60,31 @@ def load_env():
     return env_vars
 
 env = load_env()
+
+def run_migrations():
+    """Ensure DB has necessary columns for password reset."""
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+        
+        # Check if column exists
+        cursor.execute("PRAGMA table_info(users)")
+        columns = [info[1] for info in cursor.fetchall()]
+        
+        if 'reset_token' not in columns:
+            print("Migrating DB: Adding reset_token...")
+            cursor.execute("ALTER TABLE users ADD COLUMN reset_token TEXT")
+            
+        if 'reset_token_expiry' not in columns:
+            print("Migrating DB: Adding reset_token_expiry...")
+            cursor.execute("ALTER TABLE users ADD COLUMN reset_token_expiry REAL")
+            
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Migration error: {e}")
+
+run_migrations()
 
 # Prioridad: Variables de entorno sistema > Fichero .env > Valores por defecto
 SMTP_SERVER = os.environ.get("SMTP_SERVER", env.get("SMTP_SERVER", "smtp.gmail.com"))
@@ -363,6 +390,107 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(500)
                 self.end_headers()
 
+        elif self.path == '/api/request_password_reset':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                email = data.get('email')
+
+                conn = sqlite3.connect(DB_NAME)
+                cursor = conn.cursor()
+                cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
+                user = cursor.fetchone()
+
+                if user:
+                    # Generate token
+                    token = secrets.token_urlsafe(32)
+                    expiry = time.time() + 3600 # 1 hour
+                    
+                    cursor.execute("UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE email = ?", 
+                                 (token, expiry, email))
+                    conn.commit()
+                    
+                    # Send Email
+                    reset_link = f"http://localhost:{PORT}/?reset_token={token}"
+                    print(f"--- DEBUG RESET LINK: {reset_link} ---")
+                    body = f"""
+                    <h2>Recuperación de Contraseña</h2>
+                    <p>Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace:</p>
+                    <p><a href="{reset_link}">Restablecer Contraseña</a></p>
+                    <p>Este enlace expira en 1 hora.</p>
+                    <p>Si no has sido tú, ignora este mensaje.</p>
+                    """
+                    
+                    # Send async or sync? Sync for simplicity now, but might block.
+                    # Given the current architecture, simple sync is what we have.
+                    self.send_email(email, "Restablecer Contraseña - Web Renal", body)
+
+                conn.close()
+                
+                # Always return success to prevent email enumeration
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "success", "message": "Si el email existe, se ha enviado un correo."}).encode())
+
+            except Exception as e:
+                print(f"Error requesting reset: {e}")
+                self.send_response(500)
+                self.end_headers()
+
+        elif self.path == '/api/reset_password':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                token = data.get('token')
+                new_password = data.get('password')
+                
+                if not token or not new_password:
+                    self.send_response(400)
+                    self.end_headers()
+                    return
+
+                conn = sqlite3.connect(DB_NAME)
+                cursor = conn.cursor()
+                
+                # Check token and expiry
+                cursor.execute("SELECT id, reset_token_expiry FROM users WHERE reset_token = ?", (token,))
+                user = cursor.fetchone()
+                
+                if not user:
+                    conn.close()
+                    self.send_response(400)
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"status": "error", "message": "Token inválido"}).encode())
+                    return
+                
+                expiry = user[1]
+                if time.time() > expiry:
+                    conn.close()
+                    self.send_response(400)
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"status": "error", "message": "El token ha expirado"}).encode())
+                    return
+                
+                # Update password
+                hashed_pw = hash_password(new_password)
+                cursor.execute("UPDATE users SET password_hash = ?, reset_token = NULL, reset_token_expiry = NULL WHERE id = ?", 
+                             (hashed_pw, user[0]))
+                conn.commit()
+                conn.close()
+
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "success", "message": "Contraseña actualizada"}).encode())
+
+            except Exception as e:
+                print(f"Error resetting password: {e}")
+                self.send_response(500)
+                self.end_headers()
+
         elif self.path == '/api/chat':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
@@ -548,18 +676,16 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(404, "Endpoint not found")
 
-    def send_email_notification(self, feedback_text):
+    def send_email(self, to_email, subject, body):
         """
-        Envía un correo con la sugerencia usando credenciales seguras.
+        Helper genérico para enviar emails.
         """
-        print(f"--- Intentando enviar email ---\n{feedback_text}\n-------------------------------")
-        # Configurar mensaje
+        print(f"--- Intentando enviar email a {to_email} ---\nSubject: {subject}\n-------------------------------")
         msg = MIMEMultipart()
-        # "Web Renal (No-Reply)" será el nombre que veas, aunque el correo siga siendo el tuyo (Gmail obliga a esto)
         msg['From'] = f"Web Renal (No-Reply) <{SENDER_EMAIL}>"
-        msg['To'] = RECIPIENT_EMAIL
-        msg['Subject'] = "Nueva Sugerencia - Web Alimentación Renal"
-        msg.attach(MIMEText(feedback_text, 'plain'))
+        msg['To'] = to_email
+        msg['Subject'] = subject
+        msg.attach(MIMEText(body, 'html')) # Changed to HTML for links
 
         try:
             if not SENDER_PASSWORD or SENDER_PASSWORD == "TU_CONTRASEÑA_AQUI":
@@ -570,7 +696,7 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
             server.starttls()
             server.login(SENDER_EMAIL, SENDER_PASSWORD)
             text = msg.as_string()
-            server.sendmail(SENDER_EMAIL, RECIPIENT_EMAIL, text)
+            server.sendmail(SENDER_EMAIL, to_email, text)
             server.quit()
             
             print(">> Email enviado CORRECTAMENTE.")
@@ -579,6 +705,13 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
         except Exception as e:
             print(f">> ERROR CRÍTICO enviando email: {e}")
             return False, f"Failed to send email: {e}"
+
+    def send_email_notification(self, feedback_text):
+        """
+        Envía un correo con la sugerencia (wrapper legacy).
+        """
+        subject = "Nueva Sugerencia - Web Alimentación Renal"
+        return self.send_email(RECIPIENT_EMAIL, subject, feedback_text)
 
 
 
