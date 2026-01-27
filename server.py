@@ -4,6 +4,8 @@ import json
 import sqlite3
 import os
 import urllib.parse
+import urllib.request
+import urllib.error
 
 
 PORT = 8000
@@ -360,6 +362,185 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
                 print(f"Error logging in: {e}")
                 self.send_response(500)
                 self.end_headers()
+
+        elif self.path == '/api/chat':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            data = json.loads(post_data.decode('utf-8'))
+            
+            user_message = data.get('message', '')
+            user_id = data.get('userId')
+            
+            # 1. Fetch User Context
+            context_prompt = "Eres un nefrólogo experto y nutricionista renal. Ayudas a pacientes con enfermedad renal crónica (ERC)."
+            
+            if user_id:
+                try:
+                    conn = sqlite3.connect('renal_diet.db')
+                    conn.row_factory = sqlite3.Row
+                    c = conn.cursor()
+                    
+                    # A. User Medical Data
+                    c.execute('SELECT has_insufficiency, kidney_stage, treatment_type FROM users WHERE id = ?', (user_id,))
+                    row = c.fetchone()
+                    
+                    if row:
+                        has_insufficiency, stage, treatment = row['has_insufficiency'], row['kidney_stage'], row['treatment_type']
+                        context_prompt += f" Contexto del Paciente: "
+                        if has_insufficiency == '1' or has_insufficiency == 1:
+                            if treatment == 'dialysis':
+                                context_prompt += " Está en DIÁLISIS. Recuerda: Alta proteína, bajo potasio/fósforo/sodio."
+                            elif treatment == 'transplant':
+                                context_prompt += f" Es paciente TRASPLANTADO RENAL en Estadio {stage}."
+                                if str(stage) in ['1', '2', '3a']:
+                                    context_prompt += " Buen funcionamiento del injerto. NO tiene restricciones estrictas de potasio salvo indicación. Dieta general saludable."
+                                else:
+                                    context_prompt += " Función del injerto reducida. Debe moderar potasio, fósforo y sal."
+                            else:
+                                context_prompt += f" Tiene ERC Estadio {stage} (Pre-diálisis). Ojo con potasio y proteínas."
+                        else:
+                            context_prompt += " SIN insuficiencia renal. Consejos generales de prevención."
+                    
+                    # B. Food Database Search (Simple Keyword Match)
+                    try:
+                        # 1. Get all food names in Spanish
+                        c.execute("SELECT food_id, name FROM food_translations WHERE lang='es'")
+                        all_foods = c.fetchall()
+                        
+                        # 2. Normalize function (remove accents/lower)
+                        def normalize(text):
+                            import unicodedata
+                            return ''.join(c for c in unicodedata.normalize('NFD', text.lower()) if unicodedata.category(c) != 'Mn')
+
+                        user_msg_norm = normalize(user_message)
+                        found_foods = []
+
+                        for food in all_foods:
+                            f_name = food['name']
+                            f_id = food['food_id']
+                            f_name_norm = normalize(f_name)
+                            
+                            # Check if food name appears in user message (e.g. "platano" in "puedo comer platano")
+                            # Simple heuristic: if len > 3 and name in message
+                            if len(f_name_norm) > 2 and f_name_norm in user_msg_norm:
+                                found_foods.append((f_id, f_name))
+                        
+                        # 3. If foods found, fetch their nutrients
+                        if found_foods:
+                            context_prompt += "\n\nDATOS NUTRICIONALES REALES (de la base de datos):"
+                            for f_id, f_name in found_foods[:3]: # Limit to top 3 matches to save tokens
+                                c.execute("""
+                                    SELECT n.key, fn.value, n.unit 
+                                    FROM food_nutrients fn 
+                                    JOIN nutrients n ON fn.nutrient_id = n.id 
+                                    WHERE fn.food_id = ?
+                                """, (f_id,))
+                                nutrients = c.fetchall()
+                                
+                                nut_str = ", ".join([f"{n['key']}: {n['value']}{n['unit']}" for n in nutrients if n['key'] in ['potassium','phosphorus','protein','sodium','sugar']])
+                                context_prompt += f"\n- {f_name}: {nut_str}"
+                            
+                            context_prompt += "\n(Usa estos valores exactos para tu recomendación)."
+
+                    except Exception as e_db:
+                        print(f"Error searching food DB: {e_db}")
+
+                    conn.close()
+                            
+                except Exception as e:
+                    print(f"Error reading DB: {e}")
+
+            context_prompt += "\nResponde de forma breve, empática y clara."
+            
+            print(f"--- CHAT DEBUG ---")
+            print(f"Context Generated: {context_prompt}")
+            print(f"------------------", flush=True)
+
+            # 2. Call Google Gemini API (REST)
+            # No dependencies required, just urllib
+            gemini_key = os.environ.get('GEMINI_API_KEY')
+            if not gemini_key:
+                # Try loading from .env if not in env vars
+                try:
+                    with open('.env', 'r') as f:
+                        for line in f:
+                            if line.startswith('GEMINI_API_KEY='):
+                                gemini_key = line.strip().split('=')[1]
+                                break
+                except:
+                    pass
+
+            if not gemini_key:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": "Configuration error (missing API Key)"}).encode())
+                return
+
+            api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={gemini_key}"
+            headers = {
+                "Content-Type": "application/json"
+            }
+            
+            # Construct Gemini Payload with History
+            history = data.get('history', [])
+            contents = []
+            
+            # Add History
+            for note in history:
+                role = note.get('role', 'user')
+                text = note.get('text', '')
+                if text:
+                    contents.append({
+                        "role": role,
+                        "parts": [{"text": text}]
+                    })
+            
+            # Add Current Message with System Context
+            # We prepend the medical context to the *current* user prompt to ensure it's strictly followed
+            full_prompt = f"{context_prompt}\n\nPregunta del usuario: {user_message}"
+            
+            contents.append({
+                "role": "user",
+                "parts": [{"text": full_prompt}]
+            })
+            
+            payload = {
+                "contents": contents
+            }
+            
+            req = urllib.request.Request(api_url, data=json.dumps(payload).encode('utf-8'), headers=headers)
+            
+            try:
+                print(f"Sending request to Gemini...", flush=True)
+                with urllib.request.urlopen(req) as response:
+                    response_data = response.read().decode('utf-8')
+                    result = json.loads(response_data)
+                    
+                    # Parse Gemini Response
+                    try:
+                        ai_text = result['candidates'][0]['content']['parts'][0]['text']
+                    except (KeyError, IndexError) as parse_err:
+                        print(f"Error parsing Gemini response: {parse_err}. Raw: {result}")
+                        ai_text = "Lo siento, no pude entender la respuesta del servidor."
+
+                    self.send_response(200)
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"response": ai_text}).encode())
+                    
+            except urllib.error.HTTPError as e:
+                error_content = e.read().decode()
+                print(f"Gemini API Error: {e.code} - {error_content}")
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": f"AI Service Error: {e.code}", "details": {"error": error_content}}).encode())
+
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                print(f"Error in /api/chat: {e}")
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": "Internal Server Error", "details": {"error": str(e)}}).encode())
 
         else:
             self.send_error(404, "Endpoint not found")

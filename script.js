@@ -1618,12 +1618,153 @@ function loadProfileData() {
     }
 }
 
+// --- Chat Logic ---
+// --- Chat Logic ---
+function toggleChat() {
+    const window = document.getElementById('chat-window');
+    window.classList.toggle('active');
+    if (window.classList.contains('active')) {
+        const input = document.getElementById('chat-input');
+        if (input) setTimeout(() => input.focus(), 100);
+
+        // Scroll to bottom on open
+        const messages = document.getElementById('chat-messages');
+        messages.scrollTop = messages.scrollHeight;
+    }
+}
+
+function handleChatKey(e) {
+    if (e.key === 'Enter') sendChatMessage();
+}
+
+function loadChatHistory() {
+    const history = localStorage.getItem('chat_history');
+    if (history) {
+        try {
+            const msgs = JSON.parse(history);
+            const container = document.getElementById('chat-messages');
+            // Clear default welcome message if we have history
+            if (msgs.length > 0) container.innerHTML = '';
+
+            msgs.forEach(m => {
+                addMessage(m.text, m.className, false); // false to skip saving again
+            });
+        } catch (e) {
+            console.error("Error loading chat history", e);
+        }
+    }
+}
+
+function clearChatHistory() {
+    localStorage.removeItem('chat_history');
+    document.getElementById('chat-messages').innerHTML = `
+        <div class="message ai-message">
+            Hola, soy tu asistente virtual. ¿Tienes dudas sobre si puedes comer algún alimento con tu condición actual?
+        </div>
+    `;
+}
+
+async function sendChatMessage() {
+    const input = document.getElementById('chat-input');
+    const messages = document.getElementById('chat-messages');
+    const text = input.value.trim();
+    if (!text) return;
+
+    // Add User Message
+    addMessage(text, 'user-message');
+    input.value = '';
+
+    // Typing Indicator
+    const typingId = 'typing-' + Date.now();
+    const typingDiv = document.createElement('div');
+    typingDiv.id = typingId;
+    typingDiv.className = 'typing-indicator';
+    typingDiv.textContent = 'Escribiendo...';
+    messages.appendChild(typingDiv);
+    messages.scrollTop = messages.scrollHeight;
+
+    // Get User ID
+    const storedUser = localStorage.getItem('user');
+    let userId = null;
+    if (storedUser) {
+        userId = JSON.parse(storedUser).id;
+    }
+
+    // Prepare History (limit to last 12 turns to save context)
+    let history = [];
+    const rawHistory = localStorage.getItem('chat_history');
+    if (rawHistory) {
+        try {
+            const parsed = JSON.parse(rawHistory);
+            // Map to Gemini Format matching server expectations
+            // 'user-message' -> 'user', 'ai-message' -> 'model'
+            history = parsed.slice(-12).map(msg => ({
+                role: msg.className === 'user-message' ? 'user' : 'model',
+                text: msg.text
+            }));
+        } catch (e) {
+            console.error("Error parsing history for API", e);
+        }
+    }
+
+    try {
+        const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: text,
+                userId: userId,
+                history: history
+            })
+        });
+
+        const data = await res.json();
+        const typingEl = document.getElementById(typingId);
+        if (typingEl) typingEl.remove();
+
+        if (data.response) {
+            addMessage(data.response, 'ai-message');
+        } else if (data.error) {
+            if (currentLang === 'es') {
+                addMessage("Lo siento, hubo un error técnico (" + (data.details?.error || "Desconocido") + "). Inténtalo de nuevo.", 'ai-message');
+            } else {
+                addMessage("Sorry, there was a technical error. Please try again.", 'ai-message');
+            }
+        }
+    } catch (err) {
+        console.error(err);
+        const typingEl = document.getElementById(typingId);
+        if (typingEl) typingEl.remove();
+        addMessage("Error de conexión.", 'ai-message');
+    }
+}
+
+function addMessage(text, className, save = true) {
+    const messages = document.getElementById('chat-messages');
+    const div = document.createElement('div');
+    div.className = `message ${className}`;
+    // Simple formatting
+    let formatted = text.replace(/\n/g, '<br>');
+    div.innerHTML = formatted;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+
+    if (save) {
+        const history = localStorage.getItem('chat_history') ? JSON.parse(localStorage.getItem('chat_history')) : [];
+        history.push({ text: text, className: className, timestamp: Date.now() });
+        // Limit history to 50 messages to avoid huge localStorage
+        if (history.length > 50) history.shift();
+        localStorage.setItem('chat_history', JSON.stringify(history));
+    }
+}
+
 // Modify init to include setupAuth
 const originalInit = init;
 init = async function () {
     await originalInit(); // Wait for original init (rendering)
     setupAuth();
     setupMedical();
+    loadChatHistory();
 };
 
 init();
