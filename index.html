@@ -244,8 +244,19 @@
 
                     <div class="input-group-auth">
                         <label for="auth-password" data-i18n="password">Contraseña</label>
-                        <input type="password" id="auth-password" placeholder="••••••••" required
-                            data-i18n-placeholder="placeholderPassword">
+                        <div class="password-wrapper">
+                            <input type="password" id="auth-password" placeholder="••••••••" required
+                                data-i18n-placeholder="placeholderPassword">
+                            <span class="password-toggle-icon"
+                                onclick="togglePasswordVisibility('auth-password', this)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </span>
+                        </div>
                     </div>
 
                     <!-- Forgot Password Link -->
@@ -293,8 +304,19 @@
                 <form id="reset-form">
                     <div class="input-group-auth">
                         <label for="reset-new-password" data-i18n="newPassword">Nueva Contraseña</label>
-                        <input type="password" id="reset-new-password" placeholder="••••••••" required
-                            data-i18n-placeholder="placeholderPassword">
+                        <div class="password-wrapper">
+                            <input type="password" id="reset-new-password" placeholder="••••••••" required
+                                data-i18n-placeholder="placeholderPassword">
+                            <span class="password-toggle-icon"
+                                onclick="togglePasswordVisibility('reset-new-password', this)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </span>
+                        </div>
                     </div>
 
                     <p id="reset-msg" class="success-msg" style="display:none;"></p>
@@ -366,8 +388,19 @@
 
                         <div class="input-group-auth" id="profile-password-group">
                             <label for="profile-password" data-i18n="password">Contraseña</label>
-                            <input type="password" id="profile-password" data-i18n-placeholder="placeholderPassword"
-                                placeholder="••••••••">
+                            <div class="password-wrapper">
+                                <input type="password" id="profile-password" data-i18n-placeholder="placeholderPassword"
+                                    placeholder="••••••••">
+                                <span class="password-toggle-icon"
+                                    onclick="togglePasswordVisibility('profile-password', this)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </span>
+                            </div>
                         </div>
                     </div>
 
