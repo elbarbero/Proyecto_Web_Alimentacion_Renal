@@ -1,0 +1,55 @@
+<!-- Modal de Detalles -->
+<div id="food-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="modal-body">
+            <!-- Parte A: Visual -->
+            <div class="modal-column column-a">
+                <img id="modal-img" src="" alt="Alimento">
+                <h2 id="modal-name">Nombre del Alimento</h2>
+            </div>
+
+            <!-- Parte B: Datos y Cálculo -->
+            <div class="modal-column column-b">
+                <div class="input-group">
+                    <label for="grams-input" data-i18n="amountLabel">Cantidad (gramos)</label>
+                    <input type="number" id="grams-input" placeholder="100" min="0">
+                </div>
+
+                <div class="nutritional-info">
+                    <h3 data-i18n="nutritionalInfo">Información Nutricional</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label" data-i18n="protein">Proteínas</span>
+                            <span class="value" id="val-protein">0g</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="sugar">Azúcares</span>
+                            <span class="value" id="val-sugar">0g</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="fat">Grasas</span>
+                            <span class="value" id="val-fat">0g</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="potassium">Potasio</span>
+                            <span class="value" id="val-potassium">0mg</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="phosphorus">Fósforo</span>
+                            <span class="value" id="val-phosphorus">0mg</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="salt">Sal</span>
+                            <span class="value" id="val-salt">0g</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="calcium">Calcio</span>
+                            <span class="value" id="val-calcium">0mg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

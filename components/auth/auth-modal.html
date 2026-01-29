@@ -1,0 +1,133 @@
+<!-- Auth Modal -->
+<div id="auth-modal" class="modal">
+    <div class="modal-content auth-content">
+        <span class="close-modal" id="close-auth">&times;</span>
+        <div class="auth-body">
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login" data-i18n="loginBtn">Iniciar Sesión</button>
+                <button class="auth-tab" id="tab-register" data-i18n="registerBtn">Registrarse</button>
+            </div>
+
+            <h2 id="auth-title" data-i18n="welcomeBack">Bienvenido de nuevo</h2>
+
+            <form id="auth-form" novalidate>
+                <!-- Registration Only Fields Container -->
+                <div id="register-fields" style="display: none;">
+                    <div class="input-group-auth">
+                        <label for="auth-name" data-i18n="name">Nombre</label>
+                        <input type="text" id="auth-name" placeholder="Tu nombre"
+                            data-i18n-placeholder="placeholderName">
+                    </div>
+
+                    <div class="input-group-auth">
+                        <label for="auth-surnames" data-i18n="surnames">Apellidos</label>
+                        <input type="text" id="auth-surnames" placeholder="Tus apellidos"
+                            data-i18n-placeholder="placeholderSurnames">
+                    </div>
+
+                    <div class="input-group-auth">
+                        <label for="auth-birthdate" data-i18n="birthdate">Fecha de Nacimiento</label>
+                        <input type="date" id="auth-birthdate">
+                    </div>
+
+                    <div class="input-group-auth checkbox-group">
+                        <input type="checkbox" id="terms-check">
+                        <label for="terms-check">
+                            <span data-i18n="acceptTerms">He leído y acepto los</span>
+                            <button type="button" id="open-terms" class="link-btn" data-i18n="termsLink"
+                                style="display:inline;">Términos y Condiciones</button>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-group-auth">
+                    <label for="auth-email" data-i18n="email">Email</label>
+                    <input type="email" id="auth-email" placeholder="ejemplo@email.com" required
+                        data-i18n-placeholder="placeholderEmail">
+                </div>
+
+                <div class="input-group-auth">
+                    <label for="auth-password" data-i18n="password">Contraseña</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="auth-password" placeholder="••••••••" required
+                            data-i18n-placeholder="placeholderPassword">
+                        <span class="password-toggle-icon" onclick="togglePasswordVisibility('auth-password', this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Forgot Password Link -->
+                <div id="forgot-password-link-container" style="text-align: right; margin-bottom: 1rem;">
+                    <span id="forgot-password-btn" class="link-btn" data-i18n="forgotPassword"
+                        style="cursor: pointer; font-size: 0.9rem; color: var(--primary-color);">¿Olvidaste tu
+                        contraseña?</span>
+                </div>
+
+                <p id="auth-error" class="error-msg"></p>
+
+                <button type="submit" class="btn-primary btn-block" id="auth-submit"
+                    data-i18n="loginBtn">Entrar</button>
+            </form>
+        </div>
+
+        <!-- Forgot Password REQUEST View -->
+        <div id="forgot-password-view" class="auth-body" style="display: none;">
+            <h2 data-i18n="forgotPasswordTitle">Recuperar Contraseña</h2>
+            <p class="auth-subtitle" data-i18n="forgotPasswordDesc" style="margin-bottom: 1.5rem;">Ingresa tu email
+                y te enviaremos un enlace para restablecerla.</p>
+
+            <form id="forgot-form">
+                <div class="input-group-auth">
+                    <label for="forgot-email" data-i18n="email">Email</label>
+                    <input type="email" id="forgot-email" placeholder="ejemplo@email.com" required
+                        data-i18n-placeholder="placeholderEmail">
+                </div>
+
+                <p id="forgot-msg" class="success-msg" style="display:none;"></p>
+                <p id="forgot-error" class="error-msg"></p>
+
+                <button type="submit" class="btn-primary btn-block" data-i18n="sendLink">Enviar enlace</button>
+                <button type="button" id="back-to-login" class="btn-secondary btn-block" data-i18n="backToLogin"
+                    style="margin-top: 0.5rem;">Volver</button>
+            </form>
+        </div>
+
+        <!-- RESET Password View -->
+        <div id="reset-password-view" class="auth-body" style="display: none;">
+            <h2 data-i18n="resetPasswordTitle">Nueva Contraseña</h2>
+            <p class="auth-subtitle" data-i18n="resetPasswordDesc" style="margin-bottom: 1.5rem;">Introduce tu nueva
+                contraseña.</p>
+
+            <form id="reset-form">
+                <div class="input-group-auth">
+                    <label for="reset-new-password" data-i18n="newPassword">Nueva Contraseña</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="reset-new-password" placeholder="••••••••" required
+                            data-i18n-placeholder="placeholderPassword">
+                        <span class="password-toggle-icon"
+                            onclick="togglePasswordVisibility('reset-new-password', this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <p id="reset-msg" class="success-msg" style="display:none;"></p>
+                <p id="reset-error" class="error-msg"></p>
+
+                <button type="submit" class="btn-primary btn-block" data-i18n="changePassword">Cambiar
+                    Contraseña</button>
+            </form>
+        </div>
+    </div>
+</div>
