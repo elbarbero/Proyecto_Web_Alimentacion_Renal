@@ -78,6 +78,10 @@ def run_migrations():
         if 'reset_token_expiry' not in columns:
             print("Migrating DB: Adding reset_token_expiry...")
             cursor.execute("ALTER TABLE users ADD COLUMN reset_token_expiry REAL")
+
+        if 'terms_accepted_at' not in columns:
+            print("Migrating DB: Adding terms_accepted_at...")
+            cursor.execute("ALTER TABLE users ADD COLUMN terms_accepted_at REAL")
             
         conn.commit()
         conn.close()
@@ -216,9 +220,11 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
 
                 # Create user
                 hashed_pw = hash_password(password)
-                cursor.execute("INSERT INTO users (email, password_hash, name, surnames, birthdate) VALUES (?, ?, ?, ?, ?)", 
-                               (email, hashed_pw, name, surnames, birthdate))
+                terms_accepted_at = time.time()
+                cursor.execute("INSERT INTO users (email, password_hash, name, surnames, birthdate, terms_accepted_at) VALUES (?, ?, ?, ?, ?, ?)", 
+                               (email, hashed_pw, name, surnames, birthdate, terms_accepted_at))
                 conn.commit()
+
                 user_id = cursor.lastrowid
                 conn.close()
 

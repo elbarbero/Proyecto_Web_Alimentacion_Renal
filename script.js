@@ -18,6 +18,20 @@
         feedbackPlaceholder: "Escribe tu sugerencia aquí...",
         cancel: "Cancelar",
         send: "Enviar",
+        acceptTerms: "He leído y acepto los",
+        termsLink: "Términos y Condiciones",
+        termsTitle: "Términos y Condiciones",
+        closeBtn: "Cerrar",
+        validationTerms: "Debes aceptar los términos y condiciones.",
+        termsContent: `
+            <h3>1. Uso Informativo</h3>
+            <p>Esta aplicación es una herramienta de soporte nutricional y educativo. <strong>No sustituye el consejo, diagnóstico o tratamiento médico profesional.</strong></p>
+            <h3>2. Responsabilidad</h3>
+            <p>Los datos nutricionales son estimaciones. El usuario es responsable de verificar la idoneidad de los alimentos con su nefrólogo o dietista.</p>
+            <h3>3. Privacidad</h3>
+            <p>Sus datos de salud se almacenan localmente y en una base de datos segura. No se comparten con terceros sin su consentimiento explícito.</p>
+        `,
+        validationGeneric: "Por favor, completa todos los campos marcados",
         // Auth
         userBtn: "Usuario",
         loginBtn: "Entrar",
@@ -113,6 +127,20 @@
         feedbackPlaceholder: "Write your suggestion here...",
         cancel: "Cancel",
         send: "Send",
+        acceptTerms: "I have read and accept the",
+        termsLink: "Terms and Conditions",
+        termsTitle: "Terms and Conditions",
+        closeBtn: "Close",
+        validationTerms: "You must accept the terms and conditions.",
+        termsContent: `
+            <h3>1. Informational Use</h3>
+            <p>This application is a nutritional and educational support tool. <strong>It does not substitute professional medical advice, diagnosis, or treatment.</strong></p>
+            <h3>2. Liability</h3>
+            <p>Nutritional data are estimates. The user is responsible for verifying the suitability of foods with their nephrologist or dietitian.</p>
+            <h3>3. Privacy</h3>
+            <p>Your health data is stored locally and in a secure database. It is not shared with third parties without your explicit consent.</p>
+        `,
+        validationGeneric: "Please fill in all marked fields",
         // Auth
         userBtn: "User",
         loginBtn: "Login",
@@ -207,6 +235,20 @@
         feedbackPlaceholder: "Schreiben Sie hier Ihren Vorschlag...",
         cancel: "Abbrechen",
         send: "Senden",
+        acceptTerms: "Ich habe gelesen und akzeptiere die",
+        termsLink: "Allgemeinen Geschäftsbedingungen",
+        termsTitle: "Allgemeinen Geschäftsbedingungen",
+        closeBtn: "Schließen",
+        validationTerms: "Sie müssen die Allgemeinen Geschäftsbedingungen akzeptieren.",
+        termsContent: `
+            <h3>1. Informative Nutzung</h3>
+            <p>Diese Anwendung ist ein Werkzeug zur Ernährungs- und Bildungsunterstützung. <strong>Sie ersetzt keine professionelle medizinische Beratung, Diagnose oder Behandlung.</strong></p>
+            <h3>2. Haftung</h3>
+            <p>Nährwertdaten sind Schätzungen. Der Benutzer ist dafür verantwortlich, die Eignung von Lebensmitteln mit seinem Nephrologen oder Ernährungsberater zu überprüfen.</p>
+            <h3>3. Datenschutz</h3>
+            <p>Ihre Gesundheitsdaten werden lokal und in einer sicheren Datenbank gespeichert. Sie werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben.</p>
+        `,
+        validationGeneric: "Bitte füllen Sie alle markierten Felder aus",
         // Auth
         userBtn: "Benutzer",
         loginBtn: "Anmelden",
@@ -288,6 +330,20 @@
         feedbackPlaceholder: "Écrivez votre suggestion ici...",
         cancel: "Annuler",
         send: "Envoyer",
+        acceptTerms: "J'ai lu et j'accepte les",
+        termsLink: "Termes et Conditions",
+        termsTitle: "Termes et Conditions",
+        closeBtn: "Fermer",
+        validationTerms: "Vous devez accepter les termes et conditions.",
+        termsContent: `
+            <h3>1. Usage Informatif</h3>
+            <p>Cette application est un outil de soutien nutritionnel et éducatif. <strong>Elle ne remplace pas les conseils, le diagnostic ou le traitement médical professionnel.</strong></p>
+            <h3>2. Responsabilité</h3>
+            <p>Les données nutritionnelles sont des estimations. L'utilisateur est responsable de vérifier l'adéquation des aliments avec son néphrologue ou diététicien.</p>
+            <h3>3. Confidentialité</h3>
+            <p>Vos données de santé sont stockées localement et dans une base de données sécurisée. Elles ne sont pas partagées avec des tiers sans votre consentement explicite.</p>
+        `,
+        validationGeneric: "Veuillez remplir tous les champs marqués",
         // Auth
         userBtn: "Utilisateur",
         loginBtn: "Connexion",
@@ -369,6 +425,20 @@
         feedbackPlaceholder: "Escreva sua sugestão aqui...",
         cancel: "Cancelar",
         send: "Enviar",
+        acceptTerms: "Li e aceito os",
+        termsLink: "Termos e Condições",
+        termsTitle: "Termos e Condições",
+        closeBtn: "Fechar",
+        validationTerms: "Você deve aceitar os termos e condições.",
+        termsContent: `
+            <h3>1. Uso Informativo</h3>
+            <p>Esta aplicação é uma ferramenta de apoio nutricional e educativo. <strong>Não substitui o aconselhamento, diagnóstico ou tratamento médico profissional.</strong></p>
+            <h3>2. Responsabilidade</h3>
+            <p>Os dados nutricionais são estimativas. O utilizador é responsável por verificar a adequação dos alimentos com o seu nefrologista ou dietista.</p>
+            <h3>3. Privacidade</h3>
+            <p>Os seus dados de saúde são armazenados localmente e numa base de dados segura. Não são partilhados com terceiros sem o seu consentimento explícito.</p>
+        `,
+        validationGeneric: "Preencha todos os campos marcados",
         // Auth
         userBtn: "Usuário",
         loginBtn: "Entrar",
@@ -450,6 +520,20 @@
         feedbackPlaceholder: "提案をここに書いてください...",
         cancel: "キャンセル",
         send: "送信",
+        acceptTerms: "利用規約を読み、同意します",
+        termsLink: "利用規約",
+        termsTitle: "利用規約",
+        closeBtn: "閉じる",
+        validationTerms: "利用規約に同意する必要があります。",
+        termsContent: `
+            <h3>1. 情報としての利用</h3>
+            <p>このアプリは栄養および教育支援ツールです。<strong>専門的な医学的アドバイス、診断、または治療に代わるものではありません。</strong></p>
+            <h3>2. 免責事項</h3>
+            <p>栄養データは推定値です。ユーザーは、食品の適合性を腎臓専門医または管理栄養士に確認する責任があります。</p>
+            <h3>3. プライバシー</h3>
+            <p>あなたの健康データはローカルおよび安全なデータベースに保存されます。明示的な同意なしに第三者と共有されることはありません。</p>
+        `,
+        validationGeneric: "マークされたすべてのフィールドに入力してください",
         // Auth
         userBtn: "ユーザー",
         loginBtn: "ログイン",
@@ -586,6 +670,13 @@ const valPhosphorus = document.getElementById('val-phosphorus');
 const valSalt = document.getElementById('val-salt');
 const valCalcium = document.getElementById('val-calcium');
 
+// Terms Elements
+const termsModal = document.getElementById('terms-modal');
+const closeTermsBtn = document.getElementById('close-terms');
+const acceptTermsBtn = document.getElementById('accept-terms-btn');
+const termsContentDiv = document.getElementById('terms-content');
+const openTermsLink = document.getElementById('open-terms');
+
 // Language Functions
 function updateLanguage(lang) {
     currentLang = lang;
@@ -615,29 +706,27 @@ function updateLanguage(lang) {
         toggleAuthMode(isRegistering);
     }
 
+    // Update Terms Content if modal is open (so it switches language dynamically)
+    if (termsContentDiv) {
+        termsContentDiv.innerHTML = translations[currentLang].termsContent;
+    }
+
     setupValidation();
+}
+
+function clearError(e) {
+    e.target.classList.remove('input-error');
+    const checkboxGroup = document.querySelector('.checkbox-group');
+    if (checkboxGroup) checkboxGroup.classList.remove('checkbox-error');
 }
 
 function setupValidation() {
     const inputs = document.querySelectorAll('#auth-form input');
     inputs.forEach(input => {
-        // Remove old listeners to avoid stacking (simplest way is to overwrite oninvalid)
-        input.oninvalid = function (e) {
-            e.target.setCustomValidity("");
-            if (!e.target.validity.valid) {
-                if (e.target.validity.valueMissing) {
-                    e.target.setCustomValidity(translations[currentLang].validationEmpty);
-                } else if (e.target.validity.typeMismatch && e.target.type === 'email') {
-                    e.target.setCustomValidity(translations[currentLang].validationEmail);
-                } else if (e.target.validity.badInput && e.target.type === 'date') {
-                    e.target.setCustomValidity(translations[currentLang].validationDate);
-                }
-            }
-        };
-
-        input.oninput = function (e) {
-            e.target.setCustomValidity("");
-        };
+        // Clear custom error style on input
+        input.addEventListener('input', clearError);
+        // Also clear on change (for date/checkbox)
+        input.addEventListener('change', clearError);
     });
 }
 
@@ -968,6 +1057,32 @@ function setupEventListeners() {
     closeFeedbackBtn.addEventListener('click', closeFeedback);
     cancelFeedbackBtn.addEventListener('click', closeFeedback);
     sendFeedbackBtn.addEventListener('click', sendFeedback);
+
+    // Terms Listeners
+    if (openTermsLink) {
+        openTermsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (termsContentDiv) {
+                termsContentDiv.innerHTML = translations[currentLang].termsContent;
+            }
+            termsModal.classList.add('active');
+        });
+    }
+
+    if (closeTermsBtn) {
+        closeTermsBtn.addEventListener('click', () => {
+            termsModal.classList.remove('active');
+        });
+    }
+
+    if (acceptTermsBtn) {
+        acceptTermsBtn.addEventListener('click', () => {
+            termsModal.classList.remove('active');
+            // Optionally check the box automatically?
+            // document.getElementById('terms-check').checked = true;
+        });
+    }
 }
 
 // --- Nephrologist Logic ---
@@ -1325,15 +1440,62 @@ async function handleAuthSubmit(e) {
     const endpoint = isRegistering ? '/api/register' : '/api/login';
     const payload = { email, password };
 
+    // --- MANUAL VALIDATION ---
+    let isValid = true;
+    let firstInvalid = null;
+
+    // Helper to mark invalid
+    const markInvalid = (id) => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.add('input-error');
+            if (!firstInvalid) firstInvalid = el;
+        }
+        isValid = false;
+    };
+
+    if (!email) markInvalid('auth-email');
+    if (!password) markInvalid('auth-password');
+
+    if (isRegistering) {
+        if (!name) markInvalid('auth-name');
+        if (!surnames) markInvalid('auth-surnames');
+        if (!birthdate) markInvalid('auth-birthdate');
+
+        // Terms Validation
+        const termsCheck = document.getElementById('terms-check');
+        if (!termsCheck.checked) {
+            const group = document.querySelector('.checkbox-group');
+            if (group) group.classList.add('checkbox-error');
+            isValid = false;
+            // Specific error for terms if it's the only thing missing, otherwise generic
+            if (!firstInvalid) {
+                authError.textContent = translations[currentLang].validationTerms;
+                authSubmit.disabled = false;
+                return;
+            }
+        }
+    }
+
+    if (!isValid) {
+        authError.textContent = translations[currentLang].validationGeneric;
+        if (firstInvalid) firstInvalid.focus();
+        authSubmit.disabled = false;
+        return;
+    }
+    // -------------------------
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-        authError.textContent = 'Por favor, introduce un email válido.';
+        authError.textContent = translations[currentLang].validationEmail;
         authSubmit.disabled = false;
         return;
     }
 
     if (isRegistering) {
+        // Terms checked above
+
         payload.name = name;
         payload.surnames = surnames;
         payload.birthdate = birthdate;

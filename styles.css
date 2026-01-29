@@ -1637,3 +1637,130 @@ input:checked+.slider:before {
     padding-right: 45px !important;
     /* Ensure text doesn't overlap icon */
 }
+
+/* Terms Modal */
+.legal-content {
+    max-width: 800px;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.legal-text-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    line-height: 1.8;
+    text-align: left;
+}
+
+.legal-text-container h3 {
+    color: var(--primary-color);
+    margin-top: 2rem;
+    margin-bottom: 0.8rem;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+}
+
+.legal-text-container p {
+    margin-bottom: 1rem;
+    color: var(--text-main);
+    text-align: left;
+}
+
+.legal-text-container ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Checkbox Style */
+.checkbox-group {
+    display: flex;
+    align-items: center !important;
+    gap: 0.8rem;
+    text-align: left;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0.5rem 0 !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    flex-shrink: 0;
+    accent-color: var(--primary-color);
+    padding: 0;
+    border-radius: 4px;
+}
+
+.checkbox-group label {
+    margin: 0;
+    font-size: 0.9rem;
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: inline;
+}
+
+.link-btn {
+    color: var(--primary-color);
+    text-decoration: underline;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    font-weight: 600;
+}
+
+/* Validation Errors */
+.input-error {
+    border-color: #ef4444 !important;
+    /* Red */
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1) !important;
+    animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.checkbox-error {
+    color: #ef4444 !important;
+    animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.checkbox-error input {
+    outline: 2px solid #ef4444;
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}

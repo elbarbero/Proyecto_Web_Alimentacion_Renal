@@ -215,7 +215,7 @@
 
                 <h2 id="auth-title" data-i18n="welcomeBack">Bienvenido de nuevo</h2>
 
-                <form id="auth-form">
+                <form id="auth-form" novalidate>
                     <!-- Registration Only Fields Container -->
                     <div id="register-fields" style="display: none;">
                         <div class="input-group-auth">
@@ -233,6 +233,15 @@
                         <div class="input-group-auth">
                             <label for="auth-birthdate" data-i18n="birthdate">Fecha de Nacimiento</label>
                             <input type="date" id="auth-birthdate">
+                        </div>
+
+                        <div class="input-group-auth checkbox-group">
+                            <input type="checkbox" id="terms-check">
+                            <label for="terms-check">
+                                <span data-i18n="acceptTerms">He leído y acepto los</span>
+                                <button type="button" id="open-terms" class="link-btn" data-i18n="termsLink"
+                                    style="display:inline;">Términos y Condiciones</button>
+                            </label>
                         </div>
                     </div>
 
@@ -493,6 +502,21 @@
                             style="flex: 1;">Guardar</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms Modal -->
+    <div id="terms-modal" class="modal">
+        <div class="modal-content legal-content">
+            <span class="close-modal" id="close-terms">&times;</span>
+            <div class="auth-body" style="height: 100%; display: flex; flex-direction: column;">
+                <h2 data-i18n="termsTitle">Términos y Condiciones</h2>
+                <div class="legal-text-container" id="terms-content">
+                    <!-- Dynamic Content -->
+                </div>
+                <button type="button" class="btn-primary btn-block" id="accept-terms-btn"
+                    data-i18n="closeBtn">Cerrar</button>
             </div>
         </div>
     </div>
