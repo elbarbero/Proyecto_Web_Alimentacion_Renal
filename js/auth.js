@@ -147,13 +147,15 @@ export function setupAuth() {
 }
 
 function setupTermsModal() {
-    if (openTermsBtn) {
-        openTermsBtn.addEventListener('click', (e) => {
+    const triggers = document.querySelectorAll('.open-terms-trigger');
+    triggers.forEach(btn => {
+        btn.addEventListener('click', (e) => {
             e.preventDefault();
-            e.stopPropagation(); // Prevent label click from checking box
+            e.stopPropagation();
             openTerms();
         });
-    }
+    });
+
     if (closeTermsBtn) closeTermsBtn.addEventListener('click', () => termsModal.classList.remove('active'));
     if (acceptTermsBtn) acceptTermsBtn.addEventListener('click', () => termsModal.classList.remove('active'));
 }
@@ -169,6 +171,13 @@ function openTerms() {
 
 function openAuthModal() {
     if (!authModal) return;
+
+    // Reset clean state
+    if (authForm) authForm.reset();
+    document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    const checkboxGroup = document.querySelector('.checkbox-group');
+    if (checkboxGroup) checkboxGroup.classList.remove('checkbox-error');
+    if (authError) authError.textContent = '';
     if (authForm) authForm.style.display = 'block';
     if (forgotView) forgotView.style.display = 'none';
     if (resetView) resetView.style.display = 'none';
@@ -279,7 +288,7 @@ async function handleAuthSubmit(e) {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         if (birthDateObj > today) {
-            if (authError) authError.textContent = 'La fecha de nacimiento no puede ser futura.';
+            if (authError) authError.textContent = t.validationFutureDate;
             return;
         }
     }
@@ -333,18 +342,16 @@ async function handleAuthSubmit(e) {
                 loadProfileData();
                 if (medicalModal) medicalModal.classList.add('active');
             } else {
-                // Optional welcome
-                // alert(`Hola ${data.name}!`); 
+                // For login, reload to refresh app state fully
+                location.reload();
             }
-            // Reload to ensure state consistency if needed, though strictly not required if we update UI
-            location.reload();
         } else {
             if (authError) authError.textContent = data.message || "Error";
         }
 
     } catch (err) {
         console.error(err);
-        if (authError) authError.textContent = "Error de conexión";
+        if (authError) authError.textContent = t.connectionError || "Connection Error";
     }
 }
 
@@ -573,7 +580,7 @@ async function handleMedicalSubmit(e) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     if (new Date(birthdate) > today) {
-        if (medicalError) medicalError.textContent = 'Fecha inválida';
+        if (medicalError) medicalError.textContent = t.validationFutureDate || 'Fecha inválida';
         if (saveMedicalBtn) saveMedicalBtn.disabled = false;
         return;
     }
@@ -623,7 +630,7 @@ async function handleMedicalSubmit(e) {
 
     } catch (err) {
         console.error(err);
-        if (medicalError) medicalError.textContent = 'Error de conexión';
+        if (medicalError) medicalError.textContent = t.connectionError || 'Error de conexión';
     } finally {
         if (saveMedicalBtn) saveMedicalBtn.disabled = false;
     }
@@ -654,6 +661,7 @@ function updateUserAvatar(url) {
 }
 
 function setupForgotReset() {
+    const t = translations[getCurrentLang()];
     const btn = document.getElementById('forgot-password-btn');
     if (btn) {
         btn.addEventListener('click', (e) => {
@@ -685,7 +693,7 @@ function setupForgotReset() {
                 if (data.status === 'success') {
                     if (forgotMsg) {
                         forgotMsg.style.display = 'block';
-                        forgotMsg.textContent = data.message || "Enlace enviado. Revise su correo.";
+                        forgotMsg.textContent = t.linkSentMsg;
                     }
                 } else {
                     if (forgotError) forgotError.textContent = data.message;
@@ -707,7 +715,7 @@ function setupForgotReset() {
             if (resetMsg) resetMsg.style.display = 'none';
 
             if (!token) {
-                if (resetError) resetError.textContent = "Token inválido o expirado.";
+                if (resetError) resetError.textContent = t.tokenInvalid || "Token inválido o expirado.";
                 return;
             }
 
@@ -717,16 +725,22 @@ function setupForgotReset() {
                 if (data.status === 'success') {
                     if (resetMsg) {
                         resetMsg.style.display = 'block';
-                        resetMsg.textContent = data.message || "Contraseña actualizada.";
+                        resetMsg.textContent = t.passwordUpdated;
                     }
                     setTimeout(() => {
                         window.location.href = window.location.pathname; // Clear token from URL and reload logic
                     }, 2000);
                 } else {
-                    if (resetError) resetError.textContent = data.message;
+                    if (resetError) {
+                        if (data.message === "Token inválido" || data.message === "Token expirado") {
+                            resetError.textContent = t.tokenInvalid;
+                        } else {
+                            resetError.textContent = data.message;
+                        }
+                    }
                 }
             } catch (err) {
-                if (resetError) resetError.textContent = 'Connection Error';
+                if (resetError) resetError.textContent = t.connectionError || 'Connection Error';
             }
         });
     }

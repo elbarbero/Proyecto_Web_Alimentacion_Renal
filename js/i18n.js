@@ -23,6 +23,11 @@ export const translations = {
         termsTitle: "Términos y Condiciones",
         closeBtn: "Cerrar",
         validationTerms: "Debes aceptar los términos y condiciones.",
+        validationFutureDate: "La fecha de nacimiento no puede ser futura.",
+        connectionError: "Error de conexión",
+        tokenInvalid: "Token inválido o expirado.",
+        passwordUpdated: "Contraseña actualizada.",
+        linkSentMsg: "Enlace enviado. Revise su correo.",
         termsContent: `
             <h3>1. Uso Informativo</h3>
             <p>Esta aplicación es una herramienta de soporte nutricional y educativo. <strong>No sustituye el consejo, diagnóstico o tratamiento médico profesional.</strong></p>
@@ -106,7 +111,12 @@ export const translations = {
         catLegumesSpec: "Legumbres (específico)",
         catNutsSpec: "Frutos secos (específico)",
         catTubersSpec: "Tubérculos (específico)",
-        catDrinks: "Bebidas (agua/infusiones)"
+        catDrinks: "Bebidas (agua/infusiones)",
+        // Footer
+        medicalDisclaimer: "Descargo de responsabilidad: Esta aplicación es una herramienta informativa y no sustituye el consejo médico profesional. Consulte siempre a su nefrólogo.",
+        privacyPolicy: "Política de Privacidad",
+        contact: "Contacto",
+        allRightsReserved: "Todos los derechos reservados."
     },
     en: {
         title: "Smart Renal Diet",
@@ -132,6 +142,11 @@ export const translations = {
         termsTitle: "Terms and Conditions",
         closeBtn: "Close",
         validationTerms: "You must accept the terms and conditions.",
+        validationFutureDate: "Date of birth cannot be in the future.",
+        connectionError: "Connection error",
+        tokenInvalid: "Invalid or expired token.",
+        passwordUpdated: "Password updated.",
+        linkSentMsg: "Link sent. Check your email.",
         termsContent: `
             <h3>1. Informational Use</h3>
             <p>This application is a nutritional and educational support tool. <strong>It does not substitute professional medical advice, diagnosis, or treatment.</strong></p>
@@ -213,7 +228,12 @@ export const translations = {
         catLegumesSpec: "Legumes (Specific)",
         catNutsSpec: "Nuts (Specific)",
         catTubersSpec: "Tubers (Specific)",
-        catDrinks: "Drinks"
+        catDrinks: "Drinks",
+        // Footer
+        medicalDisclaimer: "Disclaimer: This app is an informational tool and does not substitute professional medical advice. Always consult your nephrologist.",
+        privacyPolicy: "Privacy Policy",
+        contact: "Contact",
+        allRightsReserved: "All rights reserved."
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -239,6 +259,11 @@ export const translations = {
         termsTitle: "Allgemeinen Geschäftsbedingungen",
         closeBtn: "Schließen",
         validationTerms: "Sie müssen die Allgemeinen Geschäftsbedingungen akzeptieren.",
+        validationFutureDate: "Das Geburtsdatum darf nicht in der Zukunft liegen.",
+        connectionError: "Verbindungsfehler",
+        tokenInvalid: "Ungültiges oder abgelaufenes Token.",
+        passwordUpdated: "Passwort aktualisiert.",
+        linkSentMsg: "Link gesendet. Prüfen Sie Ihre E-Mails.",
         termsContent: `
             <h3>1. Informative Nutzung</h3>
             <p>Diese Anwendung ist ein Werkzeug zur Ernährungs- und Bildungsunterstützung. <strong>Sie ersetzt keine professionelle medizinische Beratung, Diagnose oder Behandlung.</strong></p>
@@ -308,7 +333,12 @@ export const translations = {
         stage3a: "Stadium 3A",
         stage3b: "Stadium 3B",
         stage4: "Stadium 4",
-        stage5: "Stadium 5"
+        stage5: "Stadium 5",
+        // Footer
+        medicalDisclaimer: "Haftungsausschluss: Diese App ist ein Informationswerkzeug und ersetzt keine professionelle medizinische Beratung. Konsultieren Sie immer Ihren Nephrologen.",
+        privacyPolicy: "Datenschutzrichtlinie",
+        contact: "Kontakt",
+        allRightsReserved: "Alle Rechte vorbehalten."
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -334,6 +364,11 @@ export const translations = {
         termsTitle: "Termes et Conditions",
         closeBtn: "Fermer",
         validationTerms: "Vous devez accepter les termes et conditions.",
+        validationFutureDate: "La date de naissance ne peut pas être dans le futur.",
+        connectionError: "Erreur de connexion",
+        tokenInvalid: "Jeton invalide ou expiré.",
+        passwordUpdated: "Mot de passe mis à jour.",
+        linkSentMsg: "Lien envoyé. Vérifiez votre email.",
         termsContent: `
             <h3>1. Usage Informatif</h3>
             <p>Cette application est un outil de soutien nutritionnel et éducatif. <strong>Elle ne remplace pas les conseils, le diagnostic ou le traitement médical professionnel.</strong></p>
@@ -403,7 +438,12 @@ export const translations = {
         catLegumesSpec: "Légumineuses (Spécifique)",
         catNutsSpec: "Fruits à coque (Spécifique)",
         catTubersSpec: "Tubercules (Spécifique)",
-        catDrinks: "Boissons (eau/infusions)"
+        catDrinks: "Boissons (eau/infusions)",
+        // Footer
+        medicalDisclaimer: "Avis de non-responsabilité : Cette application est un outil d'information et ne remplace pas un avis médical professionnel. Consultez toujours votre néphrologue.",
+        privacyPolicy: "Politique de confidentialité",
+        contact: "Contact",
+        allRightsReserved: "Tous droits réservés."
     },
     pt: {
         title: "Dieta Renal Inteligente",
@@ -429,6 +469,11 @@ export const translations = {
         termsTitle: "Termos e Condições",
         closeBtn: "Fechar",
         validationTerms: "Você deve aceitar os termos e condições.",
+        validationFutureDate: "A data de nascimento não pode ser futura.",
+        connectionError: "Erro de conexão",
+        tokenInvalid: "Token inválido ou expirado.",
+        passwordUpdated: "Senha atualizada.",
+        linkSentMsg: "Link enviado. Verifique seu email.",
         termsContent: `
             <h3>1. Uso Informativo</h3>
             <p>Esta aplicação é uma ferramenta de apoio nutricional e educativo. <strong>Não substitui o aconselhamento, diagnóstico ou tratamento médico profissional.</strong></p>
@@ -498,7 +543,12 @@ export const translations = {
         catLegumesSpec: "Leguminosas (específico)",
         catNutsSpec: "Frutos secos (específico)",
         catTubersSpec: "Tubérculos (específico)",
-        catDrinks: "Bebidas (água/infusões)"
+        catDrinks: "Bebidas (água/infusões)",
+        // Footer
+        medicalDisclaimer: "Isenção de responsabilidade: Este aplicativo é uma ferramenta informativa e não substitui o conselho médico profissional. Consulte sempre seu nefrologista.",
+        privacyPolicy: "Política de Privacidade",
+        contact: "Contato",
+        allRightsReserved: "Todos os direitos reservados."
     },
     ja: {
         title: "スマート腎臓食",
@@ -524,6 +574,11 @@ export const translations = {
         termsTitle: "利用規約",
         closeBtn: "閉じる",
         validationTerms: "利用規約に同意する必要があります。",
+        validationFutureDate: "生年月日は未来の日付にできません。",
+        connectionError: "接続エラー",
+        tokenInvalid: "トークンが無効または期限切れです。",
+        passwordUpdated: "パスワードが更新されました。",
+        linkSentMsg: "リンクを送信しました。メールを確認してください。",
         termsContent: `
             <h3>1. 情報としての利用</h3>
             <p>このアプリは栄養および教育支援ツールです。<strong>専門的な医学的アドバイス、診断、または治療に代わるものではありません。</strong></p>
@@ -596,7 +651,12 @@ export const translations = {
         stage3a: "ステージ 3A",
         stage3b: "ステージ 3B",
         stage4: "ステージ 4",
-        stage5: "ステージ 5"
+        stage5: "ステージ 5",
+        // Footer
+        medicalDisclaimer: "免責事項：このアプリは情報ツールであり、専門的な医学的アドバイスに代わるものではありません。常に腎臓専門医に相談してください。",
+        privacyPolicy: "プライバシーポリシー",
+        contact: "お問い合わせ",
+        allRightsReserved: "全著作権所有。"
     }
 };
 
