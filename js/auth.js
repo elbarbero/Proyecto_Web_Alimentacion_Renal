@@ -3,7 +3,7 @@ import { translations, getCurrentLang } from './i18n.js';
 
 // Module-Scope Variables (Initialized in setupAuth)
 let userBtn, authModal, closeAuthBtn, authForm, authBody;
-let tabLogin, tabRegister, nameGroup, authTitle, authSubmit, switchRegister, authError;
+let tabLogin, tabRegister, nameGroup, termsGroup, forgotLinkContainer, authTitle, authSubmit, switchRegister, authError;
 let forgotView, resetView, forgotForm, resetForm, forgotMsg, forgotError, resetMsg, resetError;
 let termsModal, openTermsBtn, closeTermsBtn, acceptTermsBtn, termsContentDiv;
 
@@ -25,6 +25,8 @@ export function setupAuth() {
     tabLogin = document.getElementById('tab-login');
     tabRegister = document.getElementById('tab-register');
     nameGroup = document.getElementById('register-fields');
+    termsGroup = document.getElementById('register-terms');
+    forgotLinkContainer = document.getElementById('forgot-password-link-container');
     authTitle = document.getElementById('auth-title');
     authSubmit = document.getElementById('auth-submit');
     switchRegister = document.getElementById('switch-to-register');
@@ -191,6 +193,9 @@ function toggleAuthMode(register) {
         if (tabLogin) tabLogin.classList.remove('active');
         if (tabRegister) tabRegister.classList.add('active');
         if (nameGroup) nameGroup.style.display = 'block';
+        if (termsGroup) termsGroup.style.display = 'block';
+        if (forgotLinkContainer) forgotLinkContainer.style.display = 'none';
+
         if (authTitle) authTitle.textContent = t.createAccount;
         if (authSubmit) authSubmit.textContent = t.registerBtn;
 
@@ -204,6 +209,9 @@ function toggleAuthMode(register) {
         if (tabLogin) tabLogin.classList.add('active');
         if (tabRegister) tabRegister.classList.remove('active');
         if (nameGroup) nameGroup.style.display = 'none';
+        if (termsGroup) termsGroup.style.display = 'none';
+        if (forgotLinkContainer) forgotLinkContainer.style.display = 'block';
+
         if (authTitle) authTitle.textContent = t.welcomeBack;
         if (authSubmit) authSubmit.textContent = t.loginBtn;
 

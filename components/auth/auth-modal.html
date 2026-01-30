@@ -29,15 +29,6 @@
                         <label for="auth-birthdate" data-i18n="birthdate">Fecha de Nacimiento</label>
                         <input type="date" id="auth-birthdate">
                     </div>
-
-                    <div class="input-group-auth checkbox-group">
-                        <input type="checkbox" id="terms-check">
-                        <label for="terms-check">
-                            <span data-i18n="acceptTerms">He leído y acepto los</span>
-                            <button type="button" id="open-terms" class="link-btn" data-i18n="termsLink"
-                                style="display:inline;">Términos y Condiciones</button>
-                        </label>
-                    </div>
                 </div>
 
                 <div class="input-group-auth">
@@ -59,6 +50,18 @@
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
                         </span>
+                    </div>
+                </div>
+
+                <!-- Terms Checkbox (Moved here) -->
+                <div id="register-terms" style="display: none;">
+                    <div class="input-group-auth checkbox-group">
+                        <input type="checkbox" id="terms-check">
+                        <label for="terms-check">
+                            <span data-i18n="acceptTerms">He leído y acepto los</span>
+                            <button type="button" id="open-terms" class="link-btn" data-i18n="termsLink"
+                                style="display:inline;">Términos y Condiciones</button>
+                        </label>
                     </div>
                 </div>
 
