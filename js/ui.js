@@ -49,7 +49,10 @@ export function setupCustomSelects() {
                     const inputId = x[i].id.replace("-select", "-type-hidden"); // heuristic
                     // or look for input inside
                     const hiddenInput = x[i].querySelector("input[type=hidden]");
-                    if (hiddenInput) hiddenInput.value = val;
+                    if (hiddenInput) {
+                        hiddenInput.value = val;
+                        hiddenInput.dispatchEvent(new Event('change'));
+                    }
 
                     // Trigger change event if needed?
                     // For now handled by click.

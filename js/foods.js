@@ -115,8 +115,8 @@ export class Nephrologist {
         }
 
         if (treatment === 'dialysis') {
-            limits.potassium = { green: 200, yellow: 500 };
-            limits.phosphorus = { green: 200, yellow: 400 };
+            limits.potassium = { green: 100, yellow: 250 };
+            limits.phosphorus = { green: 100, yellow: 250 };
             limits.protein = { green: 60, yellow: 100 };
         }
 

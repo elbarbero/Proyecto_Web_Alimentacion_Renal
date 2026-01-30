@@ -1,5 +1,6 @@
 import { fetchUser, login, register, requestPasswordReset, resetPassword } from './api.js';
 import { translations, getCurrentLang } from './i18n.js';
+import { clearChatHistory } from './chat.js';
 
 // Module-Scope Variables (Initialized in setupAuth)
 let userBtn, authModal, closeAuthBtn, authForm, authBody;
@@ -633,6 +634,8 @@ async function handleMedicalSubmit(e) {
 
 export function logout() {
     localStorage.removeItem('user');
+    localStorage.removeItem('chat_history');
+    clearChatHistory(); // Reset chat UI immediately
     location.reload();
 }
 

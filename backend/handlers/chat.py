@@ -17,10 +17,19 @@ def handle_chat(data, handler):
     history = data.get('history', [])
     
     # 1. Build Context
-    context_prompt = "ACTÚA COMO: Asistente experto en nutrición renal (Nefrólogo/Nutricionista)."
-    context_prompt += "\nTU OBJETIVO: Aconsejar al paciente basándote EXCLUSIVAMENTE en su perfil médico (que te proporciono abajo) y en la base de datos de alimentos."
+    context_prompt = ""
     
-    if user_id:
+    if not user_id:
+        # --- SAFE MODE (Guest / No Login) ---
+        context_prompt = "ACTÚA COMO: Enciclopedia de Alimentos (Nutrición Renal)."
+        context_prompt += "\nTU OBJETIVO: Proporcionar DATOS NUTRICIONALES OBJETIVOS (Potasio, Fósforo, etc) sobre los alimentos que pregunte el usuario."
+        context_prompt += "\nREGLA CRÍTICA DE SEGURIDAD: NO des consejos médicos personalizados ni recomendaciones sobre si 'puede comer' algo, ya que NO conoces su historial médico."
+        context_prompt += "\nSI EL USUARIO PIDE CONSEJO (ej: '¿Puedo comer esto?'): Responde dando el dato nutricional y añade: 'Por favor, inicia sesión para que pueda verificar tu perfil médico y aconsejarte con seguridad.'."
+    else:
+        # --- MEDICAL MODE (Logged In User) ---
+        context_prompt = "ACTÚA COMO: Asistente experto en nutrición renal (Nefrólogo/Nutricionista)."
+        context_prompt += "\nTU OBJETIVO: Aconsejar al paciente basándote EXCLUSIVAMENTE en su perfil médico, que te proporciono abajo."
+        
         try:
             conn = get_db_connection()
             c = conn.cursor()
@@ -43,7 +52,7 @@ def handle_chat(data, handler):
                 
                 context_prompt += "\nINSTRUCCIÓN CLAVE: El usuario YA te ha dado estos datos en su perfil. NO digas 'no tengo acceso a tus datos'. TÚ TIENES ESTOS DATOS. Úsalos para personalizar cada respuesta."
 
-            # Simple Food Search for Context
+            # Simple Food Search for Context (Only relevant for detailed medical advice or specific questions)
             try:
                 c.execute("SELECT food_id, name FROM food_translations WHERE lang='es'")
                 all_foods = c.fetchall()
@@ -61,7 +70,7 @@ def handle_chat(data, handler):
                         found_foods.append(food['food_id'])
 
                 if found_foods:
-                    context_prompt += "\n\nDATOS NUTRICIONALES DETECTADOS:"
+                    context_prompt += "\n\nDATOS NUTRICIONALES DETECTADOS (Base de Datos):"
                     for f_id in found_foods[:3]:
                          c.execute("""
                             SELECT n.key, fn.value, n.unit 
