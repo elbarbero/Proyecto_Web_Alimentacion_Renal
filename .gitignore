@@ -1,6 +1,8 @@
 
 # Agent configuration
+# Agent configuration
 .agent/
+.env
 
 # Python
 __pycache__/
