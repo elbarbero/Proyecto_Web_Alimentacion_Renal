@@ -4,12 +4,9 @@ import urllib.request
 import urllib.error
 from ..database import get_db_connection
 from ..config import GEMINI_API_KEY
+from ..utils import send_json
 
-def send_json(handler, status, data):
-    handler.send_response(status)
-    handler.send_header('Content-type', 'application/json')
-    handler.end_headers()
-    handler.wfile.write(json.dumps(data).encode())
+
 
 def handle_chat(data, handler):
     user_message = data.get('message', '')

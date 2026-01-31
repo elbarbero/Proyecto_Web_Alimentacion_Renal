@@ -1,12 +1,9 @@
 import json
 from ..database import get_db_connection
 from ..email_service import send_email_notification
+from ..utils import send_json
 
-def send_json(handler, status, data):
-    handler.send_response(status)
-    handler.send_header('Content-type', 'application/json')
-    handler.end_headers()
-    handler.wfile.write(json.dumps(data).encode())
+
 
 def handle_get_foods(handler):
     try:

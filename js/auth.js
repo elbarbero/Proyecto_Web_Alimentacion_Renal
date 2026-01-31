@@ -1,6 +1,7 @@
-import { fetchUser, login, register, requestPasswordReset, resetPassword } from './api.js';
+import { fetchUser, login, register, requestPasswordReset, resetPassword, fetchCountries } from './api.js';
 import { translations, getCurrentLang } from './i18n.js';
 import { clearChatHistory } from './chat.js';
+import { setupCustomSelects } from './ui.js';
 
 // Module-Scope Variables (Initialized in setupAuth)
 let userBtn, authModal, closeAuthBtn, authForm, authBody;
@@ -143,7 +144,87 @@ export function setupAuth() {
     setupForgotReset();
     setupMedicalProfile();
     setupTermsModal();
+    setupMedicalProfile();
+    setupTermsModal();
     checkResetToken();
+
+    populateNationalityDropdowns();
+    setupCustomSelects(); // Re-run to attach listeners to new options
+}
+
+
+
+async function populateNationalityDropdowns() {
+    const authSelect = document.querySelector('#auth-nationality-select .select-items');
+    const profileSelect = document.querySelector('#profile-nationality-select .select-items');
+
+    // Fetch countries from DB
+    const countriesList = await fetchCountries();
+    if (!countriesList || countriesList.length === 0) return;
+
+    // Cache list for later use (e.g. in profile load)
+    window.countriesCache = countriesList;
+
+    // Use browser's built-in translation
+    const currentLang = document.documentElement.lang || 'es';
+    const regionNames = new Intl.DisplayNames([currentLang], { type: 'region' });
+
+    const createOptions = (container) => {
+        if (!container) return;
+        container.innerHTML = '';
+
+        // Sort by translated name
+        const sortedCountries = countriesList.map(c => {
+            let translatedName = c.code;
+            try {
+                translatedName = regionNames.of(c.code.toUpperCase());
+            } catch (e) {
+                translatedName = c.code;
+            }
+            return { ...c, name: translatedName };
+        }).sort((a, b) => a.name.localeCompare(b.name));
+
+        sortedCountries.forEach(c => {
+            const div = document.createElement('div');
+            div.setAttribute('data-value', c.code);
+            div.setAttribute('title', c.name); // Tooltip for truncated text
+            // We store the generic english name or code as fallback in DB, 
+            // but here we render the translated name.
+            // We use a data attribute for the raw code to re-translate if language changes.
+            div.innerHTML = `<img src="${c.flag}" class="flag-img" alt="${c.code}"> <span class="country-name" data-code="${c.code}">${c.name}</span>`;
+            container.appendChild(div);
+        });
+    };
+
+    createOptions(authSelect);
+    createOptions(profileSelect);
+
+    // Listen for language changes to re-translate
+    document.addEventListener('languageChanged', (e) => {
+        const newLang = e.detail;
+        const newRegionNames = new Intl.DisplayNames([newLang], { type: 'region' });
+        document.querySelectorAll('.country-name').forEach(span => {
+            const code = span.getAttribute('data-code');
+            if (code) {
+                try {
+                    span.textContent = newRegionNames.of(code.toUpperCase());
+                } catch (err) { }
+            }
+        });
+
+        // Also update selected values
+        document.querySelectorAll('.nationality-select .select-selected .country-name').forEach(span => {
+            const code = span.getAttribute('data-code');
+            if (code) {
+                try {
+                    span.textContent = newRegionNames.of(code.toUpperCase());
+                } catch (err) { }
+            }
+        });
+    });
+
+    // CRITICAL: Re-initialize custom selects now that options exist
+    setupCustomSelects();
 }
 
 function setupTermsModal() {
@@ -310,6 +391,7 @@ async function handleAuthSubmit(e) {
             payload.name = document.getElementById('auth-name').value;
             payload.surnames = document.getElementById('auth-surnames').value;
             payload.birthdate = document.getElementById('auth-birthdate').value;
+            payload.nationality = document.getElementById('auth-nationality-type-hidden')?.value || '';
             res = await register(payload);
         } else {
             res = await login(payload.email, payload.password);
@@ -327,6 +409,9 @@ async function handleAuthSubmit(e) {
                 treatment_type: data.treatment_type,
                 treatment_type: data.treatment_type,
                 kidney_stage: data.kidney_stage,
+                treatment_type: data.treatment_type,
+                kidney_stage: data.kidney_stage,
+                nationality: data.nationality,
                 email: data.email || payload.email, // Prefer backend source
                 avatar_url: data.avatar_url || 'images/default_avatar.png'
             };
@@ -535,6 +620,36 @@ async function loadProfileData() {
         const radio = document.querySelector(`input[name="kidney_stage"][value="${val}"]`);
         if (radio) radio.checked = true;
     }
+
+    if (user.nationality) {
+        const hidden = document.getElementById('profile-nationality-type-hidden');
+        if (hidden) hidden.value = user.nationality;
+        const select = document.getElementById('profile-nationality-select');
+
+        // Wait for cache if not ready (rare but possible)
+        const findAndSet = () => {
+            const countriesList = window.countriesCache || [];
+            const country = countriesList.find(c => c.code === user.nationality);
+            if (select && country) {
+                const selectedDiv = select.querySelector('.select-selected');
+                if (selectedDiv) {
+                    const currentLang = document.documentElement.lang || 'es';
+                    const regionNames = new Intl.DisplayNames([currentLang], { type: 'region' });
+                    let name = country.code;
+                    try { name = regionNames.of(country.code.toUpperCase()); } catch (e) { }
+
+                    selectedDiv.innerHTML = `<img src="${country.flag}" class="flag-img"> <span class="country-name" data-code="${country.code}">${name}</span>`;
+                }
+            }
+        };
+
+        if (window.countriesCache) {
+            findAndSet();
+        } else {
+            // Poll briefly or wait for init? simplified: just retry once after delay
+            setTimeout(findAndSet, 500);
+        }
+    }
 }
 
 async function handleMedicalSubmit(e) {
@@ -571,7 +686,9 @@ async function handleMedicalSubmit(e) {
         birthdate: birthdate,
         has_insufficiency: insufficiency,
         treatment_type: treatment || null,
-        kidney_stage: stage || null
+        treatment_type: treatment || null,
+        kidney_stage: stage || null,
+        nationality: document.getElementById('profile-nationality-type-hidden')?.value || ''
     };
 
     if (pass) payload.password = pass;
@@ -613,6 +730,7 @@ async function handleMedicalSubmit(e) {
             user.has_insufficiency = insufficiency;
             user.treatment_type = treatment;
             user.kidney_stage = stage;
+            user.nationality = payload.nationality;
             localStorage.setItem('user', JSON.stringify(user));
 
             closeMedicalModal();

@@ -29,6 +29,17 @@
                         <label for="auth-birthdate" data-i18n="birthdate">Fecha de Nacimiento</label>
                         <input type="date" id="auth-birthdate">
                     </div>
+
+                    <div class="input-group-auth">
+                        <label data-i18n="nationality">Nacionalidad</label>
+                        <div class="custom-select auth-custom-select nationality-select" id="auth-nationality-select">
+                            <div class="select-selected">
+                                <span data-i18n="selectNationality">Seleccionar Nacionalidad</span>
+                            </div>
+                            <div class="select-items select-hide"></div>
+                            <input type="hidden" id="auth-nationality-type-hidden" name="nationality">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="input-group-auth">

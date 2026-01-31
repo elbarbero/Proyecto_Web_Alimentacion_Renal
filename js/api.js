@@ -22,6 +22,17 @@ export async function fetchFoods() {
     }
 }
 
+export async function fetchCountries() {
+    try {
+        const res = await fetch(`${API_BASE}/countries`);
+        if (!res.ok) throw new Error('Failed to fetch countries');
+        return await res.json();
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+}
+
 export async function login(email, password) {
     const res = await fetch(`${API_BASE}/login`, {
         method: 'POST',

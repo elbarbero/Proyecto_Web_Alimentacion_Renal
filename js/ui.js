@@ -46,12 +46,22 @@ export function setupCustomSelects() {
                     // Update User Interface
                     newSelected.innerHTML = this.innerHTML; // Keep flag/icon if any
                     // Update Hidden Input if exists (common pattern)
-                    const inputId = x[i].id.replace("-select", "-type-hidden"); // heuristic
-                    // or look for input inside
-                    const hiddenInput = x[i].querySelector("input[type=hidden]");
+                    // Update Hidden Input
+                    // Try to find input inside first
+                    let hiddenInput = x[i].querySelector("input[type=hidden]");
+
+                    // Fallback to heuristic ID if not found inside
+                    if (!hiddenInput) {
+                        const inputId = x[i].id.replace("-select", "-type-hidden");
+                        hiddenInput = document.getElementById(inputId);
+                    }
+
                     if (hiddenInput) {
                         hiddenInput.value = val;
                         hiddenInput.dispatchEvent(new Event('change'));
+                        // console.log('Updated hidden input:', hiddenInput.id, 'to', val);
+                    } else {
+                        console.error('Hidden input not found for select:', x[i].id);
                     }
 
                     // Trigger change event if needed?

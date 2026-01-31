@@ -3,7 +3,7 @@ import socketserver
 import json
 import urllib.parse
 from backend.database import run_migrations
-from backend.handlers import auth, users, foods, chat
+from backend.handlers import auth, users, foods, chat, countries
 from backend.config import PORT
 
 # Start migrations on boot
@@ -22,6 +22,10 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
 
         elif path == '/api/foods':
             foods.handle_get_foods(self)
+            return
+            
+        elif path == '/api/countries':
+            countries.handle_get_countries(self)
             return
             
         # Static Files Routing

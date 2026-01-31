@@ -1859,3 +1859,49 @@ input:checked+.slider:before {
 #terms-modal {
     z-index: 1100 !important;
 }
+
+/* Custom Select Scroll Fix & Nationality Specifics */
+.nationality-select .select-items {
+    max-height: 250px;
+    overflow-y: auto !important;
+    width: 100% !important;
+    /* Force match container width */
+    overflow-x: hidden;
+}
+
+/* Auth content width adjustment for wider dropdowns */
+.auth-content {
+    max-width: 650px;
+}
+
+/* Ensure nationality doesn't wrap */
+.custom-select .select-selected {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.custom-select .select-items div {
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-right: 20px;
+    /* Extra padding for scrollbar */
+}
+
+/* Ensure flag image size is consistent */
+.flag-img {
+    width: 24px;
+    height: auto;
+    flex-shrink: 0;
+}
+
+/* Compact Mode Support for Custom Select */
+.profile-compact-mode .auth-custom-select .select-selected {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+}

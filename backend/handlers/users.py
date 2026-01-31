@@ -2,12 +2,9 @@ import json
 import os
 import base64
 from ..database import get_db_connection
+from ..utils import send_json
 
-def send_json(handler, status, data):
-    handler.send_response(status)
-    handler.send_header('Content-type', 'application/json')
-    handler.end_headers()
-    handler.wfile.write(json.dumps(data).encode())
+
 
 def handle_get_user(query_params, handler):
     user_id = query_params.get('id', [None])[0]
@@ -28,6 +25,7 @@ def handle_get_user(query_params, handler):
             "surnames": user['surnames'],
             "birthdate": user['birthdate'],
             "email": user['email'],
+            "nationality": user['nationality'],
             "has_insufficiency": user['has_insufficiency'],
             "treatment_type": user['treatment_type'],
             "kidney_stage": user['kidney_stage'],
@@ -56,18 +54,18 @@ def handle_update_profile(data, handler):
         
         cursor.execute("""
             UPDATE users 
-            SET name = ?, surnames = ?, birthdate = ?, has_insufficiency = ?, treatment_type = ?, kidney_stage = ?, password_hash = ?
+            SET name = ?, surnames = ?, birthdate = ?, has_insufficiency = ?, treatment_type = ?, kidney_stage = ?, password_hash = ?, nationality = ?
             WHERE email = ?
         """, (data.get('name'), data.get('surnames'), data.get('birthdate'), 
-              data.get('has_insufficiency'), data.get('treatment_type'), data.get('kidney_stage'), pwd_hash,
+              data.get('has_insufficiency'), data.get('treatment_type'), data.get('kidney_stage'), pwd_hash, data.get('nationality'),
               email))
     else:
         cursor.execute("""
             UPDATE users 
-            SET name = ?, surnames = ?, birthdate = ?, has_insufficiency = ?, treatment_type = ?, kidney_stage = ?
+            SET name = ?, surnames = ?, birthdate = ?, has_insufficiency = ?, treatment_type = ?, kidney_stage = ?, nationality = ?
             WHERE email = ?
         """, (data.get('name'), data.get('surnames'), data.get('birthdate'), 
-              data.get('has_insufficiency'), data.get('treatment_type'), data.get('kidney_stage'), 
+              data.get('has_insufficiency'), data.get('treatment_type'), data.get('kidney_stage'), data.get('nationality'),
               email))
     
     rows = cursor.rowcount

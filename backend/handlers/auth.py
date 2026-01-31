@@ -2,15 +2,11 @@ import json
 import time
 import secrets
 from ..database import get_db_connection
-from ..utils import hash_password, verify_password
+from ..utils import hash_password, verify_password, send_json
 from ..email_service import send_email
 from ..config import PORT
 
-def send_json(handler, status, data):
-    handler.send_response(status)
-    handler.send_header('Content-type', 'application/json')
-    handler.end_headers()
-    handler.wfile.write(json.dumps(data).encode())
+
 
 def handle_login(data, handler):
     email = data.get('email')
@@ -29,7 +25,8 @@ def handle_login(data, handler):
             "name": user['name'],
             "surnames": user['surnames'],
             "birthdate": user['birthdate'],
-            "email": user['email'], # Added for profile
+            "email": user['email'],
+            "nationality": user['nationality'], # Added for profile
             "has_insufficiency": user['has_insufficiency'],
             "treatment_type": user['treatment_type'],
             "kidney_stage": user['kidney_stage'],
@@ -44,6 +41,7 @@ def handle_register(data, handler):
     name = data.get('name')
     surnames = data.get('surnames', '')
     birthdate = data.get('birthdate', '')
+    nationality = data.get('nationality', '') # Added
 
     if not email or not password:
         send_json(handler, 400, {"status": "error", "message": "Missing fields"})
@@ -61,8 +59,8 @@ def handle_register(data, handler):
     terms_accepted_at = time.time()
     
     try:
-        cursor.execute("INSERT INTO users (email, password_hash, name, surnames, birthdate, terms_accepted_at) VALUES (?, ?, ?, ?, ?, ?)", 
-                       (email, hashed_pw, name, surnames, birthdate, terms_accepted_at))
+        cursor.execute("INSERT INTO users (email, password_hash, name, surnames, birthdate, nationality, terms_accepted_at) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+                       (email, hashed_pw, name, surnames, birthdate, nationality, terms_accepted_at))
         conn.commit()
         user_id = cursor.lastrowid
         conn.close()
@@ -73,6 +71,7 @@ def handle_register(data, handler):
             "name": name,
             "surnames": surnames,
             "birthdate": birthdate,
+            "nationality": nationality,
             "email": email
         })
     except Exception as e:

@@ -1,6 +1,7 @@
 import hashlib
 import binascii
 import os
+import json
 
 def hash_password(password):
     """Hash a password for storing."""
@@ -23,3 +24,9 @@ def verify_password(stored_password, provided_password):
         return pwdhash == stored_password
     except Exception:
         return False
+
+def send_json(handler, status, data):
+    handler.send_response(status)
+    handler.send_header('Content-type', 'application/json')
+    handler.end_headers()
+    handler.wfile.write(json.dumps(data).encode())
