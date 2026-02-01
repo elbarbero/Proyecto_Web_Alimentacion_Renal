@@ -1910,3 +1910,290 @@ input:checked+.slider:before {
     padding: 0.5rem 1rem;
     font-size: 0.95rem;
 }
+
+/* =========================================
+   Mobile Adaptation (max-width: 768px)
+   ========================================= */
+@media (max-width: 768px) {
+
+    /* Global Layout & Padding */
+    .main-header {
+        padding: 2rem 1rem 1rem;
+    }
+
+    .container {
+        padding: 1rem;
+    }
+
+    /* Typography Adjustments */
+    .header-content h1 {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1.1rem;
+    }
+
+    .description {
+        font-size: 0.95rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Header Actions Stack */
+    .header-actions {
+        justify-content: center;
+        width: 100%;
+        margin-top: 1rem;
+        gap: 0.8rem;
+    }
+
+    /* Search Bar Optimized */
+    .search-container {
+        margin-top: 1.5rem;
+        max-width: 100%;
+    }
+
+    #search-input {
+        padding: 1rem 1rem 1rem 3.5rem;
+        font-size: 1rem;
+    }
+
+    .search-icon {
+        left: 16px;
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Food Grid: Force 2 Columns for Mobile */
+    .food-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+
+    .food-card {
+        padding: 0.8rem;
+    }
+
+    .food-card img {
+        height: 120px;
+        margin-bottom: 0.6rem;
+    }
+
+    .food-card h3 {
+        font-size: 1rem;
+    }
+
+    /* Modal Mobile Overrides */
+    .modal {
+        padding: 10px;
+        align-items: flex-end;
+        /* Show at bottom or center? Center is better usually. */
+        align-items: center;
+    }
+
+    .modal-content {
+        max-height: 85vh;
+        overflow-y: auto;
+        margin: 0;
+        width: 95%;
+    }
+
+    .column-a {
+        padding: 1.5rem;
+    }
+
+    .column-a img {
+        width: 140px;
+        height: 140px;
+        margin-bottom: 0.5rem;
+    }
+
+    .column-a h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .column-b {
+        padding: 1.5rem;
+    }
+
+    .input-group {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+    }
+
+    .input-group input {
+        width: 100%;
+        max-width: 150px;
+    }
+
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+
+    .info-item {
+        padding: 0.8rem 0.5rem;
+    }
+
+    .info-item .value {
+        font-size: 1.1rem;
+    }
+
+    .close-modal {
+        top: 10px;
+        right: 10px;
+        width: 32px;
+        height: 32px;
+        font-size: 1.2rem;
+    }
+
+    /* Auth Modal Mobile */
+    .auth-content {
+        padding: 1.5rem;
+        max-width: 100%;
+        width: 100%;
+        border-radius: 20px;
+    }
+
+    .auth-body h2 {
+        font-size: 1.6rem;
+    }
+
+    .auth-tabs {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Nationality Select scrolling on mobile */
+    .nationality-select .select-items {
+        max-height: 200px;
+    }
+}
+
+/* Extra small devices (max-width: 360px) */
+@media (max-width: 360px) {
+    .food-grid {
+        grid-template-columns: 1fr;
+        /* 1 column for very small screens */
+    }
+
+    .header-content h1 {
+        font-size: 1.7rem;
+    }
+
+    .column-a img {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+/* Landscape Mode Fix (Mobile: max-height 600px) */
+@media (max-height: 600px) and (orientation: landscape) {
+    .modal {
+        align-items: flex-start;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .modal-content {
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+
+    /* Revert to side-by-side for food modal if width permits */
+    .modal-body {
+        flex-direction: row;
+    }
+
+    .column-a {
+        width: 35%;
+        padding: 1rem;
+        border-right: 1px solid #e2e8f0;
+        border-bottom: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .column-a img {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 0.5rem;
+    }
+
+    .column-a h2 {
+        font-size: 1.2rem;
+    }
+
+    .column-b {
+        width: 65%;
+        padding: 1rem;
+        display: block;
+        /* Ensure it scrolls if needed */
+    }
+
+    .input-group {
+        margin-bottom: 0.8rem;
+        padding: 0.5rem;
+    }
+
+    /* Make nutritional info compact and scrollable */
+    .nutritional-info {
+        max-height: 160px;
+        overflow-y: auto;
+        padding-right: 5px;
+        /* Space for scrollbar */
+    }
+
+    .nutritional-info h3 {
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .info-grid {
+        grid-template-columns: repeat(3, 1fr);
+        /* Back to 3 columns */
+        gap: 0.5rem;
+    }
+
+    .info-item {
+        padding: 0.3rem;
+        /* Tighter padding */
+    }
+
+    .info-item .value {
+        font-size: 0.95rem;
+    }
+
+    .info-item .label {
+        font-size: 0.7rem;
+        margin-bottom: 0.1rem;
+    }
+
+    /* Auth Modal Landscape optimizations */
+    .auth-content {
+        padding: 1rem;
+        max-width: 600px;
+        /* Limit width in landscape */
+        margin: 0 auto;
+    }
+
+    .auth-body h2 {
+        font-size: 1.4rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .auth-tabs {
+        margin-bottom: 0.5rem;
+        padding: 0.2rem;
+    }
+
+    .input-group-auth {
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-block {
+        margin-top: 0.8rem;
+        padding: 0.8rem;
+    }
+}

@@ -248,10 +248,12 @@ export function openModal(food) {
     if (mName) mName.textContent = getFoodName(food);
     updateNutrients(0);
     modal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Lock body scroll
 }
 
 export function closeModal() {
     modal.classList.remove('active');
+    document.body.style.overflow = ''; // Unlock body scroll
     currentFood = null;
 }
 
