@@ -10,6 +10,7 @@ let activeCategory = 'all';
 // DOM Elements
 let gridContainer, modal, closeModalBtn, gramsInput, searchInput, categoryTabsContainer;
 let mImg, mName, valProtein, valSugar, valFat, valPotassium, valPhosphorus, valSalt, valCalcium;
+let valMagnesium, valIron, valCopper, valSulfur, valChlorine;
 
 // Feedback Elements
 let feedbackBtn, feedbackModal, closeFeedbackBtn, cancelFeedbackBtn, sendFeedbackBtn, feedbackText;
@@ -33,6 +34,11 @@ function setupDOM() {
         valPhosphorus = modal.querySelector('#val-phosphorus');
         valSalt = modal.querySelector('#val-salt');
         valCalcium = modal.querySelector('#val-calcium');
+        valMagnesium = modal.querySelector('#val-magnesium');
+        valIron = modal.querySelector('#val-iron');
+        valCopper = modal.querySelector('#val-copper');
+        valSulfur = modal.querySelector('#val-sulfur');
+        valChlorine = modal.querySelector('#val-chlorine');
     }
 
     // Feedback Elements
@@ -269,6 +275,11 @@ function updateNutrients(grams) {
     const vPhosphorus = (n.phosphorus * ratio).toFixed(0);
     const vSalt = (n.salt * ratio).toFixed(2);
     const vCalcium = (n.calcium * ratio).toFixed(0);
+    const vMagnesium = (n.magnesium ? (n.magnesium * ratio).toFixed(0) : "0");
+    const vIron = (n.iron ? (n.iron * ratio).toFixed(1) : "0"); // Iron often small
+    const vCopper = (n.copper ? (n.copper * ratio).toFixed(1) : "0");
+    const vSulfur = (n.sulfur ? (n.sulfur * ratio).toFixed(0) : "0");
+    const vChlorine = (n.chlorine ? (n.chlorine * ratio).toFixed(0) : "0");
 
     if (valProtein) valProtein.textContent = vProteins + 'g';
     if (valSugar) valSugar.textContent = vSugar + 'g';
@@ -277,6 +288,11 @@ function updateNutrients(grams) {
     if (valPhosphorus) valPhosphorus.textContent = vPhosphorus + 'mg';
     if (valSalt) valSalt.textContent = vSalt + 'g';
     if (valCalcium) valCalcium.textContent = vCalcium + 'mg';
+    if (valMagnesium) valMagnesium.textContent = vMagnesium + 'mg';
+    if (valIron) valIron.textContent = vIron + 'mg';
+    if (valCopper) valCopper.textContent = vCopper + 'mg';
+    if (valSulfur) valSulfur.textContent = vSulfur + 'mg';
+    if (valChlorine) valChlorine.textContent = vChlorine + 'mg';
 
     const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
