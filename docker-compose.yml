@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: renal_diet_web
+    restart: unless-stopped
+    ports:
+      - "8005:8000"  # Puerto 8005 para no chocar con el NAS/Pi-hole
+    volumes:
+      - ./renal_diet.db:/app/renal_diet.db  # BD persistente
+      - ./images:/app/images  # Imágenes persistentes
+    environment:
+      - PYTHONUNBUFFERED=1
+    # IMPORTANTE PARA DOCKGE:
+    # Asegúrate de copiar TODOS los archivos del proyecto a la carpeta del stack en el NAS.
+    # Si usas Dockge, la carpeta suele estar en /opt/stacks/alimentacion-renal (ejemplo).
+    env_file:
+      - .env  # Lee las variables desde el archivo .env si existe
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    command: http web:8000
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    ports:
+      - 4040:4040
+    networks:
+      - default
+    depends_on:
+      - web
+

@@ -92,7 +92,11 @@ def handle_request_reset(data, handler):
         cursor.execute("UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE email = ?", (token, expiry, email))
         conn.commit()
         
-        reset_link = f"http://localhost:{PORT}/?reset_token={token}"
+        # Dynamic Host Logic for Ngrok/Localhost
+        host = handler.headers.get("X-Forwarded-Host", handler.headers.get("Host", f"localhost:{PORT}"))
+        scheme = handler.headers.get("X-Forwarded-Proto", "http")
+        
+        reset_link = f"{scheme}://{host}/?reset_token={token}"
         print(f"DEBUG LINK: {reset_link}")
         
         body = f"""
