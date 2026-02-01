@@ -38,6 +38,14 @@ def handle_get_foods(handler):
             if row['food_id'] not in nut_dict: nut_dict[row['food_id']] = {}
             nut_dict[row['food_id']][row['nutrient_key']] = row['value']
 
+        # Vitamins
+        cursor.execute("SELECT fv.food_id, v.key as vitamin_key, fv.value FROM food_vitamins fv JOIN vitamins v ON fv.vitamin_id = v.id")
+        vit_rows = cursor.fetchall()
+        vit_dict = {}
+        for row in vit_rows:
+            if row['food_id'] not in vit_dict: vit_dict[row['food_id']] = {}
+            vit_dict[row['food_id']][row['vitamin_key']] = row['value']
+
         foods = []
         for f in foods_rows:
             f_id = f['id']
@@ -51,7 +59,8 @@ def handle_get_foods(handler):
                 "category": category_string,
                 "names": names,
                 "image": f['image_url'],
-                "nutrients": nut_dict.get(f_id, {})
+                "nutrients": nut_dict.get(f_id, {}),
+                "vitamins": vit_dict.get(f_id, {})
             })
         
         foods.sort(key=lambda x: x['name'])

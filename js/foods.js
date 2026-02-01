@@ -11,6 +11,7 @@ let activeCategory = 'all';
 let gridContainer, modal, closeModalBtn, gramsInput, searchInput, categoryTabsContainer;
 let mImg, mName, valProtein, valSugar, valFat, valPotassium, valPhosphorus, valSalt, valCalcium;
 let valMagnesium, valIron, valCopper, valSulfur, valChlorine;
+let valVitK, valVitA, valVitC, valVitE, valVitB1, valVitB3, valVitB5, valVitB6, valVitB9;
 
 // Feedback Elements
 let feedbackBtn, feedbackModal, closeFeedbackBtn, cancelFeedbackBtn, sendFeedbackBtn, feedbackText;
@@ -39,6 +40,17 @@ function setupDOM() {
         valCopper = modal.querySelector('#val-copper');
         valSulfur = modal.querySelector('#val-sulfur');
         valChlorine = modal.querySelector('#val-chlorine');
+
+        // Vitamins
+        valVitK = modal.querySelector('#val-vitamin_k');
+        valVitA = modal.querySelector('#val-vitamin_a');
+        valVitC = modal.querySelector('#val-vitamin_c');
+        valVitE = modal.querySelector('#val-vitamin_e');
+        valVitB1 = modal.querySelector('#val-vitamin_b1');
+        valVitB3 = modal.querySelector('#val-vitamin_b3');
+        valVitB5 = modal.querySelector('#val-vitamin_b5');
+        valVitB6 = modal.querySelector('#val-vitamin_b6');
+        valVitB9 = modal.querySelector('#val-vitamin_b9');
     }
 
     // Feedback Elements
@@ -281,6 +293,18 @@ function updateNutrients(grams) {
     const vSulfur = (n.sulfur ? (n.sulfur * ratio).toFixed(0) : "0");
     const vChlorine = (n.chlorine ? (n.chlorine * ratio).toFixed(0) : "0");
 
+    // Vitamins Calculation
+    const v = currentFood.vitamins || {};
+    const vK = (v.vitamin_k ? (v.vitamin_k * ratio).toFixed(1) : "0");
+    const vA = (v.vitamin_a ? (v.vitamin_a * ratio).toFixed(1) : "0");
+    const vC = (v.vitamin_c ? (v.vitamin_c * ratio).toFixed(1) : "0");
+    const vE = (v.vitamin_e ? (v.vitamin_e * ratio).toFixed(1) : "0");
+    const vB1 = (v.vitamin_b1 ? (v.vitamin_b1 * ratio).toFixed(2) : "0");
+    const vB3 = (v.vitamin_b3 ? (v.vitamin_b3 * ratio).toFixed(1) : "0");
+    const vB5 = (v.vitamin_b5 ? (v.vitamin_b5 * ratio).toFixed(1) : "0");
+    const vB6 = (v.vitamin_b6 ? (v.vitamin_b6 * ratio).toFixed(2) : "0");
+    const vB9 = (v.vitamin_b9 ? (v.vitamin_b9 * ratio).toFixed(0) : "0");
+
     if (valProtein) valProtein.textContent = vProteins + 'g';
     if (valSugar) valSugar.textContent = vSugar + 'g';
     if (valFat) valFat.textContent = vFat + 'g';
@@ -293,6 +317,17 @@ function updateNutrients(grams) {
     if (valCopper) valCopper.textContent = vCopper + 'mg';
     if (valSulfur) valSulfur.textContent = vSulfur + 'mg';
     if (valChlorine) valChlorine.textContent = vChlorine + 'mg';
+
+    // Update UI - Vitamins
+    if (valVitK) valVitK.textContent = vK + "ug";
+    if (valVitA) valVitA.textContent = vA + "ug";
+    if (valVitC) valVitC.textContent = vC + "mg";
+    if (valVitE) valVitE.textContent = vE + "mg";
+    if (valVitB1) valVitB1.textContent = vB1 + "mg";
+    if (valVitB3) valVitB3.textContent = vB3 + "mg";
+    if (valVitB5) valVitB5.textContent = vB5 + "mg";
+    if (valVitB6) valVitB6.textContent = vB6 + "mg";
+    if (valVitB9) valVitB9.textContent = vB9 + "ug";
 
     const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
@@ -350,3 +385,20 @@ async function handleSendFeedback() {
         }, 2000);
     }
 }
+
+// Make toggle accessible to HTML
+window.toggleSection = function (gridId, headerElement) {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+
+    // Find icon inside header
+    const icon = headerElement.querySelector('.toggle-icon');
+
+    if (grid.style.display === "none") {
+        grid.style.display = "grid";
+        if (icon) icon.style.transform = "rotate(0deg)";
+    } else {
+        grid.style.display = "none";
+        if (icon) icon.style.transform = "rotate(-90deg)";
+    }
+};

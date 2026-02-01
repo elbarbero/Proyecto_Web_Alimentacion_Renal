@@ -371,7 +371,11 @@ body {
     position: relative;
     box-shadow: var(--shadow-xl);
     border: 1px solid rgba(255, 255, 255, 0.4);
-    overflow: hidden;
+
+    /* Scroll Fix */
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .close-modal {
@@ -401,6 +405,8 @@ body {
 .modal-body {
     display: flex;
     align-items: stretch;
+    overflow-y: auto;
+    /* Enable scroll */
 }
 
 .column-a {
@@ -412,6 +418,14 @@ body {
     padding: 3rem;
     width: 40%;
     border-right: 1px solid #e2e8f0;
+
+    /* Sticky Sidebar */
+    position: sticky;
+    top: 0;
+    height: 100%;
+    /* Match parent height */
+    max-height: 90vh;
+    /* Prevent overflow */
 }
 
 .column-a img {
@@ -437,7 +451,10 @@ body {
     width: 60%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    /* Fix clipping */
+    overflow-y: visible;
+    /* Body handles scroll */
 }
 
 .input-group {
@@ -484,6 +501,14 @@ body {
     opacity: 0.2;
 }
 
+.nutritional-info {
+    margin-bottom: 2rem;
+}
+
+.nutritional-info:last-child {
+    margin-bottom: 0;
+}
+
 .nutritional-info h3 {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -492,6 +517,21 @@ body {
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 1.5px;
+
+    /* Interactive */
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.nutritional-info h3:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.toggle-icon {
+    font-size: 0.8em;
+    transition: transform 0.3s ease;
+    display: inline-block;
 }
 
 .info-grid {

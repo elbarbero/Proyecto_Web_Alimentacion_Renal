@@ -17,8 +17,12 @@
                 </div>
 
                 <div class="nutritional-info">
-                    <h3 data-i18n="nutritionalInfo">Información Nutricional</h3>
-                    <div class="info-grid">
+                    <h3 onclick="toggleSection('nutrients-grid', this)"
+                        style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <span data-i18n="nutritionalInfo">Información Nutricional</span>
+                        <span class="toggle-icon">▼</span>
+                    </h3>
+                    <div id="nutrients-grid" class="info-grid">
                         <div class="info-item">
                             <span class="label" data-i18n="protein">Proteínas</span>
                             <span class="value" id="val-protein">0g</span>
@@ -47,7 +51,6 @@
                             <span class="label" data-i18n="calcium">Calcio</span>
                             <span class="value" id="val-calcium">0mg</span>
                         </div>
-
                         <div class="info-item">
                             <span class="label" data-i18n="magnesium">Magnesio</span>
                             <span class="value" id="val-magnesium">0mg</span>
@@ -67,6 +70,52 @@
                         <div class="info-item">
                             <span class="label" data-i18n="chlorine">Cloro</span>
                             <span class="value" id="val-chlorine">0mg</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nutritional-info">
+                    <h3 onclick="toggleSection('vitamins-grid', this)"
+                        style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <span data-i18n="vitamins">Vitaminas</span>
+                        <span class="toggle-icon">▼</span>
+                    </h3>
+                    <div id="vitamins-grid" class="info-grid">
+                        <div class="info-item">
+                            <span class="label" data-i18n="vitamin_k">Vitamina K</span>
+                            <span class="value" id="val-vitamin_k">0ug</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="vitamin_a">Vitamina A</span>
+                            <span class="value" id="val-vitamin_a">0ug</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="vitamin_c">Vitamina C</span>
+                            <span class="value" id="val-vitamin_c">0mg</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="vitamin_e">Vitamina E</span>
+                            <span class="value" id="val-vitamin_e">0mg</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="vitamin_b1">Vitamina B1</span>
+                            <span class="value" id="val-vitamin_b1">0mg</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="vitamin_b3">Vitamina B3</span>
+                            <span class="value" id="val-vitamin_b3">0mg</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="vitamin_b5">Vitamina B5</span>
+                            <span class="value" id="val-vitamin_b5">0mg</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="vitamin_b6">Vitamina B6</span>
+                            <span class="value" id="val-vitamin_b6">0mg</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label" data-i18n="vitamin_b9">Vitamina B9</span>
+                            <span class="value" id="val-vitamin_b9">0ug</span>
                         </div>
                     </div>
                 </div>
