@@ -3,7 +3,7 @@ import socketserver
 import json
 import urllib.parse
 from backend.database import run_migrations
-from backend.handlers import auth, users, foods, chat, countries
+from backend.handlers import auth, users, foods, chat, countries, pdf
 from backend.config import PORT
 
 # Start migrations on boot
@@ -68,6 +68,9 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
             
         elif path == '/api/chat':
             chat.handle_chat(data, self)
+
+        elif path == '/api/generate_pdf':
+            pdf.handle_generate_pdf(data, self)
             
         else:
             self.send_error(404, "Endpoint not found")

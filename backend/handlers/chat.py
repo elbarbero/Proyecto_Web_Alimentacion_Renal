@@ -26,6 +26,8 @@ def handle_chat(data, handler):
         # --- MEDICAL MODE (Logged In User) ---
         context_prompt = "ACTÚA COMO: Asistente experto en nutrición renal (Nefrólogo/Nutricionista)."
         context_prompt += "\nTU OBJETIVO: Aconsejar al paciente basándote EXCLUSIVAMENTE en su perfil médico, que te proporciono abajo."
+        context_prompt += "\nSi te pide algo elaborado, como una receta o menú, dásela pero con advertencia médica. IMPORTANTE: NO USES TABLAS MARKDOWN (|...|), el sistema no las soporta. Usa LISTAS con viñetas y NEGRILLAS para estructurar."
+        context_prompt += "\nESTILO VISUAL: Usa MUCHOS emoticonos (🥘, 🥕, 👨‍⚕️, 📅) en tus respuestas para que sea visual y amigable. Tienes prohibido el 'texto plano' aburrido para cuando te piden menus o recetas."
         
         try:
             conn = get_db_connection()
