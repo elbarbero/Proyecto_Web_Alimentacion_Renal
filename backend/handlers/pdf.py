@@ -103,7 +103,17 @@ def handle_generate_pdf(data, handler):
                 content = content.replace("**", "").replace("### ", "").replace("`", "")
                 
                 # No encoding needed! FPDF2 handles Unicode with TTF fonts.
-                pdf.multi_cell(0, 6, content)
+                try:
+                    pdf.multi_cell(0, 6, content)
+                except Exception as e:
+                    print(f"MultiCell Error on text: {content[:50]}... -> {e}")
+                    # Fallback strategies
+                    try:
+                        # Try ignoring width issue by splitting manually? 
+                        # Or simple cell
+                        pdf.multi_cell(0, 6, "Error rendering line. (Layout issue)")
+                    except:
+                        pass
                 pdf.ln(2)
                 normal_buffer.clear()
 
@@ -131,14 +141,12 @@ def handle_generate_pdf(data, handler):
                             row = table.row()
                             for datum in row_data:
                                 if i == 0:
-                                    # Use bold if possible, but simplistic here
-                                    # FPDF2 fallback support for bold might vary
+                                    # Header
                                     pdf.set_fill_color(240, 240, 240)
-                                    # Try to set bold style if ArialUnicode supports it, 
-                                    # otherwise keep normal
-                                    set_font_style('', 10) 
+                                    set_font_style('B', 8) # Smaller header
                                 else:
-                                    set_font_style('', 10)
+                                    # Body
+                                    set_font_style('', 7) # Much smaller body text to fit nutrients
                                     pdf.set_fill_color(255, 255, 255)
                                 row.cell(datum)
                     pdf.ln(5)

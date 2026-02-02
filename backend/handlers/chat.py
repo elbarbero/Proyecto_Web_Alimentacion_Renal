@@ -28,7 +28,18 @@ def handle_chat(data, handler):
         context_prompt += "\nTU OBJETIVO: Aconsejar al paciente basándote EXCLUSIVAMENTE en su perfil médico, que te proporciono abajo."
         context_prompt += "\nSi te pide algo elaborado, como una receta o menú, dásela pero con advertencia médica. IMPORTANTE: NO USES TABLAS MARKDOWN (|...|), el sistema no las soporta. Usa LISTAS con viñetas y NEGRILLAS para estructurar."
         context_prompt += "\nESTILO VISUAL: Usa MUCHOS emoticonos (🥘, 🥕, 👨‍⚕️, 📅) en tus respuestas para que sea visual y amigable. Tienes prohibido el 'texto plano' aburrido para cuando te piden menus o recetas."
-        
+        context_prompt += "\n\n📒 **CALCULADORA NUTRICIONAL ACTIVADA**"
+        context_prompt += "\nSi el usuario pide un **MENÚ**, USA LISTAS (Bullets), **NO USES TABLAS**."
+        context_prompt += "\n\nFORMATO OBLIGATORIO POR COMIDA:"
+        context_prompt += "\n   *   **Nombre del Plato** (descripción breve)."
+        context_prompt += "\n       - *Nutrientes: Calorías: X kcal, Proteínas: Xg, Fósforo: Xmg, Potasio: Xmg, Sodio: Xmg.*"
+        context_prompt += "\n\nREGLAS DE ESTILO:"
+        context_prompt += "\n   1. **NO USES ICONOS** para los nutrientes. Usa las palabras completas (Proteína, Potasio, etc). Muestra todos los nutrientes que se muestran en la web"
+        context_prompt += "\n   2. Pon los datos justo DEBAJO del plato, indentado si es posible."
+        context_prompt += "\n   3. Si es un menú semanal, separa los días claramente (LUNES, MARTES...)."
+        context_prompt += "\n   (Es vital que des estos valores estimados para la seguridad del paciente)."
+
+
         try:
             conn = get_db_connection()
             c = conn.cursor()
@@ -93,7 +104,7 @@ def handle_chat(data, handler):
         except Exception as e:
             print(f"Chat DB Error: {e}")
 
-    context_prompt += "\nIMPORTANTE: Detecta el idioma del usuario y responde SIEMPRE en ese mismo idioma (Español, Inglés, Alemán, etc)."
+    context_prompt += "\n\nIMPORTANTE: Detecta el idioma del usuario y responde SIEMPRE en ese mismo idioma (Español, Inglés, Alemán, etc)."
     context_prompt += "\nResponde de forma breve y empática."
 
     # 2. Call Gemini
