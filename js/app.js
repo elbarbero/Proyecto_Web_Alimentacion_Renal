@@ -1,11 +1,12 @@
 import { updateTexts, getCurrentLang } from './i18n.js';
-import { setupCustomSelects, togglePasswordVisibility } from './ui.js';
+import { setupCustomSelects, togglePasswordVisibility, showView } from './ui.js';
 import { initFoods } from './foods.js';
 import { setupAuth } from './auth.js';
 import { setupChat } from './chat.js';
 
 // Global Scope Exports for HTML (onclick handlers if any remain)
 window.togglePasswordVisibility = togglePasswordVisibility;
+window.showView = showView;
 
 import { loadComponent } from './loader.js';
 
@@ -48,6 +49,9 @@ async function initApp() {
     const todayStr = new Date().toISOString().split('T')[0];
     const dateInputs = document.querySelectorAll('input[type="date"]');
     dateInputs.forEach(input => input.max = todayStr);
+
+    // 7. Initial View
+    showView('view-home');
 
     console.log('App Initialized');
 }

@@ -148,3 +148,24 @@ export function showToast(message, type = 'info') {
         setTimeout(() => toast.remove(), 300);
     }, 3000);
 }
+
+export function showView(viewId) {
+    const views = document.querySelectorAll('.view-section');
+    const backBtn = document.getElementById('global-back-btn');
+
+    views.forEach(view => {
+        if (view.id === viewId) {
+            view.classList.remove('hidden');
+        } else {
+            view.classList.add('hidden');
+        }
+    });
+
+    if (viewId === 'view-home') {
+        if (backBtn) backBtn.classList.add('hidden');
+    } else {
+        if (backBtn) backBtn.classList.remove('hidden');
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
