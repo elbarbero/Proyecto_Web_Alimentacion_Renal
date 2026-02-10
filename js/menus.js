@@ -117,10 +117,15 @@ function renderMenus() {
 }
 
 function openMenu(menu) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user ? (user.userId || user.id) : null;
+    const isOwner = userId && menu.user_id === userId;
+
     editingMenuId = menu.id;
     const lang = getCurrentLang();
     currentMenu = {
         name: menu.name,
+        user_id: menu.user_id, // Store owner id
         items: menu.items.map(it => ({
             food_id: it.food_id,
             food_data: {
@@ -136,10 +141,25 @@ function openMenu(menu) {
     toggleCreation(true);
 
     menuNameInput.value = menu.name;
+    menuNameInput.readOnly = !isOwner; // Disable editing name
+
     if (menuPublicToggle) {
         menuPublicToggle.checked = menu.is_public === 1;
+        menuPublicToggle.disabled = !isOwner; // Disable toggle
         updatePrivacyText();
     }
+
+    // Hide/Show Save button
+    if (saveMenuBtn) {
+        saveMenuBtn.style.display = isOwner ? 'block' : 'none';
+    }
+
+    // Hide search column if not owner
+    const searchCol = document.querySelector('.search-column');
+    if (searchCol) {
+        searchCol.style.display = isOwner ? 'block' : 'none';
+    }
+
     renderCurrentMenuItems();
 }
 
@@ -155,6 +175,13 @@ function toggleCreation(show) {
         newMenuBtn.classList.remove('hidden');
         menusListContainer.classList.remove('hidden');
         editingMenuId = null;
+
+        // Reset fields to editable/visible for "New Menu" defaults
+        if (menuNameInput) menuNameInput.readOnly = false;
+        if (menuPublicToggle) menuPublicToggle.disabled = false;
+        if (saveMenuBtn) saveMenuBtn.style.display = 'block';
+        const searchCol = document.querySelector('.search-column');
+        if (searchCol) searchCol.style.display = 'block';
     }
 }
 
@@ -190,7 +217,6 @@ function updatePrivacyText() {
     const lang = getCurrentLang();
     const t = translations[lang] || translations['es'];
 
-    // Use translations if available, otherwise defaults
     if (menuPublicToggle.checked) {
         privacyStatusText.textContent = t.public ? t.public.replace('🌍 ', '') : 'Público';
     } else {
@@ -199,6 +225,12 @@ function updatePrivacyText() {
 }
 
 function addFoodToMenu(food) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user ? (user.userId || user.id) : null;
+    if (editingMenuId && currentMenu.user_id !== userId) {
+        return; // Security guard
+    }
+
     currentMenu.items.push({
         food_id: food.id,
         food_data: food,
@@ -215,6 +247,10 @@ function addFoodToMenu(food) {
 function renderCurrentMenuItems() {
     menuItemsContainer.innerHTML = '';
 
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user ? (user.userId || user.id) : null;
+    const isOwner = !editingMenuId || currentMenu.user_id === userId;
+
     currentMenu.items.forEach((item, index) => {
         const food = item.food_data;
         const lang = getCurrentLang();
@@ -225,24 +261,30 @@ function renderCurrentMenuItems() {
             <div class="item-info">
                 <span class="item-name">${food.names ? (food.names[lang] || food.name) : food.name}</span>
                 <div class="item-quantity-wrapper">
-                    <input type="number" class="item-quantity-input" data-index="${index}" value="${item.quantity}" min="1" step="1">
+                    <input type="number" class="item-quantity-input" data-index="${index}" 
+                           value="${item.quantity}" min="1" step="1" ${isOwner ? '' : 'readonly'}>
                     <span>g</span>
                 </div>
             </div>
-            <button class="btn-icon remove-item" data-index="${index}">&times;</button>
+            ${isOwner ? `<button class="btn-icon remove-item" data-index="${index}">&times;</button>` : ''}
         `;
 
         const qInput = row.querySelector('.item-quantity-input');
-        qInput.addEventListener('input', (e) => {
-            const val = parseFloat(e.target.value) || 0;
-            currentMenu.items[index].quantity = val;
-            calculateTotals();
-        });
+        if (qInput && isOwner) {
+            qInput.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value) || 0;
+                currentMenu.items[index].quantity = val;
+                calculateTotals();
+            });
+        }
 
-        row.querySelector('.remove-item').addEventListener('click', () => {
-            currentMenu.items.splice(index, 1);
-            renderCurrentMenuItems();
-        });
+        const rmBtn = row.querySelector('.remove-item');
+        if (rmBtn) {
+            rmBtn.addEventListener('click', () => {
+                currentMenu.items.splice(index, 1);
+                renderCurrentMenuItems();
+            });
+        }
 
         menuItemsContainer.appendChild(row);
     });
@@ -294,6 +336,12 @@ async function handleSaveMenu() {
         return;
     }
     const userId = user.userId || user.id;
+
+    // Security check: if editing, must be owner
+    if (editingMenuId && currentMenu.user_id !== userId) {
+        showToast("No tienes permiso para modificar este menú", "error");
+        return;
+    }
     const data = {
         user_id: userId,
         menu_id: editingMenuId,
@@ -334,17 +382,25 @@ async function handleSaveMenu() {
 async function handleDeleteMenu(id) {
     if (!confirm("¿Seguro que quieres borrar este menú?")) return;
 
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) return;
+    const userId = user.userId || user.id;
+
     try {
         const res = await fetch('/api/delete_menu', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ menu_id: id })
+            body: JSON.stringify({
+                menu_id: id,
+                user_id: userId
+            })
         });
         if (res.ok) {
             showToast("Menú eliminado", "success");
             loadMenus();
         } else {
-            showToast("Error al eliminar", "error");
+            const data = await res.json();
+            showToast(data.error || "Error al eliminar", "error");
         }
     } catch (e) {
         console.error("Error deleting menu:", e);

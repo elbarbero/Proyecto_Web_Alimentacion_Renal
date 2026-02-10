@@ -107,12 +107,20 @@ def handle_create_menu(data, handler):
 
 def handle_delete_menu(data, handler):
     try:
+        user_id = data.get('user_id')
         menu_id = data.get('menu_id')
-        if not menu_id:
-            return send_json(handler, 400, {"error": "menu_id required"})
+        if not user_id or not menu_id:
+            return send_json(handler, 400, {"error": "user_id and menu_id required"})
             
         conn = get_db_connection()
         cursor = conn.cursor()
+        
+        # Verify ownership
+        cursor.execute("SELECT user_id FROM menus WHERE id = ?", (menu_id,))
+        menu = cursor.fetchone()
+        if not menu or menu['user_id'] != user_id:
+            conn.close()
+            return send_json(handler, 403, {"error": "Unauthorized: You do not own this menu"})
         
         # 1. Delete items
         cursor.execute("DELETE FROM menu_items WHERE menu_id = ?", (menu_id,))
@@ -128,16 +136,24 @@ def handle_delete_menu(data, handler):
 
 def handle_update_menu(data, handler):
     try:
+        user_id = data.get('user_id')
         menu_id = data.get('menu_id')
         name = data.get('name')
         is_public = 1 if data.get('is_public') else 0
         items = data.get('items', [])
         
-        if not menu_id or not name:
-            return send_json(handler, 400, {"error": "menu_id and name required"})
+        if not user_id or not menu_id or not name:
+            return send_json(handler, 400, {"error": "user_id, menu_id and name required"})
             
         conn = get_db_connection()
         cursor = conn.cursor()
+        
+        # Verify ownership
+        cursor.execute("SELECT user_id FROM menus WHERE id = ?", (menu_id,))
+        menu = cursor.fetchone()
+        if not menu or menu['user_id'] != user_id:
+            conn.close()
+            return send_json(handler, 403, {"error": "Unauthorized: You do not own this menu"})
         
         # 1. Update menu metadata
         cursor.execute("UPDATE menus SET name = ?, is_public = ? WHERE id = ?", 
