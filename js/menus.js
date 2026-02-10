@@ -1,0 +1,368 @@
+import { getCurrentLang, translations } from './i18n.js';
+import { fetchFoods } from './api.js';
+import { Nephrologist, normalizeText } from './foods.js';
+
+let menus = [];
+let foodDatabase = [];
+let currentMenu = {
+    name: '',
+    items: []
+};
+let isCreating = false;
+let editingMenuId = null;
+
+// DOM Elements
+let menusListContainer, newMenuBtn, creationForm, menuNameInput, menuPublicToggle, privacyStatusText, menuItemsContainer, menuTotalsContainer, saveMenuBtn, cancelMenuBtn;
+let foodSearchInput, foodSearchResults, toastContainer;
+
+function setupDOM() {
+    menusListContainer = document.getElementById('menus-list');
+    newMenuBtn = document.getElementById('new-menu-btn');
+    creationForm = document.getElementById('menu-creation-form');
+    menuNameInput = document.getElementById('menu-name-meta');
+    menuPublicToggle = document.getElementById('menu-public-toggle');
+    privacyStatusText = document.getElementById('privacy-status-text');
+    menuItemsContainer = document.getElementById('selected-items');
+    menuTotalsContainer = document.getElementById('menu-totals');
+    saveMenuBtn = document.getElementById('save-menu-btn');
+    cancelMenuBtn = document.getElementById('cancel-menu-btn');
+    foodSearchInput = document.getElementById('food-search-menu');
+    foodSearchResults = document.getElementById('food-results-menu');
+    toastContainer = document.getElementById('toast-container');
+}
+
+export async function initMenus() {
+    setupDOM();
+
+    // Attach listeners immediately to avoid race conditions if fetch is slow
+    if (newMenuBtn) newMenuBtn.addEventListener('click', () => {
+        editingMenuId = null;
+        currentMenu = { name: '', items: [] };
+        menuNameInput.value = '';
+        renderCurrentMenuItems();
+        toggleCreation(true);
+    });
+    if (cancelMenuBtn) cancelMenuBtn.addEventListener('click', () => toggleCreation(false));
+    if (saveMenuBtn) saveMenuBtn.addEventListener('click', handleSaveMenu);
+    if (foodSearchInput) foodSearchInput.addEventListener('input', handleFoodSearch);
+    if (menuPublicToggle) {
+        menuPublicToggle.addEventListener('change', updatePrivacyText);
+    }
+
+    // Load data in background
+    foodDatabase = await fetchFoods();
+    await loadMenus();
+}
+
+async function loadMenus() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) return;
+    const userId = user.userId || user.id;
+    if (!userId) return;
+
+    try {
+        const res = await fetch(`/api/menus?user_id=${userId}`);
+        menus = await res.json();
+        renderMenus();
+    } catch (e) {
+        console.error("Error loading menus:", e);
+    }
+}
+
+function renderMenus() {
+    if (!menusListContainer) return;
+    menusListContainer.innerHTML = '';
+
+    const lang = getCurrentLang();
+    const t = translations[lang] || translations['es'];
+
+    if (menus.length === 0) {
+        menusListContainer.innerHTML = `<p class="empty-msg">${t.noMenus || 'No tienes menús guardados.'}</p>`;
+        return;
+    }
+
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    menus.forEach(menu => {
+        const isOwner = user && menu.user_id === (user.userId || user.id);
+        const card = document.createElement('div');
+        card.className = `menu-summary-card glass-card ${menu.is_public ? 'is-public' : ''}`;
+
+        const privacyText = menu.is_public ?
+            (t.public || '🌍 Público') :
+            (t.private || '🔒 Privado');
+
+        card.innerHTML = `
+            <div class="menu-card-header">
+                <h3>${menu.name}</h3>
+                <span class="privacy-badge">${privacyText}</span>
+            </div>
+            <p>${menu.items.length} alimentos</p>
+            <div class="menu-actions">
+                ${isOwner ? `<button class="btn-small delete-menu" data-id="${menu.id}">${t.deleteMenu || 'Eliminar'}</button>` : `<span class="read-only">${t.readOnly || 'Solo lectura'}</span>`}
+            </div>
+        `;
+
+        card.addEventListener('click', () => openMenu(menu));
+
+        const delBtn = card.querySelector('.delete-menu');
+        if (delBtn) {
+            delBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleDeleteMenu(menu.id);
+            });
+        }
+        menusListContainer.appendChild(card);
+    });
+}
+
+function openMenu(menu) {
+    editingMenuId = menu.id;
+    const lang = getCurrentLang();
+    currentMenu = {
+        name: menu.name,
+        items: menu.items.map(it => ({
+            food_id: it.food_id,
+            food_data: {
+                name: it.names[lang] || it.name,
+                names: it.names,
+                nutrients: it.nutrients
+            },
+            quantity: it.quantity,
+            meal_type: it.meal_type
+        }))
+    };
+
+    toggleCreation(true);
+
+    menuNameInput.value = menu.name;
+    if (menuPublicToggle) {
+        menuPublicToggle.checked = menu.is_public === 1;
+        updatePrivacyText();
+    }
+    renderCurrentMenuItems();
+}
+
+function toggleCreation(show) {
+    isCreating = show;
+    if (show) {
+        creationForm.classList.remove('hidden');
+        newMenuBtn.classList.add('hidden');
+        menusListContainer.classList.add('hidden');
+        updatePrivacyText();
+    } else {
+        creationForm.classList.add('hidden');
+        newMenuBtn.classList.remove('hidden');
+        menusListContainer.classList.remove('hidden');
+        editingMenuId = null;
+    }
+}
+
+function handleFoodSearch() {
+    const query = foodSearchInput.value.toLowerCase();
+    if (query.length < 2) {
+        foodSearchResults.innerHTML = '';
+        return;
+    }
+
+    const lang = getCurrentLang();
+    const normalizedQuery = normalizeText(query);
+    const matches = foodDatabase.filter(food => {
+        const name = food.names[lang] || food.name;
+        return normalizeText(name).includes(normalizedQuery);
+    }).slice(0, 20);
+
+    foodSearchResults.innerHTML = '';
+    matches.forEach(food => {
+        const item = document.createElement('div');
+        item.className = 'search-result-item';
+        item.innerHTML = `
+            <span>${food.names[lang] || food.name}</span>
+            <span class="add-icon">+</span>
+        `;
+        item.addEventListener('click', () => addFoodToMenu(food));
+        foodSearchResults.appendChild(item);
+    });
+}
+
+function updatePrivacyText() {
+    if (!menuPublicToggle || !privacyStatusText) return;
+    const lang = getCurrentLang();
+    const t = translations[lang] || translations['es'];
+
+    // Use translations if available, otherwise defaults
+    if (menuPublicToggle.checked) {
+        privacyStatusText.textContent = t.public ? t.public.replace('🌍 ', '') : 'Público';
+    } else {
+        privacyStatusText.textContent = t.private ? t.private.replace('🔒 ', '') : 'Privado';
+    }
+}
+
+function addFoodToMenu(food) {
+    currentMenu.items.push({
+        food_id: food.id,
+        food_data: food,
+        quantity: 100,
+        meal_type: 'generic'
+    });
+
+    foodSearchInput.value = '';
+    foodSearchResults.innerHTML = '';
+    renderCurrentMenuItems();
+    showToast(translations[getCurrentLang()].foodAdded || "Alimento añadido", "success");
+}
+
+function renderCurrentMenuItems() {
+    menuItemsContainer.innerHTML = '';
+
+    currentMenu.items.forEach((item, index) => {
+        const food = item.food_data;
+        const lang = getCurrentLang();
+
+        const row = document.createElement('div');
+        row.className = 'menu-item-row';
+        row.innerHTML = `
+            <div class="item-info">
+                <span class="item-name">${food.names ? (food.names[lang] || food.name) : food.name}</span>
+                <div class="item-quantity-wrapper">
+                    <input type="number" class="item-quantity-input" data-index="${index}" value="${item.quantity}" min="1" step="1">
+                    <span>g</span>
+                </div>
+            </div>
+            <button class="btn-icon remove-item" data-index="${index}">&times;</button>
+        `;
+
+        const qInput = row.querySelector('.item-quantity-input');
+        qInput.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value) || 0;
+            currentMenu.items[index].quantity = val;
+            calculateTotals();
+        });
+
+        row.querySelector('.remove-item').addEventListener('click', () => {
+            currentMenu.items.splice(index, 1);
+            renderCurrentMenuItems();
+        });
+
+        menuItemsContainer.appendChild(row);
+    });
+
+    calculateTotals();
+}
+
+function calculateTotals() {
+    let totals = { protein: 0, potassium: 0, phosphorus: 0, salt: 0, calcium: 0 };
+    currentMenu.items.forEach(item => {
+        const food = item.food_data;
+        const ratio = item.quantity / 100;
+        for (let key in totals) {
+            if (food.nutrients && food.nutrients[key]) {
+                totals[key] += food.nutrients[key] * ratio;
+            }
+        }
+    });
+    updateTotalsUI(totals);
+}
+
+function updateTotalsUI(totals) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const lang = getCurrentLang();
+    const t = translations[lang] || translations['es'];
+
+    menuTotalsContainer.innerHTML = `<h4>${t.totalSummary || 'Resumen Nutricional Total'}</h4>`;
+
+    for (let key in totals) {
+        const val = totals[key].toFixed(key === 'salt' ? 2 : 0);
+        const color = user ? Nephrologist.getTrafficColor(key, val, user) : '';
+        const badge = document.createElement('div');
+        badge.className = `nutrient-badge ${color}`;
+        badge.innerHTML = `<strong>${key.toUpperCase()}:</strong> ${val}${key === 'salt' ? 'g' : 'mg'}`;
+        menuTotalsContainer.appendChild(badge);
+    }
+}
+
+async function handleSaveMenu() {
+    const name = menuNameInput.value.trim();
+    if (!name || currentMenu.items.length === 0) {
+        showToast("Ponle un nombre y añade alimentos.", "error");
+        return;
+    }
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+        showToast("Error: No se ha podido identificar al usuario.", "error");
+        return;
+    }
+    const userId = user.userId || user.id;
+    const data = {
+        user_id: userId,
+        menu_id: editingMenuId,
+        name: name,
+        is_public: menuPublicToggle ? menuPublicToggle.checked : false,
+        items: currentMenu.items.map(it => ({
+            food_id: it.food_id,
+            quantity: it.quantity,
+            meal_type: it.meal_type
+        }))
+    };
+
+    try {
+        const url = editingMenuId ? '/api/update_menu' : '/api/create_menu';
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        if (res.ok) {
+            showToast(translations[getCurrentLang()].menuSaved || "¡Menú guardado!", "success");
+            if (menuPublicToggle) {
+                menuPublicToggle.checked = false;
+                updatePrivacyText();
+            }
+            menuNameInput.value = '';
+            toggleCreation(false);
+            loadMenus();
+        } else {
+            showToast("Error al guardar el menú", "error");
+        }
+    } catch (e) {
+        console.error("Error saving menu:", e);
+        showToast("Error de conexión", "error");
+    }
+}
+
+async function handleDeleteMenu(id) {
+    if (!confirm("¿Seguro que quieres borrar este menú?")) return;
+
+    try {
+        const res = await fetch('/api/delete_menu', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ menu_id: id })
+        });
+        if (res.ok) {
+            showToast("Menú eliminado", "success");
+            loadMenus();
+        } else {
+            showToast("Error al eliminar", "error");
+        }
+    } catch (e) {
+        console.error("Error deleting menu:", e);
+        showToast("Error de conexión", "error");
+    }
+}
+
+function showToast(message, type = 'success') {
+    if (!toastContainer) return;
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => toast.classList.add('active'), 10);
+
+    setTimeout(() => {
+        toast.classList.remove('active');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}

@@ -1,0 +1,57 @@
+<!-- VIEW: MENUS -->
+<section id="view-menus" class="view-section hidden">
+    <div class="container">
+        <div class="menus-header">
+            <h2 data-i18n="menusTitle">Mis Menús</h2>
+            <button id="new-menu-btn" class="btn-primary" data-i18n="newMenu"> + Nuevo Menú</button>
+        </div>
+
+        <!-- Menu Creation Form (Hidden by default) -->
+        <div id="menu-creation-form" class="glass-card hidden">
+            <div class="form-header">
+                <input type="text" id="menu-name-meta" placeholder="Nombre del menú (Ej: Miércoles saludable)"
+                    data-i18n-placeholder="menuNamePlaceholder" class="menu-name-input">
+
+                <div class="privacy-toggle-container">
+                    <label class="switch">
+                        <input type="checkbox" id="menu-public-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <span id="privacy-status-text" data-i18n="private">Privado</span>
+                </div>
+            </div>
+
+            <div class="creation-columns">
+                <div class="search-column">
+                    <div class="form-group">
+                        <label data-i18n="addFood">Añadir Alimento</label>
+                        <input type="text" id="food-search-menu" placeholder="Buscar alimento..."
+                            data-i18n-placeholder="foodSearchPlaceholder" class="search-field">
+                        <div id="food-results-menu" class="search-results-mini"></div>
+                    </div>
+                </div>
+
+                <div class="items-column">
+                    <label data-i18n="selectedItems">Alimentos Seleccionados</label>
+                    <div id="selected-items" class="selected-items-list">
+                        <!-- Items added here -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="menu-totals" class="menu-totals-panel">
+                <!-- Totals go here -->
+            </div>
+
+            <div class="form-actions">
+                <button id="cancel-menu-btn" class="btn-secondary" data-i18n="cancel">Cancelar</button>
+                <button id="save-menu-btn" class="btn-primary" data-i18n="saveMenu">Guardar Menú</button>
+            </div>
+        </div>
+
+        <!-- Saved Menus List -->
+        <div id="menus-list" class="menus-grid">
+            <!-- Menus generated dynamically -->
+        </div>
+    </div>
+</section>

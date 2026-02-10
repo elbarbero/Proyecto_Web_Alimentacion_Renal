@@ -3,7 +3,7 @@
  * Dynamic HTML Component Loader
  */
 
-export async function loadComponent(path) {
+export async function loadComponent(path, targetSelector = null) {
     try {
         const response = await fetch(path);
         if (!response.ok) throw new Error(`Failed to load ${path}`);
@@ -14,12 +14,15 @@ export async function loadComponent(path) {
         const temp = document.createElement('div');
         temp.innerHTML = html;
 
-        // Append all children to document.body
+        const target = targetSelector ? document.querySelector(targetSelector) : document.body;
+        if (!target) throw new Error(`Target not found: ${targetSelector}`);
+
+        // Append all children to target
         while (temp.firstChild) {
-            document.body.appendChild(temp.firstChild);
+            target.appendChild(temp.firstChild);
         }
 
-        console.log(`Loaded component: ${path}`);
+        console.log(`Loaded component: ${path} into ${targetSelector || 'body'}`);
     } catch (error) {
         console.error(`Error loading component from ${path}:`, error);
     }
