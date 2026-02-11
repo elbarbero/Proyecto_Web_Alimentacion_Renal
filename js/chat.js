@@ -30,6 +30,13 @@ export function setupChat() {
     } else {
         loadChatHistory();
     }
+
+    // Listen for language changes to update welcome message if no history
+    document.addEventListener('languageChanged', () => {
+        if (!localStorage.getItem('chat_history') && chatMessages) {
+            setWelcomeMessage();
+        }
+    });
 }
 
 function setWelcomeMessage() {

@@ -32,7 +32,7 @@ async function initApp() {
     // Listen for language changes from Custom Select
     document.addEventListener('languageChanged', (e) => {
         localStorage.setItem('language', e.detail);
-        location.reload();
+        updateTexts();
     });
 
     // 2. UI Components

@@ -180,6 +180,15 @@ export async function initFoods() {
         renderTabs();
         filterAndRender();
 
+        // Listen for language changes to update UI without reload
+        document.addEventListener('languageChanged', () => {
+            renderTabs();
+            filterAndRender();
+            if (currentFood) {
+                if (mName) mName.textContent = getFoodName(currentFood);
+            }
+        });
+
     } catch (error) {
         console.error("Error init foods:", error);
     }

@@ -54,6 +54,14 @@ export async function initMenus() {
     foodDatabase = await fetchFoods();
     await loadMenus();
 
+    // Listen for language changes to update UI without reload
+    document.addEventListener('languageChanged', () => {
+        renderMenus();
+        if (isCreating) {
+            renderCurrentMenuItems();
+        }
+    });
+
     // Listen for view changes to handle internal sub-views
     document.addEventListener('viewChanged', (e) => {
         const { viewId } = e.detail;
