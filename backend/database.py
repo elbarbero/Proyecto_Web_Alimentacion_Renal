@@ -58,6 +58,28 @@ def run_migrations():
             FOREIGN KEY(menu_id) REFERENCES menus(id),
             FOREIGN KEY(food_id) REFERENCES foods(id)
         )""")
+
+        # Forum Tables
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS forum_threads (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        )""")
+
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS forum_comments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            thread_id INTEGER,
+            user_id INTEGER,
+            content TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(thread_id) REFERENCES forum_threads(id),
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        )""")
             
         conn.commit()
         conn.close()

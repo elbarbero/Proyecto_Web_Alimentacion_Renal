@@ -163,7 +163,22 @@ export const translations = {
         accept: "Aceptar",
         deleteMenuConfirm: "¿Seguro que quieres borrar este menú?",
         profileUpdatedTitle: "Perfil",
-        profileUpdatedMsg: "¡Perfil actualizado!"
+        profileUpdatedMsg: "¡Perfil actualizado!",
+        // Forum
+        forum: "Foro",
+        forumDesc: "Comunidad y soporte entre usuarios",
+        newThread: " + Nuevo Tema",
+        threadTitle: "Título del tema",
+        threadContent: "Contenido del mensaje...",
+        createThread: "Crear Tema",
+        comments: "Comentarios",
+        writeComment: "Escribe un comentario...",
+        postComment: "Publicar",
+        noThreads: "No hay temas aún. ¡Sé el primero en preguntar!",
+        backToForum: "Volver al foro",
+        threadCreated: "¡Tema creado exitosamente!",
+        errorGeneric: "Algo salió mal. Por favor, inténtalo de nuevo.",
+        errorLogin: "Debes iniciar sesión para publicar."
     },
     en: {
         title: "Smart Renal Diet",
@@ -327,7 +342,22 @@ export const translations = {
         accept: "Accept",
         deleteMenuConfirm: "Are you sure you want to delete this menu?",
         profileUpdatedTitle: "Profile",
-        profileUpdatedMsg: "Profile updated!"
+        profileUpdatedMsg: "Profile updated!",
+        // Forum
+        forum: "Forum",
+        forumDesc: "Community and user support",
+        newThread: " + New Thread",
+        threadTitle: "Thread title",
+        threadContent: "Message content...",
+        createThread: "Create Thread",
+        comments: "Comments",
+        writeComment: "Write a comment...",
+        postComment: "Post",
+        noThreads: "No threads yet. Be the first to ask!",
+        backToForum: "Back to forum",
+        threadCreated: "Thread created successfully!",
+        errorGeneric: "Something went wrong. Please try again.",
+        errorLogin: "You must be logged in to post."
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -479,7 +509,19 @@ export const translations = {
         accept: "Akzeptieren",
         deleteMenuConfirm: "Sind Sie sicher, dass Sie dieses Menü löschen möchten?",
         profileUpdatedTitle: "Profil",
-        profileUpdatedMsg: "Profil aktualisiert!"
+        profileUpdatedMsg: "Profil aktualisiert!",
+        // Forum
+        forum: "Forum",
+        forumDesc: "Gemeinschaft und Benutzerunterstützung",
+        newThread: " + Neues Thema",
+        threadTitle: "Thementitel",
+        threadContent: "Nachrichteninhalt...",
+        createThread: "Thema erstellen",
+        comments: "Kommentare",
+        writeComment: "Einen Kommentar schreiben...",
+        postComment: "Veröffentlichen",
+        noThreads: "Noch keine Themen. Sei der Erste, der fragt!",
+        backToForum: "Zurück zum Forum"
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -631,7 +673,19 @@ export const translations = {
         accept: "Accepter",
         deleteMenuConfirm: "Êtes-vous sûr de vouloir supprimer ce menu ?",
         profileUpdatedTitle: "Profil",
-        profileUpdatedMsg: "Profil mis à jour !"
+        profileUpdatedMsg: "Profil mis à jour !",
+        // Forum
+        forum: "Forum",
+        forumDesc: "Communauté et support utilisateur",
+        newThread: " + Nouveau sujet",
+        threadTitle: "Titre du sujet",
+        threadContent: "Contenu du message...",
+        createThread: "Créer un sujet",
+        comments: "Commentaires",
+        writeComment: "Écrire un commentaire...",
+        postComment: "Publier",
+        noThreads: "Pas encore de sujets. Soyez le premier à demander !",
+        backToForum: "Retour au forum"
     },
     pt: {
         title: "Dieta Renal Inteligente",
@@ -783,7 +837,19 @@ export const translations = {
         accept: "Aceitar",
         deleteMenuConfirm: "Tem certeza de que deseja excluir este menu?",
         profileUpdatedTitle: "Perfil",
-        profileUpdatedMsg: "Perfil atualizado!"
+        profileUpdatedMsg: "Perfil atualizado!",
+        // Forum
+        forum: "Fórum",
+        forumDesc: "Comunidade e suporte ao usuário",
+        newThread: " + Novo Tópico",
+        threadTitle: "Título do tópico",
+        threadContent: "Conteúdo da mensagem...",
+        createThread: "Criar Tópico",
+        comments: "Comentários",
+        writeComment: "Escreva um comentário...",
+        postComment: "Publicar",
+        noThreads: "Ainda não há tópicos. Seja o primeiro a perguntar!",
+        backToForum: "Voltar ao fórum"
     },
     ja: {
         title: "スマート腎臓食",
@@ -938,7 +1004,19 @@ export const translations = {
         accept: "承認",
         deleteMenuConfirm: "このメニューを削除してもよろしいですか？",
         profileUpdatedTitle: "プロフィール",
-        profileUpdatedMsg: "プロフィールが更新されました！"
+        profileUpdatedMsg: "プロフィールが更新されました！",
+        // Forum
+        forum: "掲示板",
+        forumDesc: "コミュニティとユーザーサポート",
+        newThread: " + 新規トピック",
+        threadTitle: "トピックのタイトル",
+        threadContent: "メッセージの内容...",
+        createThread: "トピックを作成",
+        comments: "コメント",
+        writeComment: "コメントを書く...",
+        postComment: "投稿",
+        noThreads: "まだトピックはありません。最初の質問をしましょう！",
+        backToForum: "掲示板に戻る"
     },
 };
 

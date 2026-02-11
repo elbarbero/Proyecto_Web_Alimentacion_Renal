@@ -50,10 +50,23 @@ async function initApp() {
     // 5.1 Menus
     await initMenus();
 
+    // 5.2 Forum
+    const { initForum, loadThreads } = await import('./forum.js');
+    await initForum();
+
     // 6. Global Event Listeners (like specific Date inputs)
     const todayStr = new Date().toISOString().split('T')[0];
     const dateInputs = document.querySelectorAll('input[type="date"]');
     dateInputs.forEach(input => input.max = todayStr);
+
+    // Update showView to handle dynamic loading
+    const originalShowView = window.showView;
+    window.showView = (viewId) => {
+        originalShowView(viewId);
+        if (viewId === 'view-forum') {
+            loadThreads();
+        }
+    };
 
     // 7. Initial View
     showView('view-home');

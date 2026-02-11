@@ -3,7 +3,7 @@ import socketserver
 import json
 import urllib.parse
 from backend.database import run_migrations
-from backend.handlers import auth, users, foods, chat, countries, pdf, menus
+from backend.handlers import auth, users, foods, chat, countries, pdf, menus, forum
 from backend.config import PORT
 
 # Start migrations on boot
@@ -31,6 +31,15 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
         elif path == '/api/menus':
             query_params = urllib.parse.parse_qs(parsed_path.query)
             menus.handle_get_menus(query_params, self)
+            return
+            
+        elif path == '/api/forum/threads':
+            forum.handle_get_threads(self)
+            return
+
+        elif path == '/api/forum/comments':
+            query_params = urllib.parse.parse_qs(parsed_path.query)
+            forum.handle_get_comments(query_params, self)
             return
             
         # Static Files Routing
@@ -85,6 +94,12 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
         
         elif path == '/api/delete_menu':
             menus.handle_delete_menu(data, self)
+            
+        elif path == '/api/forum/create_thread':
+            forum.handle_create_thread(data, self)
+            
+        elif path == '/api/forum/create_comment':
+            forum.handle_create_comment(data, self)
             
         else:
             self.send_error(404, "Endpoint not found")
