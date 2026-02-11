@@ -1,7 +1,7 @@
 import { updateTexts, getCurrentLang } from './i18n.js';
 import { setupCustomSelects, togglePasswordVisibility, showView } from './ui.js';
 import { initFoods } from './foods.js';
-import { setupAuth } from './auth.js';
+import { setupAuth, initAuthState } from './auth.js';
 import { setupChat } from './chat.js';
 import { initMenus } from './menus.js';
 
@@ -14,7 +14,10 @@ import { loadComponent } from './loader.js';
 async function initApp() {
     console.log('Initializing App...');
 
-    // 0. Load HTML Components
+    // 0. Immediate UI Sync (No awaits here!)
+    initAuthState();
+
+    // 1. Load HTML Components
     await Promise.all([
         loadComponent('components/auth/auth-modal.html'),
         loadComponent('components/profile/medical-modal.html'),

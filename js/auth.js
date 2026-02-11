@@ -18,6 +18,32 @@ let insufficiencyToggle, treatmentGroup, stageGroup, treatmentHidden, treatmentS
 let isRegistering = false;
 let pendingAvatarUpload = null;
 
+export function initAuthState() {
+    console.log('initAuthState: Syncing UI state...');
+    const userBtn = document.getElementById('user-btn');
+    const menusCard = document.getElementById('menus-menu-card');
+    const forumCard = document.getElementById('forum-menu-card');
+
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+        try {
+            const user = JSON.parse(storedUser);
+            if (userBtn) userBtn.classList.add('user-logged-in');
+            if (menusCard) menusCard.classList.remove('hidden');
+            if (forumCard) forumCard.classList.remove('hidden');
+
+            // Fast avatar sync
+            const avatarImg = document.getElementById('user-avatar-img');
+            if (avatarImg && user.avatar_url) {
+                if (userBtn) userBtn.classList.add('has-avatar');
+                avatarImg.src = user.avatar_url;
+            }
+        } catch (e) {
+            console.error('initAuthState: Error parsing user', e);
+        }
+    }
+}
+
 export function setupAuth() {
     // --- Auth DOM Elements ---
     userBtn = document.getElementById('user-btn');
@@ -129,15 +155,7 @@ export function setupAuth() {
         input.addEventListener('change', (e) => clearError(e.target));
     });
 
-    // 8. Initial Login Check
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-        const user = JSON.parse(storedUser);
-        userBtn.classList.add('user-logged-in');
-        updateUserAvatar(user.avatar_url || 'images/default_avatar.png');
-    }
-
-    // 9. Setup Sub-Components
+    // 8. Setup Sub-Components
     setupDropdownListeners();
     setupForgotReset();
     setupMedicalProfile();

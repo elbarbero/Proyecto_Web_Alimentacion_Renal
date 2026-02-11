@@ -5,21 +5,6 @@ let currentThreadId = null;
 
 export async function initForum() {
     console.log('initForum: Initializing...');
-    const forumMenuCard = document.getElementById('forum-menu-card');
-    let user = null;
-    try {
-        const stored = localStorage.getItem('user');
-        if (stored) user = JSON.parse(stored);
-    } catch (e) {
-        console.error('initForum: Error parsing user', e);
-    }
-
-    if (user && forumMenuCard) {
-        console.log('initForum: User logged in, showing forum card');
-        forumMenuCard.classList.remove('hidden');
-    } else {
-        console.log('initForum: No user or card found', { hasUser: !!user, hasCard: !!forumMenuCard });
-    }
 
     // Event Listeners
     setupForumEventListeners();
