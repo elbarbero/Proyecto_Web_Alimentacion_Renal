@@ -156,7 +156,9 @@ export const translations = {
         totalSummary: "Resumen Nutricional Total",
         menuNamePlaceholder: "Nombre del menú (Ej: Miércoles saludable)",
         foodSearchPlaceholder: "Buscar alimento...",
-        noMenus: "No tienes menús guardados."
+        noMenus: "No tienes menús guardados.",
+        searchMenusPlaceholder: "Buscar en mis menús...",
+        noMatches: "No se encontraron resultados."
     },
     en: {
         title: "Smart Renal Diet",
@@ -313,7 +315,9 @@ export const translations = {
         totalSummary: "Total Nutritional Summary",
         menuNamePlaceholder: "Menu name (e.g., Healthy Wednesday)",
         foodSearchPlaceholder: "Search food...",
-        noMenus: "You have no saved menus."
+        noMenus: "You have no saved menus.",
+        searchMenusPlaceholder: "Search in my menus...",
+        noMatches: "No matches found."
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -458,7 +462,9 @@ export const translations = {
         totalSummary: "Gesamte Nährwertübersicht",
         menuNamePlaceholder: "Menüname (z. B. Gesunder Mittwoch)",
         foodSearchPlaceholder: "Lebensmittel suchen...",
-        noMenus: "Sie haben keine gespeicherten Menüs."
+        noMenus: "Sie haben keine gespeicherten Menüs.",
+        searchMenusPlaceholder: "In meinen Menüs suchen...",
+        noMatches: "Keine Treffer gefunden."
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -603,7 +609,9 @@ export const translations = {
         totalSummary: "Résumé nutritionnel total",
         menuNamePlaceholder: "Nom du menu (ex : Mercredi santé)",
         foodSearchPlaceholder: "Rechercher un aliment...",
-        noMenus: "Vous n'avez pas de menus enregistrés."
+        noMenus: "Vous n'avez pas de menus enregistrés.",
+        searchMenusPlaceholder: "Rechercher dans mes menus...",
+        noMatches: "Aucun résultat trouvé."
     },
     pt: {
         title: "Dieta Renal Inteligente",
@@ -748,7 +756,9 @@ export const translations = {
         totalSummary: "Resumo Nutricional Total",
         menuNamePlaceholder: "Nome do menu (ex: Quarta-feira saudável)",
         foodSearchPlaceholder: "Buscar alimento...",
-        noMenus: "Você não tem menus salvos."
+        noMenus: "Você não tem menus salvos.",
+        searchMenusPlaceholder: "Pesquisar nos meus menus...",
+        noMatches: "Nenhum resultado encontrado."
     },
     ja: {
         title: "スマート腎臓食",
@@ -896,7 +906,9 @@ export const translations = {
         totalSummary: "総合栄養サマリー",
         menuNamePlaceholder: "メニュー名（例：健康的な水曜日）",
         foodSearchPlaceholder: "食品を検索...",
-        noMenus: "保存されたメニューはありません。"
+        noMenus: "保存されたメニューはありません。",
+        searchMenusPlaceholder: "メニューを検索...",
+        noMatches: "一致する結果が見つかりません。"
     },
 };
 

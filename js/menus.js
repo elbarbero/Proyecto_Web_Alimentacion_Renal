@@ -14,7 +14,7 @@ let editingMenuId = null;
 
 // DOM Elements
 let menusListContainer, newMenuBtn, creationForm, menuNameInput, menuPublicToggle, privacyStatusText, menuItemsContainer, menuTotalsContainer, saveMenuBtn, cancelMenuBtn;
-let foodSearchInput, foodSearchResults, toastContainer;
+let foodSearchInput, foodSearchResults, toastContainer, menuListSearch;
 
 function setupDOM() {
     menusListContainer = document.getElementById('menus-list');
@@ -30,6 +30,7 @@ function setupDOM() {
     foodSearchInput = document.getElementById('food-search-menu');
     foodSearchResults = document.getElementById('food-results-menu');
     toastContainer = document.getElementById('toast-container');
+    menuListSearch = document.getElementById('menu-list-search');
 }
 
 export async function initMenus() {
@@ -48,6 +49,9 @@ export async function initMenus() {
     if (foodSearchInput) foodSearchInput.addEventListener('input', handleFoodSearch);
     if (menuPublicToggle) {
         menuPublicToggle.addEventListener('change', updatePrivacyText);
+    }
+    if (menuListSearch) {
+        menuListSearch.addEventListener('input', () => renderMenus());
     }
 
     // Load data in background
@@ -76,11 +80,15 @@ export async function initMenus() {
             if (saveMenuBtn) saveMenuBtn.style.display = 'block';
             const searchCol = document.querySelector('.search-column');
             if (searchCol) searchCol.style.display = 'block';
+            const searchListContainer = document.getElementById('menus-search-container');
+            if (searchListContainer) searchListContainer.classList.remove('hidden');
         } else if (viewId === 'view-menus-form') {
             isCreating = true;
             if (creationForm) creationForm.classList.remove('hidden');
             if (newMenuBtn) newMenuBtn.classList.add('hidden');
             if (menusListContainer) menusListContainer.classList.add('hidden');
+            const searchListContainer = document.getElementById('menus-search-container');
+            if (searchListContainer) searchListContainer.classList.add('hidden');
             updatePrivacyText();
         }
     });
@@ -103,19 +111,24 @@ async function loadMenus() {
 
 function renderMenus() {
     if (!menusListContainer) return;
+
+    const searchTerm = menuListSearch ? normalizeText(menuListSearch.value) : '';
+    const filteredMenus = menus.filter(m => normalizeText(m.name).includes(searchTerm));
+
     menusListContainer.innerHTML = '';
 
     const lang = getCurrentLang();
     const t = translations[lang] || translations['es'];
 
-    if (menus.length === 0) {
-        menusListContainer.innerHTML = `<p class="empty-msg">${t.noMenus || 'No tienes menús guardados.'}</p>`;
+    if (filteredMenus.length === 0) {
+        const msg = searchTerm ? (t.noMatches || 'No se encontraron menús.') : (t.noMenus || 'No tienes menús guardados.');
+        menusListContainer.innerHTML = `<p class="empty-msg">${msg}</p>`;
         return;
     }
 
     const user = JSON.parse(localStorage.getItem('user'));
 
-    menus.forEach(menu => {
+    filteredMenus.forEach(menu => {
         const isOwner = user && menu.user_id === (user.userId || user.id);
         const card = document.createElement('div');
         card.className = `menu-summary-card glass-card ${menu.is_public ? 'is-public' : ''}`;

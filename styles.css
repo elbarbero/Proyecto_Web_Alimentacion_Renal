@@ -276,7 +276,7 @@ body {
     z-index: 2;
 }
 
-#search-input {
+.search-container input {
     width: 100%;
     padding: 1.4rem 1.5rem 1.4rem 4rem;
     font-size: 1.15rem;
@@ -289,14 +289,14 @@ body {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-#search-input:focus {
+.search-container input:focus {
     background: #ffffff;
     box-shadow: var(--shadow-xl), 0 0 0 4px rgba(59, 130, 246, 0.1);
     transform: translateY(-2px);
     border-color: rgba(59, 130, 246, 0.3);
 }
 
-#search-input::placeholder {
+.search-container input::placeholder {
     color: #9ca3af;
     font-weight: 400;
 }
