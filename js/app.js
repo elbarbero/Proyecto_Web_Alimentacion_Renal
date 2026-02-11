@@ -22,7 +22,8 @@ async function initApp() {
         loadComponent('components/modals/feedback-modal.html'),
         loadComponent('components/modals/food-modal.html'),
         loadComponent('components/chat/chat-widget.html'),
-        loadComponent('components/menus/menus-section.html', '#app-views')
+        loadComponent('components/menus/menus-section.html', '#app-views'),
+        loadComponent('components/forum/forum-section.html', '#app-views')
     ]);
 
     // 1. I18n

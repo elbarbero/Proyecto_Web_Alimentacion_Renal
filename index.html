@@ -167,84 +167,8 @@
             </div>
         </section>
 
-        <!-- VIEW: FORUM (New) -->
-        <section id="view-forum" class="view-section hidden">
-            <div class="container">
-                <div id="forum-list-view">
-                    <div class="forum-header">
-                        <div>
-                            <h2 data-i18n="forum">Foro</h2>
-                            <p class="subtitle" data-i18n="forumDesc">Comunidad y soporte entre usuarios</p>
-                        </div>
-                        <button id="new-thread-btn" class="btn-primary" data-i18n="newThread">+ Nuevo Tema</button>
-                    </div>
-                    <div id="thread-list" class="thread-list">
-                        <!-- Threads will be loaded here -->
-                    </div>
-                </div>
+        <!-- VIEW: FORUM (Loaded dynamically) -->
 
-                <div id="forum-thread-view" class="hidden">
-                    <button id="back-to-forum-btn" class="glass-btn mb-4" title="Volver">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="19" y1="12" x2="5" y2="12"></line>
-                            <polyline points="12 19 5 12 12 5"></polyline>
-                        </svg>
-                    </button>
-
-                    <div id="thread-detail" class="thread-detail glass-card">
-                        <!-- Thread content will be loaded here -->
-                    </div>
-
-                    <div class="comments-section">
-                        <h3 class="section-title" data-i18n="comments">Comentarios</h3>
-                        <div id="comment-list" class="comment-list">
-                            <!-- Comments will be loaded here -->
-                        </div>
-
-                        <div class="comment-form-container glass-card mt-4">
-                            <form id="comment-form" class="comment-form">
-                                <textarea id="comment-content" data-i18n-placeholder="writeComment"
-                                    placeholder="Escribe un comentario..." required></textarea>
-                                <div class="form-actions" style="display: flex; justify-content: flex-end;">
-                                    <button type="submit" class="btn-primary" data-i18n="postComment">Publicar</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- New Thread Modal - Redesigned to match Auth Modal -->
-            <div id="new-thread-modal" class="modal">
-                <div class="modal-content auth-content">
-                    <span class="close-modal" id="close-forum-modal">&times;</span>
-                    <div class="auth-body">
-                        <h2 data-i18n="newThread" style="text-align: center;">Nuevo Tema</h2>
-                        <p class="auth-subtitle" data-i18n="threadTitle"
-                            style="text-align: center; margin-bottom: 2rem;">Inicia una nueva conversación</p>
-
-                        <form id="new-thread-form">
-                            <div class="input-group-auth">
-                                <label for="thread-title" data-i18n="threadTitle">Título del tema</label>
-                                <input type="text" id="thread-title" data-i18n-placeholder="threadTitle" required>
-                            </div>
-                            <div class="input-group-auth">
-                                <label for="thread-content" data-i18n="threadContent">Mensaje</label>
-                                <textarea id="thread-content" data-i18n-placeholder="threadContent" rows="5"
-                                    required></textarea>
-                            </div>
-                            <div class="modal-actions" style="margin-top: 2rem; display: flex; gap: 1rem;">
-                                <button type="button" class="btn-secondary" id="cancel-thread-btn" data-i18n="cancel"
-                                    style="flex: 1;">Cancelar</button>
-                                <button type="submit" class="btn-primary" data-i18n="createThread"
-                                    style="flex: 2;">Crear Tema</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
 
     </main>
 
