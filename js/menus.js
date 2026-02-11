@@ -1,6 +1,7 @@
 import { getCurrentLang, translations } from './i18n.js';
 import { fetchFoods } from './api.js';
 import { Nephrologist, normalizeText } from './foods.js';
+import { showView } from './ui.js';
 
 let menus = [];
 let foodDatabase = [];
@@ -52,6 +53,29 @@ export async function initMenus() {
     // Load data in background
     foodDatabase = await fetchFoods();
     await loadMenus();
+
+    // Listen for view changes to handle internal sub-views
+    document.addEventListener('viewChanged', (e) => {
+        const { viewId } = e.detail;
+        if (viewId === 'view-menus') {
+            isCreating = false;
+            if (creationForm) creationForm.classList.add('hidden');
+            if (newMenuBtn) newMenuBtn.classList.remove('hidden');
+            if (menusListContainer) menusListContainer.classList.remove('hidden');
+            editingMenuId = null;
+            if (menuNameInput) menuNameInput.readOnly = false;
+            if (menuPublicToggle) menuPublicToggle.disabled = false;
+            if (saveMenuBtn) saveMenuBtn.style.display = 'block';
+            const searchCol = document.querySelector('.search-column');
+            if (searchCol) searchCol.style.display = 'block';
+        } else if (viewId === 'view-menus-form') {
+            isCreating = true;
+            if (creationForm) creationForm.classList.remove('hidden');
+            if (newMenuBtn) newMenuBtn.classList.add('hidden');
+            if (menusListContainer) menusListContainer.classList.add('hidden');
+            updatePrivacyText();
+        }
+    });
 }
 
 async function loadMenus() {
@@ -164,24 +188,10 @@ function openMenu(menu) {
 }
 
 function toggleCreation(show) {
-    isCreating = show;
     if (show) {
-        creationForm.classList.remove('hidden');
-        newMenuBtn.classList.add('hidden');
-        menusListContainer.classList.add('hidden');
-        updatePrivacyText();
+        showView('view-menus-form');
     } else {
-        creationForm.classList.add('hidden');
-        newMenuBtn.classList.remove('hidden');
-        menusListContainer.classList.remove('hidden');
-        editingMenuId = null;
-
-        // Reset fields to editable/visible for "New Menu" defaults
-        if (menuNameInput) menuNameInput.readOnly = false;
-        if (menuPublicToggle) menuPublicToggle.disabled = false;
-        if (saveMenuBtn) saveMenuBtn.style.display = 'block';
-        const searchCol = document.querySelector('.search-column');
-        if (searchCol) searchCol.style.display = 'block';
+        showView('view-menus');
     }
 }
 

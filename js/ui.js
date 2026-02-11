@@ -149,12 +149,22 @@ export function showToast(message, type = 'info') {
     }, 3000);
 }
 
-export function showView(viewId) {
+let currentViewId = 'view-home';
+const viewHistory = [];
+
+export function showView(viewId, saveHistory = true) {
     const views = document.querySelectorAll('.view-section');
     const backBtn = document.getElementById('global-back-btn');
 
+    if (saveHistory && currentViewId !== viewId) {
+        viewHistory.push(currentViewId);
+    }
+    currentViewId = viewId;
+
+    const sectionId = viewId.startsWith('view-menus') ? 'view-menus' : viewId;
+
     views.forEach(view => {
-        if (view.id === viewId) {
+        if (view.id === sectionId) {
             view.classList.remove('hidden');
         } else {
             view.classList.add('hidden');
@@ -167,5 +177,21 @@ export function showView(viewId) {
         if (backBtn) backBtn.classList.remove('hidden');
     }
 
+    // Trigger an event so other modules (like menus.js) can react to view changes
+    const event = new CustomEvent('viewChanged', { detail: { viewId } });
+    document.dispatchEvent(event);
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+export function goBack() {
+    if (viewHistory.length > 0) {
+        const prevView = viewHistory.pop();
+        showView(prevView, false);
+    } else {
+        showView('view-home', false);
+    }
+}
+
+// Global exposure for onclick handlers
+window.goBack = goBack;
