@@ -2883,3 +2883,50 @@ input:checked+.slider:before {
     font-weight: 600;
     text-transform: capitalize;
 }
+
+/* Confirmation Modal Specifics */
+.confirmation-modal-content {
+    max-width: 450px !important;
+    text-align: center;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+.confirmation-modal-body {
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.confirmation-icon {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.2));
+}
+
+.confirmation-modal-body h2 {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--text-main);
+}
+
+.confirmation-modal-body p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.confirmation-actions {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.confirmation-actions button {
+    flex: 1;
+    max-width: 160px;
+}

@@ -193,5 +193,111 @@ export function goBack() {
     }
 }
 
+// Custom Confirm/Alert Modal Logic
+let currentModalResolve = null;
+
+export function showConfirm(title, message, icon = '⚠️') {
+    if (currentModalResolve) currentModalResolve(false); // Resolve previous if any
+
+    return new Promise((resolve) => {
+        currentModalResolve = resolve;
+        const modal = document.getElementById('custom-confirm-modal');
+        const titleEl = document.getElementById('confirm-title');
+        const messageEl = document.getElementById('confirm-message');
+        const okBtn = document.getElementById('confirm-ok-btn');
+        const cancelBtn = document.getElementById('confirm-cancel-btn');
+        const iconEl = modal.querySelector('.confirmation-icon');
+
+        if (!modal || !titleEl || !messageEl || !okBtn) {
+            resolve(confirm(message));
+            currentModalResolve = null;
+            return;
+        }
+
+        titleEl.textContent = title;
+        messageEl.textContent = message;
+        if (iconEl) iconEl.textContent = icon;
+        if (cancelBtn) cancelBtn.style.display = 'block';
+
+        const handleOk = () => {
+            cleanup();
+            resolve(true);
+        };
+
+        const handleCancel = () => {
+            cleanup();
+            resolve(false);
+        };
+
+        const cleanup = () => {
+            okBtn.removeEventListener('click', handleOk);
+            if (cancelBtn) cancelBtn.removeEventListener('click', handleCancel);
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            currentModalResolve = null;
+        };
+
+        okBtn.addEventListener('click', handleOk);
+        if (cancelBtn) cancelBtn.addEventListener('click', handleCancel);
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+}
+
+export function showAlert(title, message, icon = 'ℹ️') {
+    if (currentModalResolve) currentModalResolve(null);
+
+    return new Promise((resolve) => {
+        currentModalResolve = resolve;
+        const modal = document.getElementById('custom-confirm-modal');
+        const titleEl = document.getElementById('confirm-title');
+        const messageEl = document.getElementById('confirm-message');
+        const okBtn = document.getElementById('confirm-ok-btn');
+        const cancelBtn = document.getElementById('confirm-cancel-btn');
+        const iconEl = modal.querySelector('.confirmation-icon');
+
+        if (!modal || !titleEl || !messageEl || !okBtn) {
+            alert(message);
+            resolve();
+            currentModalResolve = null;
+            return;
+        }
+
+        titleEl.textContent = title;
+        messageEl.textContent = message;
+        if (iconEl) iconEl.textContent = icon;
+        if (cancelBtn) cancelBtn.style.display = 'none';
+
+        const handleOk = () => {
+            cleanup();
+            resolve();
+        };
+
+        const cleanup = () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            okBtn.removeEventListener('click', handleOk);
+            currentModalResolve = null;
+        };
+
+        okBtn.addEventListener('click', handleOk);
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+}
+
+window.closeConfirmModal = () => {
+    const modal = document.getElementById('custom-confirm-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        if (currentModalResolve) {
+            currentModalResolve(false);
+            currentModalResolve = null;
+        }
+    }
+};
+
 // Global exposure for onclick handlers
 window.goBack = goBack;

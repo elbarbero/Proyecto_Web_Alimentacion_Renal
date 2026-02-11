@@ -158,7 +158,12 @@ export const translations = {
         foodSearchPlaceholder: "Buscar alimento...",
         noMenus: "No tienes menús guardados.",
         searchMenusPlaceholder: "Buscar en mis menús...",
-        noMatches: "No se encontraron resultados."
+        noMatches: "No se encontraron resultados.",
+        confirmTitle: "Confirmación",
+        accept: "Aceptar",
+        deleteMenuConfirm: "¿Seguro que quieres borrar este menú?",
+        profileUpdatedTitle: "Perfil",
+        profileUpdatedMsg: "¡Perfil actualizado!"
     },
     en: {
         title: "Smart Renal Diet",
@@ -317,7 +322,12 @@ export const translations = {
         foodSearchPlaceholder: "Search food...",
         noMenus: "You have no saved menus.",
         searchMenusPlaceholder: "Search in my menus...",
-        noMatches: "No matches found."
+        noMatches: "No matches found.",
+        confirmTitle: "Confirmation",
+        accept: "Accept",
+        deleteMenuConfirm: "Are you sure you want to delete this menu?",
+        profileUpdatedTitle: "Profile",
+        profileUpdatedMsg: "Profile updated!"
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -464,7 +474,12 @@ export const translations = {
         foodSearchPlaceholder: "Lebensmittel suchen...",
         noMenus: "Sie haben keine gespeicherten Menüs.",
         searchMenusPlaceholder: "In meinen Menüs suchen...",
-        noMatches: "Keine Treffer gefunden."
+        noMatches: "Keine Treffer gefunden.",
+        confirmTitle: "Bestätigung",
+        accept: "Akzeptieren",
+        deleteMenuConfirm: "Sind Sie sicher, dass Sie dieses Menü löschen möchten?",
+        profileUpdatedTitle: "Profil",
+        profileUpdatedMsg: "Profil aktualisiert!"
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -611,7 +626,12 @@ export const translations = {
         foodSearchPlaceholder: "Rechercher un aliment...",
         noMenus: "Vous n'avez pas de menus enregistrés.",
         searchMenusPlaceholder: "Rechercher dans mes menus...",
-        noMatches: "Aucun résultat trouvé."
+        noMatches: "Aucun résultat trouvé.",
+        confirmTitle: "Confirmation",
+        accept: "Accepter",
+        deleteMenuConfirm: "Êtes-vous sûr de vouloir supprimer ce menu ?",
+        profileUpdatedTitle: "Profil",
+        profileUpdatedMsg: "Profil mis à jour !"
     },
     pt: {
         title: "Dieta Renal Inteligente",
@@ -758,7 +778,12 @@ export const translations = {
         foodSearchPlaceholder: "Buscar alimento...",
         noMenus: "Você não tem menus salvos.",
         searchMenusPlaceholder: "Pesquisar nos meus menus...",
-        noMatches: "Nenhum resultado encontrado."
+        noMatches: "Nenhum resultado encontrado.",
+        confirmTitle: "Confirmação",
+        accept: "Aceitar",
+        deleteMenuConfirm: "Tem certeza de que deseja excluir este menu?",
+        profileUpdatedTitle: "Perfil",
+        profileUpdatedMsg: "Perfil atualizado!"
     },
     ja: {
         title: "スマート腎臓食",
@@ -908,7 +933,12 @@ export const translations = {
         foodSearchPlaceholder: "食品を検索...",
         noMenus: "保存されたメニューはありません。",
         searchMenusPlaceholder: "メニューを検索...",
-        noMatches: "一致する結果が見つかりません。"
+        noMatches: "一致する結果が見つかりません。",
+        confirmTitle: "確認",
+        accept: "承認",
+        deleteMenuConfirm: "このメニューを削除してもよろしいですか？",
+        profileUpdatedTitle: "プロフィール",
+        profileUpdatedMsg: "プロフィールが更新されました！"
     },
 };
 

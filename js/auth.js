@@ -1,7 +1,7 @@
 import { fetchUser, login, register, requestPasswordReset, resetPassword, fetchCountries } from './api.js';
 import { translations, getCurrentLang } from './i18n.js';
 import { clearChatHistory } from './chat.js';
-import { setupCustomSelects } from './ui.js';
+import { setupCustomSelects, showAlert } from './ui.js';
 
 // Module-Scope Variables (Initialized in setupAuth)
 let userBtn, authModal, closeAuthBtn, authForm, authBody;
@@ -140,10 +140,6 @@ export function setupAuth() {
     // 9. Setup Sub-Components
     setupDropdownListeners();
     setupForgotReset();
-    setupDropdownListeners();
-    setupForgotReset();
-    setupMedicalProfile();
-    setupTermsModal();
     setupMedicalProfile();
     setupTermsModal();
     checkResetToken();
@@ -663,7 +659,10 @@ async function handleMedicalSubmit(e) {
         if (saveMedicalBtn) saveMedicalBtn.disabled = false;
         return;
     }
+    console.log('handleMedicalSubmit: starting...');
     let user = JSON.parse(storedUser);
+    const t = translations[getCurrentLang()] || translations['es'];
+    console.log('handleMedicalSubmit: language', getCurrentLang(), 'user', user.email);
 
     const name = profileName.value;
     const surnames = profileSurnames.value;
@@ -686,10 +685,10 @@ async function handleMedicalSubmit(e) {
         birthdate: birthdate,
         has_insufficiency: insufficiency,
         treatment_type: treatment || null,
-        treatment_type: treatment || null,
         kidney_stage: stage || null,
         nationality: document.getElementById('profile-nationality-type-hidden')?.value || ''
     };
+    console.log('handleMedicalSubmit: payload', payload);
 
     if (pass) payload.password = pass;
 
@@ -703,11 +702,13 @@ async function handleMedicalSubmit(e) {
     }
 
     try {
+        console.log('handleMedicalSubmit: fetching /api/update_profile...');
         const res = await fetch('/api/update_profile', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
+        console.log('handleMedicalSubmit: response status', res.status);
 
         if (res.ok) {
             // Upload avatar if pending
@@ -738,7 +739,7 @@ async function handleMedicalSubmit(e) {
 
             // Clear password
             if (profilePassword) profilePassword.value = '';
-            alert('Perfil actualizado!');
+            await showAlert(t.profileUpdatedTitle || 'Perfil', t.profileUpdatedMsg || '¡Perfil actualizado!', "✅");
             location.reload();
 
         } else {

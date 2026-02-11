@@ -1,7 +1,7 @@
 import { getCurrentLang, translations } from './i18n.js';
 import { fetchFoods } from './api.js';
 import { Nephrologist, normalizeText } from './foods.js';
-import { showView } from './ui.js';
+import { showView, showConfirm } from './ui.js';
 
 let menus = [];
 let foodDatabase = [];
@@ -411,7 +411,14 @@ async function handleSaveMenu() {
 }
 
 async function handleDeleteMenu(id) {
-    if (!confirm("¿Seguro que quieres borrar este menú?")) return;
+    const lang = getCurrentLang();
+    const t = translations[lang] || translations['es'];
+    const confirmed = await showConfirm(
+        t.confirmTitle || "Confirmación",
+        t.deleteMenuConfirm || "¿Seguro que quieres borrar este menú?",
+        "🗑️"
+    );
+    if (!confirmed) return;
 
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user) return;
