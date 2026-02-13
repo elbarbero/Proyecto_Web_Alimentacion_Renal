@@ -1,3 +1,5 @@
+import { translations, getCurrentLang, updateTexts } from './i18n.js';
+
 export function setupCustomSelects() {
     const x = document.getElementsByClassName("custom-select");
     for (let i = 0; i < x.length; i++) {
@@ -9,12 +11,76 @@ export function setupCustomSelects() {
         const itemsDiv = x[i].querySelector(".select-items");
 
         if (selectedDiv && itemsDiv) {
+            // Check if searchable
+            const isSearchable = x[i].getAttribute("data-searchable") === "true";
+            let searchInput = null;
+
+            if (isSearchable) {
+                // Remove old search if exists
+                const existingSearch = itemsDiv.querySelector(".searchable-select-search");
+                if (existingSearch) existingSearch.remove();
+
+                const searchContainer = document.createElement("div");
+                searchContainer.className = "searchable-select-search";
+
+                searchInput = document.createElement("input");
+                searchInput.type = "text";
+                searchInput.setAttribute("data-i18n-placeholder", "searchCountryPlaceholder");
+
+                // Initial placeholder (will be refined by updateTexts() later)
+                const currentT = translations[getCurrentLang()] || translations['es'];
+                searchInput.placeholder = currentT.searchCountryPlaceholder || "Buscar...";
+
+                searchContainer.appendChild(searchInput);
+                itemsDiv.insertBefore(searchContainer, itemsDiv.firstChild);
+
+                // Prevent dropdown close on search click
+                searchContainer.addEventListener("click", (e) => e.stopPropagation());
+
+                // Filter logic
+                searchInput.addEventListener("input", function () {
+                    const filter = this.value.toLowerCase();
+                    const options = itemsDiv.querySelectorAll("div:not(.searchable-select-search):not(.no-results)");
+                    let visibleCount = 0;
+
+                    const lang = getCurrentLang();
+                    const t = translations[lang] || translations['es'];
+
+                    options.forEach(opt => {
+                        const text = opt.textContent.toLowerCase();
+                        if (text.includes(filter)) {
+                            opt.style.display = "";
+                            visibleCount++;
+                        } else {
+                            opt.style.display = "none";
+                        }
+                    });
+
+                    // Handle "No results"
+                    let noResults = itemsDiv.querySelector(".no-results");
+                    if (visibleCount === 0) {
+                        if (!noResults) {
+                            noResults = document.createElement("div");
+                            noResults.className = "no-results";
+                            noResults.setAttribute("data-i18n", "noMatches");
+                            noResults.textContent = t.noMatches || "No se encontraron resultados";
+                            itemsDiv.appendChild(noResults);
+                        } else {
+                            // Update text if language changed since creation
+                            noResults.textContent = t.noMatches || "No se encontraron resultados";
+                        }
+                    } else if (noResults) {
+                        noResults.remove();
+                    }
+                });
+            }
+
             // Determine initial selected value based on context
             let initialVal = null;
             if (x[i].id === 'language-select') {
                 // For language select, sync with current document language
                 const currentLang = document.documentElement.lang || 'es';
-                const matchingOption = Array.from(itemsDiv.querySelectorAll("div"))
+                const matchingOption = Array.from(itemsDiv.querySelectorAll("div:not(.searchable-select-search)"))
                     .find(div => div.getAttribute("data-value") === currentLang);
 
                 if (matchingOption) {
@@ -31,9 +97,20 @@ export function setupCustomSelects() {
                 closeAllSelects(this);
                 itemsDiv.classList.toggle("select-hide");
                 this.classList.toggle("select-arrow-active");
+
+                // Focus search if opening
+                if (isSearchable && !itemsDiv.classList.contains("select-hide")) {
+                    setTimeout(() => {
+                        if (searchInput) {
+                            searchInput.value = "";
+                            searchInput.dispatchEvent(new Event('input'));
+                            searchInput.focus();
+                        }
+                    }, 10);
+                }
             });
 
-            const options = itemsDiv.querySelectorAll("div");
+            const options = itemsDiv.querySelectorAll("div:not(.searchable-select-search):not(.no-results)");
             options.forEach(opt => {
                 // Clone to remove old listeners
                 const newOpt = opt.cloneNode(true);
@@ -80,7 +157,7 @@ export function setupCustomSelects() {
             });
         }
     }
-
+    updateTexts();
     document.addEventListener("click", closeAllSelects);
 }
 

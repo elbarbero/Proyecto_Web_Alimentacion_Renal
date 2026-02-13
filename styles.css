@@ -1192,6 +1192,42 @@ input:checked+.slider:before {
     color: var(--primary-color);
 }
 
+.searchable-select-search {
+    padding: 10px;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.searchable-select-search input {
+    width: 100% !important;
+    padding: 8px 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    font-size: 0.9rem !important;
+    outline: none !important;
+    background: #f8fafc !important;
+}
+
+.searchable-select-search input:focus {
+    border-color: var(--primary-color) !important;
+    background: white !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.select-items .no-results {
+    padding: 15px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
 .auth-select:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);

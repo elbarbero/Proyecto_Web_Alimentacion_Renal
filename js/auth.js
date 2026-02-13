@@ -180,7 +180,7 @@ async function populateNationalityDropdowns() {
     window.countriesCache = countriesList;
 
     // Use browser's built-in translation
-    const currentLang = document.documentElement.lang || 'es';
+    const currentLang = getCurrentLang();
     const regionNames = new Intl.DisplayNames([currentLang], { type: 'region' });
 
     const createOptions = (container) => {
@@ -647,7 +647,7 @@ async function loadProfileData() {
             if (select && country) {
                 const selectedDiv = select.querySelector('.select-selected');
                 if (selectedDiv) {
-                    const currentLang = document.documentElement.lang || 'es';
+                    const currentLang = getCurrentLang();
                     const regionNames = new Intl.DisplayNames([currentLang], { type: 'region' });
                     let name = country.code;
                     try { name = regionNames.of(country.code.toUpperCase()); } catch (e) { }

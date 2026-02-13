@@ -89,6 +89,7 @@ export const translations = {
         placeholderSurnames: "Tus apellidos",
         placeholderEmail: "ejemplo@email.com",
         placeholderPassword: "••••••••",
+        searchCountryPlaceholder: "Buscar país...",
         // Validation
         validationEmpty: "Completa este campo",
         validationEmail: "Introduce un email válido",
@@ -245,6 +246,7 @@ export const translations = {
         email: "Email",
         nationality: "Nationality",
         selectNationality: "Select Nationality",
+        searchCountryPlaceholder: "Search country...",
         password: "Password",
         country_es: "Spain", country_us: "United States", country_de: "Germany", country_fr: "France",
         country_gb: "United Kingdom", country_it: "Italy", country_pt: "Portugal", country_br: "Brazil",
@@ -432,6 +434,7 @@ export const translations = {
         forgotPassword: "Passwort vergessen?",
         noAccount: "Kein Konto?",
         registerLink: "Registrieren",
+        searchCountryPlaceholder: "Land suchen...",
         loginLink: "Anmelden",
         // Placeholders
         placeholderName: "Dein Name",
@@ -596,6 +599,7 @@ export const translations = {
         forgotPassword: "Mot de passe oublié ?",
         noAccount: "Pas de compte ?",
         registerLink: "S'inscrire",
+        searchCountryPlaceholder: "Chercher un pays...",
         loginLink: "Connexion",
         // Placeholders
         placeholderName: "Votre prénom",
@@ -760,6 +764,7 @@ export const translations = {
         forgotPassword: "Esqueceu a senha?",
         noAccount: "Não tem conta?",
         registerLink: "Registrar",
+        searchCountryPlaceholder: "Buscar país...",
         loginLink: "Entrar",
         // Placeholders
         placeholderName: "Seu nome",
@@ -924,6 +929,7 @@ export const translations = {
         forgotPassword: "パスワードをお忘れですか？",
         noAccount: "アカウントをお持ちでないですか？",
         registerLink: "登録",
+        searchCountryPlaceholder: "国を検索...",
         loginLink: "ログイン",
         // Placeholders
         placeholderName: "お名前",
