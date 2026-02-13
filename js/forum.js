@@ -75,7 +75,7 @@ export async function loadThreads() {
                     <div class="thread-meta">
                         <strong style="color: var(--primary-color)">${escapeHTML(thread.author_name)}</strong>
                         <span style="opacity: 0.5">•</span>
-                        <span>${new Date(thread.created_at).toLocaleDateString()}</span>
+                        <span>${new Date(thread.created_at).toLocaleString(getCurrentLang(), { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
                 </div>
                 <div class="thread-stats">
@@ -191,7 +191,7 @@ window.openThread = async function (threadId) {
                         <div class="author-info">
                             <strong>${escapeHTML(thread.author_name)}</strong>
                             <div class="thread-meta">
-                                <span>${new Date(thread.created_at).toLocaleDateString()}</span>
+                                <span>${new Date(thread.created_at).toLocaleString(getCurrentLang(), { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                             </div>
                         </div>
                     </div>
@@ -217,7 +217,7 @@ async function loadComments(threadId) {
                     <img src="${comment.author_avatar || 'images/default_avatar.png'}" class="author-avatar" style="width: 38px; height: 38px; border: 2px solid white; box-shadow: var(--shadow-sm);">
                     <div style="display: flex; flex-direction: column;">
                         <span class="comment-author-name">${escapeHTML(comment.author_name)}</span>
-                        <span class="comment-date">${new Date(comment.created_at).toLocaleDateString()}</span>
+                        <span class="comment-date">${new Date(comment.created_at).toLocaleString(getCurrentLang(), { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
                 </div>
                 <div class="comment-content">${escapeHTML(comment.content)}</div>
