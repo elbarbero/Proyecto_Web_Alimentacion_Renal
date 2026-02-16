@@ -6,71 +6,52 @@
 
 ## 📋 Descripción
 
-Esta aplicación web progresiva (PWA) está diseñada para ayudar a personas con enfermedad renal crónica (ERC) a gestionar su dieta de manera precisa. Permite consultar valores nutricionales críticos (**Potasio**, **Fósforo**, **Proteínas**) y ofrece un asistente inteligente (Chatbot) personalizado basado en el perfil médico del usuario.
+Esta aplicación web es una herramienta diseñada para ayudar a personas con enfermedad renal crónica (ERC) a gestionar su dieta de manera precisa. Permite consultar valores nutricionales críticos (**Potasio**, **Fósforo**, **Proteínas**) y ofrece un asistente inteligente (Chatbot) personalizado basado en el perfil médico del usuario.
 
-La interfaz sigue principios de **Glassmorphism** y diseño moderno, asegurando accesibilidad y una experiencia visual premium.
+El proyecto destaca por su arquitectura modular, su sistema de cache-busting para entornos de producción y una interfaz moderna basada en **Glassmorphism**.
 
 ## ✨ Características Principales
 
 *   **🔍 Buscador y Filtros**: Búsqueda instantánea de alimentos clasificados por idoneidad renal.
-*   **📊 Semáforo Nutricional**: Indicadores visuales (Verde/Amarillo/Rojo) para Potasio y Fósforo.
-*   **👤 Perfil Médico Personalizado**: Ajusta las recomendaciones según tu estadio (1-5), si estás en diálisis o trasplante.
-*   **🤖 Smart Chatbot**: Asistente con IA (Gemini) que responde dudas nutricionales con contexto médico ("¿Puedo comer plátano si estoy en estadio 4?").
-*   **🌍 Multi-idioma**: Soporte completo para Español, Inglés, Alemán, Francés, Portugués y Japonés.
-*   **🔐 Autenticación Completa**: Registro, Login, Recuperación de contraseña y gestión de perfil.
-*   **📱 Diseño Responsive**: Optimizado para móviles, tablets y escritorio.
+*   **📊 Semáforo Nutricional**: Indicadores visuales claros para Potasio y Fósforo.
+*   **👤 Perfil Médico Personalizado**: Ajuste automático de recomendaciones según estadio (1-5), diálisis o trasplante.
+*   **🤖 Smart Chatbot**: Integración con Google Gemini para resolver dudas nutricionales con contexto.
+*   **🌍 Multi-idioma**: Soporte completo para ES, EN, DE, FR, PT y JA.
+*   **🔐 Autenticación Robusta**: Flujos de registro, login y recuperación de contraseña (fix de solapamiento implementado).
+*   **⚡ Cache Busting Total**: Sistema para forzar la recarga de módulos JS, CSS y componentes HTML en producción.
+*   **📱 Diseño Responsive**: Experiencia premium en cualquier dispositivo.
 
 ## 🛠️ Arquitectura y Tecnologías
 
-El proyecto ha sido refactorizado a una arquitectura modular para facilitar la mantenibilidad:
-
 ### Frontend
-*   **Core**: HTML5, CSS3 (Variables, Animations, Glassmorphism), Vanilla JS (ES6 Modules).
-*   **Estructura**:
-    *   `js/api.js`: Capa de comunicación con el backend.
-    *   `js/i18n.js`: Motor de internacionalización.
-    *   `js/auth.js`: Gestión de usuarios y sesiones.
-    *   `js/chat.js`: Lógica del asistente IA.
-    *   `components/`: HTML dinámico inyectado (Modales, Widgets).
+- **Core**: HTML5, CSS3, Vanilla JS (ES6 Modules).
+- **Lógica**: 
+  - `app.js`: Punto de entrada con versionado de módulos.
+  - `auth.js`: Gestión de sesiones y visibilidad de vistas por clases.
+  - `loader.js`: Cargador de componentes con sistema anti-caché.
+  - `i18n.js`: Motor de traducción internacional.
 
-### Backend
-*   **Servidor**: Python puro (`http.server` extendido).
-*   **Módulos (`backend/handlers/`)**:
-    *   `auth.py`: Endpoints de autenticación (JWT/Sessions).
-    *   `chat.py`: Integración con Google Gemini API.
-    *   `foods.py`: API de alimentos y búsqueda.
-*   **Base de Datos**: SQLite3 (`renal_diet.db`).
+### Backend & DevOps
+- **Servidor**: Python `http.server` y Docker (Nginx/Python).
+- **Base de Datos**: SQLite3 (`renal_diet.db` incluida en el repo).
+- **Despliegue**: Optimizado para VPS con **Docker Compose**.
 
-## 🚀 Instalación y Uso
+## 🚀 Instalación y Despliegue
 
-1.  **Clonar el repositorio**:
-    ```bash
-    git clone https://github.com/elbarbero/Proyecto_Web_Alimentacion_Renal.git
-    cd Proyecto_Web_Alimentacion_Renal
-    ```
+### Entorno Local
+1.  **Clonar**: `git clone [url-del-repo]`
+2.  **Configurar**: Crea un `.env` con `GEMINI_API_KEY`.
+3.  **Lanzar**: `python server.py` o vía Docker.
 
-2.  **Configuración**:
-    Crea un archivo `.env` en la raíz del proyecto con tu API Key de Gemini:
-    ```env
-    GEMINI_API_KEY=tu_api_key_aqui
-    ```
-
-3.  **Ejecutar el servidor**:
-    Asegúrate de tener Python 3.x instalado.
-    ```bash
-    python server.py
-    ```
-
-4.  **Acceder a la web**:
-    Abre tu navegador y visita:
-    [http://localhost:8000](http://localhost:8000)
+### Entorno de Producción (VPS)
+El proyecto está preparado para desplegarse mediante Docker Compose:
+```bash
+docker compose up -d --build
+```
 
 ## 📄 Licencia y Legal
 
-Esta aplicación es una herramienta informativa y educativa. **No sustituye el consejo médico profesional.**
-
-*   **Términos y Condiciones**: Disponibles en el pie de página de la aplicación.
-*   **Privacidad**: Los datos médicos se utilizan únicamente para personalizar la experiencia dentro de la app.
+Esta aplicación es estrictamente **informativa**. El usuario debe verificar siempre los datos con su nefrólogo. Los términos y condiciones están disponibles en la propia aplicación.
 
 ---
 Desarrollado con ❤️ para mejorar la calidad de vida renal.
