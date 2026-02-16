@@ -2,7 +2,7 @@
 
 > **Tu compañera digital para el control nutricional avanzado en pacientes renales.**
 
-![Preview del Proyecto](https://via.placeholder.com/800x400?text=Web+Alimentaci%C3%B3n+Renal)
+![Preview del Proyecto](assets/preview.png)
 
 ## 📋 Descripción
 
