@@ -12,7 +12,9 @@ run_migrations()
 class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed_path = urllib.parse.urlparse(self.path)
-        path = parsed_path.path
+        path = urllib.parse.unquote(parsed_path.path)
+        if '?' in path:
+            path = path.split('?')[0]
         
         # API Routes
         if path == '/api/get_user':
