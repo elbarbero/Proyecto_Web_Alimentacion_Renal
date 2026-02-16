@@ -443,9 +443,6 @@ async function handleAuthSubmit(e) {
                 birthdate: data.birthdate,
                 has_insufficiency: data.has_insufficiency,
                 treatment_type: data.treatment_type,
-                treatment_type: data.treatment_type,
-                kidney_stage: data.kidney_stage,
-                treatment_type: data.treatment_type,
                 kidney_stage: data.kidney_stage,
                 nationality: data.nationality,
                 email: data.email || payload.email, // Prefer backend source
@@ -753,14 +750,22 @@ async function handleMedicalSubmit(e) {
         if (res.ok) {
             // Upload avatar if pending
             if (pendingAvatarUpload) {
-                const avRes = await fetch('/api/upload_avatar', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: user.email, image_data: pendingAvatarUpload })
-                });
-                if (avRes.ok) {
-                    const avData = await avRes.json();
-                    user.avatar_url = avData.avatar_url;
+                console.log('handleMedicalSubmit: uploading avatar...');
+                try {
+                    const avRes = await fetch('/api/upload_avatar', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: user.email, image_data: pendingAvatarUpload })
+                    });
+                    if (avRes.ok) {
+                        const avData = await avRes.json();
+                        user.avatar_url = avData.avatar_url;
+                        console.log('handleMedicalSubmit: avatar uploaded successfully', user.avatar_url);
+                    } else {
+                        console.error('handleMedicalSubmit: avatar upload failed on server');
+                    }
+                } catch (avErr) {
+                    console.error('handleMedicalSubmit: avatar upload fetch error', avErr);
                 }
             }
 
@@ -774,11 +779,14 @@ async function handleMedicalSubmit(e) {
             user.nationality = payload.nationality;
             localStorage.setItem('user', JSON.stringify(user));
 
+            console.log('handleMedicalSubmit: profile and avatar sync complete');
             closeMedicalModal();
             updateUserAvatar(user.avatar_url);
 
             // Clear password
             if (profilePassword) profilePassword.value = '';
+
+            // Show alert and THEN reload
             await showAlert(t.profileUpdatedTitle || 'Perfil', t.profileUpdatedMsg || '¡Perfil actualizado!', "✅");
             location.reload();
 
