@@ -37,7 +37,8 @@ export function initAuthState() {
             if (avatarImg && user.avatar_url) {
                 if (userBtn) userBtn.classList.add('has-avatar');
                 const timestamp = new Date().getTime();
-                const url = user.avatar_url;
+                let url = user.avatar_url;
+                if (!url.startsWith('/')) url = '/' + url;
                 avatarImg.src = url.includes('?') ? `${url}&t=${timestamp}` : `${url}?t=${timestamp}`;
             }
         } catch (e) {
@@ -821,10 +822,11 @@ function updateUserAvatar(url) {
 
     if (userBtn && avatarImg) {
         userBtn.classList.add('has-avatar');
-        if (url.includes('?')) {
-            avatarImg.src = `${url}&t=${new Date().getTime()}`;
+        let absoluteUrl = url.startsWith('/') ? url : '/' + url;
+        if (absoluteUrl.includes('?')) {
+            avatarImg.src = `${absoluteUrl}&t=${new Date().getTime()}`;
         } else {
-            avatarImg.src = `${url}?t=${new Date().getTime()}`;
+            avatarImg.src = `${absoluteUrl}?t=${new Date().getTime()}`;
         }
     }
 }

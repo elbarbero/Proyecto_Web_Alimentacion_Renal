@@ -122,7 +122,7 @@ def handle_upload_avatar(data, handler):
             f.write(file_content)
         
         # Consistent URL path
-        db_path = f"images/avatars/{filename}"
+        db_path = f"/images/avatars/{filename}"
         cursor.execute("UPDATE users SET avatar_url = ? WHERE id = ?", (db_path, user_id))
         conn.commit()
         conn.close()
