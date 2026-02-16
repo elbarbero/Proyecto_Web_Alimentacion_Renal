@@ -5,7 +5,8 @@
 
 export async function loadComponent(path, targetSelector = null) {
     try {
-        const response = await fetch(path);
+        const cacheBuster = `?t=${new Date().getTime()}`;
+        const response = await fetch(path + cacheBuster);
         if (!response.ok) throw new Error(`Failed to load ${path}`);
 
         const html = await response.text();

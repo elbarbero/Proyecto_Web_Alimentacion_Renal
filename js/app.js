@@ -1,15 +1,15 @@
-import { updateTexts, getCurrentLang } from './i18n.js';
-import { setupCustomSelects, togglePasswordVisibility, showView } from './ui.js';
-import { initFoods } from './foods.js';
-import { setupAuth, initAuthState } from './auth.js';
-import { setupChat } from './chat.js';
-import { initMenus } from './menus.js';
+import { updateTexts, getCurrentLang } from './i18n.js?v=2';
+import { setupCustomSelects, togglePasswordVisibility, showView } from './ui.js?v=2';
+import { initFoods } from './foods.js?v=2';
+import { setupAuth, initAuthState } from './auth.js?v=2';
+import { setupChat } from './chat.js?v=2';
+import { initMenus } from './menus.js?v=2';
 
 // Global Scope Exports for HTML (onclick handlers if any remain)
 window.togglePasswordVisibility = togglePasswordVisibility;
 window.showView = showView;
 
-import { loadComponent } from './loader.js';
+import { loadComponent } from './loader.js?v=2';
 
 async function initApp() {
     console.log('Initializing App...');

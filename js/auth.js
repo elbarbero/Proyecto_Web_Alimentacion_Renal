@@ -59,10 +59,17 @@ export function setupAuth() {
     authSubmit = document.getElementById('auth-submit');
     switchRegister = document.getElementById('switch-to-register');
     authError = document.getElementById('auth-error');
-    authBody = document.querySelector('.auth-body:not(#forgot-password-view):not(#reset-password-view)');
+    authBody = document.getElementById('login-register-view');
 
     forgotView = document.getElementById('forgot-password-view');
     resetView = document.getElementById('reset-password-view');
+
+    console.log('setupAuth: Elements found:', {
+        authModal: !!authModal,
+        authBody: !!authBody,
+        forgotView: !!forgotView,
+        resetView: !!resetView
+    });
     forgotForm = document.getElementById('forgot-form');
     resetForm = document.getElementById('reset-form');
     forgotMsg = document.getElementById('forgot-msg');
@@ -273,10 +280,25 @@ function openAuthModal() {
     const checkboxGroup = document.querySelector('.checkbox-group');
     if (checkboxGroup) checkboxGroup.classList.remove('checkbox-error');
     if (authError) authError.textContent = '';
-    if (authForm) authForm.style.display = 'block';
-    if (forgotView) forgotView.style.display = 'none';
-    if (resetView) resetView.style.display = 'none';
-    if (authBody) authBody.style.display = 'block';
+
+    console.log('openAuthModal: Resetting view states...');
+    // Use direct ID selection and .hidden-view class for robustness
+    const loginView = document.getElementById('login-register-view');
+    const fView = document.getElementById('forgot-password-view');
+    const rView = document.getElementById('reset-password-view');
+
+    if (loginView) {
+        loginView.classList.remove('hidden-view');
+        loginView.style.display = 'block'; // Fallback
+    }
+    if (fView) {
+        fView.classList.add('hidden-view');
+        fView.style.display = 'none'; // Fallback
+    }
+    if (rView) {
+        rView.classList.add('hidden-view');
+        rView.style.display = 'none'; // Fallback
+    }
 
     const tabs = document.querySelector('.auth-tabs');
     if (tabs) tabs.style.display = 'flex';
@@ -801,20 +823,41 @@ function setupForgotReset() {
     const t = translations[getCurrentLang()];
     const btn = document.getElementById('forgot-password-btn');
     if (btn) {
-        btn.addEventListener('click', (e) => {
+        console.log('setupForgotReset: Attaching listener to forgot-password-btn');
+        btn.onclick = (e) => { // Using onclick for maximum compatibility/override
             e.preventDefault();
-            if (authBody) authBody.style.display = 'none';
-            if (forgotView) forgotView.style.display = 'block';
-        });
+            console.log('Forgot password clicked: hiding main login view...');
+            const loginView = document.getElementById('login-register-view');
+            const fView = document.getElementById('forgot-password-view');
+
+            if (loginView) {
+                loginView.classList.add('hidden-view');
+                loginView.style.display = 'none';
+            }
+            if (fView) {
+                fView.classList.remove('hidden-view');
+                fView.style.display = 'block';
+            }
+        };
     }
 
     const back = document.getElementById('back-to-login');
     if (back) {
-        back.addEventListener('click', (e) => {
+        back.onclick = (e) => {
             e.preventDefault();
-            if (forgotView) forgotView.style.display = 'none';
-            if (authBody) authBody.style.display = 'block';
-        });
+            console.log('Back to login clicked');
+            const loginView = document.getElementById('login-register-view');
+            const fView = document.getElementById('forgot-password-view');
+
+            if (fView) {
+                fView.classList.add('hidden-view');
+                fView.style.display = 'none';
+            }
+            if (loginView) {
+                loginView.classList.remove('hidden-view');
+                loginView.style.display = 'block';
+            }
+        };
     }
 
     if (forgotForm) {
@@ -893,11 +936,12 @@ function checkResetToken() {
         // Open Modal
         authModal.classList.add('active');
 
-        // Hide others
-        if (authBody) authBody.style.display = 'none';
-        if (forgotView) forgotView.style.display = 'none';
+        // Hide others using utility class
+        document.getElementById('login-register-view')?.classList.add('hidden-view');
+        document.getElementById('forgot-password-view')?.classList.add('hidden-view');
 
         // Show Reset View
-        if (resetView) resetView.style.display = 'block';
+        const rView = document.getElementById('reset-password-view');
+        if (rView) rView.classList.remove('hidden-view');
     }
 }

@@ -21,3 +21,7 @@ Thumbs.db
 
 # User uploaded content
 images/avatars/
+
+# SSH Keys
+ssh-key-web-renal-hostinguer
+ssh-key-web-renal-hostinguer.pub

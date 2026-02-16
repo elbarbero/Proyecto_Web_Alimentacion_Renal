@@ -2,7 +2,7 @@
 <div id="auth-modal" class="modal">
     <div class="modal-content auth-content">
         <span class="close-modal" id="close-auth">&times;</span>
-        <div class="auth-body">
+        <div class="auth-body" id="login-register-view">
             <div class="auth-tabs">
                 <button class="auth-tab active" id="tab-login" data-i18n="loginBtn">Iniciar Sesión</button>
                 <button class="auth-tab" id="tab-register" data-i18n="registerBtn">Registrarse</button>
@@ -93,7 +93,7 @@
         </div>
 
         <!-- Forgot Password REQUEST View -->
-        <div id="forgot-password-view" class="auth-body" style="display: none;">
+        <div id="forgot-password-view" class="auth-body hidden-view">
             <h2 data-i18n="forgotPasswordTitle">Recuperar Contraseña</h2>
             <p class="auth-subtitle" data-i18n="forgotPasswordDesc" style="margin-bottom: 1.5rem;">Ingresa tu email
                 y te enviaremos un enlace para restablecerla.</p>
@@ -115,7 +115,7 @@
         </div>
 
         <!-- RESET Password View -->
-        <div id="reset-password-view" class="auth-body" style="display: none;">
+        <div id="reset-password-view" class="auth-body hidden-view">
             <h2 data-i18n="resetPasswordTitle">Nueva Contraseña</h2>
             <p class="auth-subtitle" data-i18n="resetPasswordDesc" style="margin-bottom: 1.5rem;">Introduce tu nueva
                 contraseña.</p>

@@ -2298,6 +2298,10 @@ input:checked+.slider:before {
     max-width: 650px;
 }
 
+.hidden-view {
+    display: none !important;
+}
+
 /* Ensure nationality doesn't wrap */
 .custom-select .select-selected {
     white-space: nowrap;
