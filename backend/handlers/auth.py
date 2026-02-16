@@ -60,7 +60,7 @@ def handle_register(data, handler):
     
     try:
         cursor.execute("INSERT INTO users (email, password_hash, name, surnames, birthdate, nationality, terms_accepted_at, avatar_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
-                       (email, hashed_pw, name, surnames, birthdate, nationality, terms_accepted_at, 'images/default_avatar.png'))
+                       (email, hashed_pw, name, surnames, birthdate, nationality, terms_accepted_at, '/images/default_avatar.png'))
         conn.commit()
         user_id = cursor.lastrowid
         conn.close()

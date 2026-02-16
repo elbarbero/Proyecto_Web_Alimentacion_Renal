@@ -36,7 +36,10 @@ export function initAuthState() {
             const avatarImg = document.getElementById('user-avatar-img');
             if (avatarImg && user.avatar_url) {
                 if (userBtn) userBtn.classList.add('has-avatar');
-                avatarImg.src = user.avatar_url;
+                const timestamp = new Date().getTime();
+                let url = user.avatar_url;
+                if (!url.startsWith('/')) url = '/' + url;
+                avatarImg.src = url.includes('?') ? `${url}&t=${timestamp}` : `${url}?t=${timestamp}`;
             }
         } catch (e) {
             console.error('initAuthState: Error parsing user', e);
@@ -510,6 +513,17 @@ function setupMedicalProfile() {
         avatarInput.addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file) {
+                // Size validation (2MB limit for VPS stability)
+                if (file.size > 2 * 1024 * 1024) {
+                    showDialog(
+                        i18n.t('error_title') || 'Error',
+                        'La imagen es demasiado grande. Máximo 2MB.',
+                        'error'
+                    );
+                    e.target.value = ''; // Clear input
+                    return;
+                }
+
                 const reader = new FileReader();
                 reader.onload = function (e) {
                     avatarPreview.src = e.target.result;
@@ -819,10 +833,11 @@ function updateUserAvatar(url) {
 
     if (userBtn && avatarImg) {
         userBtn.classList.add('has-avatar');
-        if (url.includes('?')) {
-            avatarImg.src = `${url}&t=${new Date().getTime()}`;
+        let absoluteUrl = url.startsWith('/') ? url : '/' + url;
+        if (absoluteUrl.includes('?')) {
+            avatarImg.src = `${absoluteUrl}&t=${new Date().getTime()}`;
         } else {
-            avatarImg.src = `${url}?t=${new Date().getTime()}`;
+            avatarImg.src = `${absoluteUrl}?t=${new Date().getTime()}`;
         }
     }
 }
