@@ -45,6 +45,8 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
         # Static Files Routing
         if path == '/':
              self.path = '/index.html'
+        else:
+             self.path = path # Clean query params for static files
         
         return super().do_GET()
 
