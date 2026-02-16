@@ -36,7 +36,9 @@ export function initAuthState() {
             const avatarImg = document.getElementById('user-avatar-img');
             if (avatarImg && user.avatar_url) {
                 if (userBtn) userBtn.classList.add('has-avatar');
-                avatarImg.src = user.avatar_url;
+                const timestamp = new Date().getTime();
+                const url = user.avatar_url;
+                avatarImg.src = url.includes('?') ? `${url}&t=${timestamp}` : `${url}?t=${timestamp}`;
             }
         } catch (e) {
             console.error('initAuthState: Error parsing user', e);
