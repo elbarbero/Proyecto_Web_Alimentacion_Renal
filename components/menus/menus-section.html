@@ -6,46 +6,104 @@
             <button id="new-menu-btn" class="btn-primary" data-i18n="newMenu"> + Nuevo Menú</button>
         </div>
 
-        <!-- Menu Creation Form (Hidden by default) -->
-        <div id="menu-creation-form" class="glass-card hidden">
-            <div class="form-header">
-                <input type="text" id="menu-name-meta" placeholder="Nombre del menú (Ej: Miércoles saludable)"
-                    data-i18n-placeholder="menuNamePlaceholder" class="menu-name-input">
-
-                <div class="privacy-toggle-container">
-                    <label class="switch">
-                        <input type="checkbox" id="menu-public-toggle">
-                        <span class="slider round"></span>
-                    </label>
-                    <span id="privacy-status-text" data-i18n="private">Privado</span>
-                </div>
-            </div>
-
-            <div class="creation-columns">
-                <div class="search-column">
-                    <div class="form-group">
-                        <label data-i18n="addFood">Añadir Alimento</label>
-                        <input type="text" id="food-search-menu" placeholder="Buscar alimento..."
-                            data-i18n-placeholder="foodSearchPlaceholder" class="search-field">
-                        <div id="food-results-menu" class="search-results-mini"></div>
+        <!-- Menu Creation Form (Builder Mode) -->
+        <div id="menu-creation-form" class="menu-builder-card hidden">
+            <div class="builder-header">
+                <div class="builder-title-section">
+                    <input type="text" id="menu-name-meta" placeholder="Nombre de tu menú..."
+                        data-i18n-placeholder="menuNamePlaceholder" class="builder-name-input">
+                    <div class="builder-badge-row">
+                        <div class="privacy-toggle-container">
+                            <label class="switch">
+                                <input type="checkbox" id="menu-public-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                            <span id="privacy-status-text" data-i18n="private">Privado</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="items-column">
-                    <label data-i18n="selectedItems">Alimentos Seleccionados</label>
-                    <div id="selected-items" class="selected-items-list">
-                        <!-- Items added here -->
-                    </div>
+                <div class="builder-actions-top">
+                    <button id="cancel-menu-btn" class="btn-ghost" data-i18n="cancel">Cancelar</button>
+                    <button id="save-menu-btn" class="btn-primary btn-glow" data-i18n="saveMenu">Guardar Menú</button>
                 </div>
             </div>
 
-            <div id="menu-totals" class="menu-totals-panel">
-                <!-- Totals go here -->
-            </div>
+            <div class="builder-main-layout">
+                <!-- Left: Search & Discovery -->
+                <div class="builder-search-column">
+                    <div class="search-box-wrapper">
+                        <svg class="search-field-icon" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="food-search-menu" placeholder="Busca ingredientes para añadir..."
+                            data-i18n-placeholder="foodSearchPlaceholder" class="builder-search-field">
+                    </div>
+                    <div id="builder-discovery" class="builder-discovery">
+                        <div class="discovery-header">
+                            <h4 data-i18n="quickStart">¿Por dónde empezamos?</h4>
+                            <p data-i18n="quickStartDesc">Selecciona una categoría o busca tu ingrediente</p>
+                        </div>
+                        <div class="quick-categories-grid">
+                            <button class="quick-cat-btn" data-cat="fruits"><span>🍎</span> <label
+                                    data-i18n="catFruitsMenu">Frutas</label></button>
+                            <button class="quick-cat-btn" data-cat="vegetables"><span>🥦</span> <label
+                                    data-i18n="catVegetablesMenu">Verduras</label></button>
+                            <button class="quick-cat-btn" data-cat="proteins"><span>🍗</span> <label
+                                    data-i18n="catProteinsMenu">Proteínas</label></button>
+                            <button class="quick-cat-btn" data-cat="dairy"><span>🥛</span> <label
+                                    data-i18n="catDairyMenu">Lácteos</label></button>
+                            <button class="quick-cat-btn" data-cat="carbs"><span>🌾</span> <label
+                                    data-i18n="catCerealsMenu">Cereales</label></button>
+                            <button class="quick-cat-btn" data-cat="drinks"><span>💧</span> <label
+                                    data-i18n="catDrinksMenu">Bebidas</label></button>
+                        </div>
+                        <div class="builder-tips-container">
+                            <div class="builder-tip-card">
+                                <span class="tip-icon">💡</span>
+                                <p data-i18n="tipPotassium">Recordatorio: Remoja las legumbres y tubérculos para reducir
+                                    el potasio.</p>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="form-actions">
-                <button id="cancel-menu-btn" class="btn-secondary" data-i18n="cancel">Cancelar</button>
-                <button id="save-menu-btn" class="btn-primary" data-i18n="saveMenu">Guardar Menú</button>
+                    <div id="food-results-container-menu" class="hidden">
+                        <div id="results-header" class="results-header">
+                            <button id="back-to-discovery" class="btn-back-mini">
+                                <span>←</span> <label data-i18n="back">Volver</label>
+                            </button>
+                            <h4 id="results-title">Resultados</h4>
+                        </div>
+                        <div id="food-results-menu" class="builder-results-grid">
+                            <!-- Visual search results cards will appear here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Selection & Weights -->
+                <div class="builder-selection-column">
+                    <div class="selection-header">
+                        <h3 data-i18n="selectedItems">Alimentos Seleccionados</h3>
+                        <span id="selected-count-badge" class="count-badge">0</span>
+                    </div>
+                    <div id="selected-items" class="builder-items-list">
+                        <!-- Selected items with modern row design -->
+                        <div class="empty-selection-placeholder">
+                            <div class="placeholder-icon">🍲</div>
+                            <p data-i18n="emptySelection">Añade alimentos para empezar a calcular</p>
+                        </div>
+                    </div>
+
+                    <!-- Modern Nutrient Dashboard -->
+                    <div class="builder-dashboard">
+                        <h3 data-i18n="totalSummary">Análisis Nutricional Total</h3>
+                        <div id="menu-totals" class="dashboard-grid">
+                            <!-- Nutrient cards go here -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
