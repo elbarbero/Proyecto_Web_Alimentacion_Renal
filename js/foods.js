@@ -210,6 +210,15 @@ function renderTabs() {
             activeCategory = cat.id;
             document.querySelectorAll('.category-tab').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+
+            // Google Analytics: Category Change
+            if (typeof gtag === 'function') {
+                gtag('event', 'select_content', {
+                    content_type: 'food_category',
+                    item_id: cat.id
+                });
+            }
+
             filterAndRender();
         });
 
@@ -244,6 +253,13 @@ export function filterAndRender() {
     });
 
     renderGrid(filtered);
+
+    // Google Analytics: Search Tracking (only if there is a term)
+    if (searchTerm && typeof gtag === 'function') {
+        gtag('event', 'search', {
+            search_term: searchTerm
+        });
+    }
 }
 
 function renderGrid(foodsToRender) {
@@ -276,6 +292,19 @@ export function openModal(food) {
     updateNutrients(0);
     modal.classList.add('active');
     document.body.style.overflow = 'hidden'; // Lock body scroll
+
+    // Google Analytics: Food Detail View
+    if (typeof gtag === 'function') {
+        gtag('event', 'view_item', {
+            currency: 'N/A',
+            value: 0,
+            items: [{
+                item_id: food.id || food.name,
+                item_name: getFoodName(food),
+                item_category: food.category
+            }]
+        });
+    }
 }
 
 export function closeModal() {

@@ -258,6 +258,15 @@ export function showView(viewId, saveHistory = true) {
     const event = new CustomEvent('viewChanged', { detail: { viewId } });
     document.dispatchEvent(event);
 
+    // Google Analytics Virtual Page View
+    if (typeof gtag === 'function') {
+        gtag('event', 'page_view', {
+            page_title: viewId,
+            page_location: window.location.href,
+            page_path: '/' + viewId
+        });
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 

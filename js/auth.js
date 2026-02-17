@@ -458,6 +458,15 @@ async function handleAuthSubmit(e) {
             closeAuthModal();
             authForm.reset();
 
+            // Google Analytics: Auth Success
+            if (typeof gtag === 'function') {
+                if (isRegistering) {
+                    gtag('event', 'sign_up', { method: 'email' });
+                } else {
+                    gtag('event', 'login', { method: 'email' });
+                }
+            }
+
             if (isRegistering) {
                 // Open Profile for setup
                 loadProfileData();

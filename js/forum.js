@@ -153,6 +153,14 @@ async function handleNewThreadSubmit(e) {
             document.getElementById('new-thread-form').reset();
             document.getElementById('new-thread-modal').classList.remove('active');
             loadThreads();
+
+            // Google Analytics: Thread Created
+            if (typeof gtag === 'function') {
+                gtag('event', 'create_thread', {
+                    thread_title: title
+                });
+            }
+
             const t = translations[getCurrentLang()];
             showAlert(t.forum || 'Foro', t.threadCreated || '¡Tema creado!', "✅");
         } else {
@@ -199,6 +207,14 @@ window.openThread = async function (threadId) {
                 <div class="thread-content">${escapeHTML(thread.content)}</div>
             `;
             loadComments(threadId);
+
+            // Google Analytics: Thread View
+            if (typeof gtag === 'function') {
+                gtag('event', 'view_thread', {
+                    thread_id: thread.id,
+                    thread_title: thread.title
+                });
+            }
         }
     } catch (err) {
         console.error('Error loading thread detail:', err);
@@ -251,6 +267,13 @@ async function handleCommentSubmit(e) {
             loadComments(currentThreadId);
             // Update thread list in background to refresh comment count
             loadThreads();
+
+            // Google Analytics: Comment Created
+            if (typeof gtag === 'function') {
+                gtag('event', 'create_comment', {
+                    thread_id: currentThreadId
+                });
+            }
         }
     } catch (err) {
         console.error('Error posting comment:', err);
