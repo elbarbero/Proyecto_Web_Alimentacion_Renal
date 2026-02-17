@@ -46,7 +46,32 @@ export async function initMenus() {
     });
     if (cancelMenuBtn) cancelMenuBtn.addEventListener('click', () => toggleCreation(false));
     if (saveMenuBtn) saveMenuBtn.addEventListener('click', handleSaveMenu);
-    if (foodSearchInput) foodSearchInput.addEventListener('input', handleFoodSearch);
+    const builderDiscovery = document.getElementById('builder-discovery');
+    const resultsContainer = document.getElementById('food-results-container-menu');
+    const backBtn = document.getElementById('back-to-discovery');
+
+    if (foodSearchInput) {
+        foodSearchInput.addEventListener('input', handleFoodSearch);
+    }
+
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            if (foodSearchInput) foodSearchInput.value = '';
+            if (foodSearchResults) foodSearchResults.innerHTML = '';
+            if (resultsContainer) resultsContainer.classList.add('hidden');
+            if (builderDiscovery) builderDiscovery.classList.remove('hidden');
+        });
+    }
+
+    // Quick Category listeners
+    const quickCatBtns = document.querySelectorAll('.quick-cat-btn');
+    quickCatBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const cat = btn.getAttribute('data-cat');
+            const label = btn.querySelector('label')?.textContent || cat;
+            handleCategorySearch(cat, label);
+        });
+    });
     if (menuPublicToggle) {
         menuPublicToggle.addEventListener('change', updatePrivacyText);
     }
@@ -170,17 +195,21 @@ function openMenu(menu) {
     const lang = getCurrentLang();
     currentMenu = {
         name: menu.name,
-        user_id: menu.user_id, // Store owner id
-        items: menu.items.map(it => ({
-            food_id: it.food_id,
-            food_data: {
-                name: it.names[lang] || it.name,
-                names: it.names,
-                nutrients: it.nutrients
-            },
-            quantity: it.quantity,
-            meal_type: it.meal_type
-        }))
+        user_id: menu.user_id,
+        items: menu.items.map(it => {
+            const foodName = it.names ? (it.names[lang] || it.names['es'] || it.name) : it.name;
+            return {
+                food_id: it.food_id,
+                food_data: {
+                    ...it,
+                    name: foodName,
+                    nutrients: it.nutrients || {},
+                    vitamins: it.vitamins || {}
+                },
+                quantity: it.quantity,
+                meal_type: it.meal_type
+            };
+        })
     };
 
     toggleCreation(true);
@@ -218,9 +247,22 @@ function toggleCreation(show) {
 
 function handleFoodSearch() {
     const query = foodSearchInput.value.toLowerCase();
+    const builderDiscovery = document.getElementById('builder-discovery');
+    const resultsContainer = document.getElementById('food-results-container-menu');
+    const resultsTitle = document.getElementById('results-title');
+
     if (query.length < 2) {
         foodSearchResults.innerHTML = '';
+        if (resultsContainer) resultsContainer.classList.add('hidden');
+        if (builderDiscovery) builderDiscovery.classList.remove('hidden');
         return;
+    }
+
+    // Hide discovery when searching
+    if (builderDiscovery) builderDiscovery.classList.add('hidden');
+    if (resultsContainer) {
+        resultsContainer.classList.remove('hidden');
+        if (resultsTitle) resultsTitle.textContent = translations[getCurrentLang()].results || 'Resultados';
     }
 
     const lang = getCurrentLang();
@@ -228,19 +270,70 @@ function handleFoodSearch() {
     const matches = foodDatabase.filter(food => {
         const name = food.names[lang] || food.name;
         return normalizeText(name).includes(normalizedQuery);
-    }).slice(0, 20);
+    }).slice(0, 15);
 
+    renderSearchResults(matches);
+}
+
+function handleCategorySearch(category, label) {
+    const builderDiscovery = document.getElementById('builder-discovery');
+    const resultsContainer = document.getElementById('food-results-container-menu');
+    const resultsTitle = document.getElementById('results-title');
+
+    if (builderDiscovery) builderDiscovery.classList.add('hidden');
+    if (resultsContainer) {
+        resultsContainer.classList.remove('hidden');
+        if (resultsTitle) resultsTitle.textContent = label;
+    }
+
+    foodSearchInput.value = ''; // Clear search text
+
+    // Use .includes because food.category can be a comma-separated list
+    const matches = foodDatabase.filter(food => {
+        if (!food.category) return false;
+        const cats = food.category.split(',');
+        return cats.includes(category);
+    }).slice(0, 15);
+
+    renderSearchResults(matches);
+}
+
+function renderSearchResults(matches) {
+    const lang = getCurrentLang();
     foodSearchResults.innerHTML = '';
+
+    if (matches.length === 0) {
+        foodSearchResults.innerHTML = `<p class="no-results-mini">${translations[lang].noMatches || 'No hay resultados'}</p>`;
+        return;
+    }
+
     matches.forEach(food => {
-        const item = document.createElement('div');
-        item.className = 'search-result-item';
-        item.innerHTML = `
-            <span>${food.names[lang] || food.name}</span>
-            <span class="add-icon">+</span>
+        const card = document.createElement('div');
+        card.className = 'food-builder-card';
+        const icon = getCategoryIcon(food.category);
+
+        card.innerHTML = `
+            <span class="food-icon">${icon}</span>
+            <span class="food-name">${food.names[lang] || food.name}</span>
         `;
-        item.addEventListener('click', () => addFoodToMenu(food));
-        foodSearchResults.appendChild(item);
+        card.addEventListener('click', () => addFoodToMenu(food));
+        foodSearchResults.appendChild(card);
     });
+}
+
+function getCategoryIcon(category) {
+    const icons = {
+        'Frutas': '🍎',
+        'Verduras': '🥦',
+        'Lácteos': '🥛',
+        'Carnes': '🍗',
+        'Pescados': '🐟',
+        'Cereales': '🍞',
+        'Legumbres': '🫘',
+        'Mis Alimentos': '✨',
+        'Todos': '🍲'
+    };
+    return icons[category] || '🥗';
 }
 
 function updatePrivacyText() {
@@ -262,21 +355,43 @@ function addFoodToMenu(food) {
         return; // Security guard
     }
 
-    currentMenu.items.push({
-        food_id: food.id,
-        food_data: food,
-        quantity: 100,
-        meal_type: 'generic'
-    });
+    // Check if food already exists in menu to increment quantity instead of duplicating row
+    const existingItem = currentMenu.items.find(it => it.food_id === food.id);
 
-    foodSearchInput.value = '';
-    foodSearchResults.innerHTML = '';
+    if (existingItem) {
+        existingItem.quantity = (parseFloat(existingItem.quantity) || 0) + 100;
+        showToast(`${translations[getCurrentLang()].foodAdded || "Alimento añadido"} (+100g)`, "success");
+    } else {
+        currentMenu.items.push({
+            food_id: food.id,
+            food_data: food,
+            quantity: 100,
+            meal_type: 'generic'
+        });
+        showToast(translations[getCurrentLang()].foodAdded || "Alimento añadido", "success");
+    }
+
     renderCurrentMenuItems();
-    showToast(translations[getCurrentLang()].foodAdded || "Alimento añadido", "success");
 }
 
 function renderCurrentMenuItems() {
+    if (!menuItemsContainer) return;
+
     menuItemsContainer.innerHTML = '';
+
+    const lang = getCurrentLang();
+    const t = translations[lang] || translations['es'];
+
+    if (currentMenu.items.length === 0) {
+        menuItemsContainer.innerHTML = `
+            <div class="empty-selection-placeholder">
+                <div class="placeholder-icon">🍲</div>
+                <p>${t.emptySelection || 'Añade alimentos para empezar a calcular'}</p>
+            </div>
+        `;
+        calculateTotals();
+        return;
+    }
 
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user ? (user.userId || user.id) : null;
@@ -284,23 +399,27 @@ function renderCurrentMenuItems() {
 
     currentMenu.items.forEach((item, index) => {
         const food = item.food_data;
-        const lang = getCurrentLang();
+        const icon = getCategoryIcon(food.category);
 
         const row = document.createElement('div');
-        row.className = 'menu-item-row';
+        row.className = 'builder-item-row';
         row.innerHTML = `
-            <div class="item-info">
-                <span class="item-name">${food.names ? (food.names[lang] || food.name) : food.name}</span>
-                <div class="item-quantity-wrapper">
-                    <input type="number" class="item-quantity-input" data-index="${index}" 
-                           value="${item.quantity}" min="1" step="1" ${isOwner ? '' : 'readonly'}>
-                    <span>g</span>
-                </div>
+            <span class="item-row-icon">${icon}</span>
+            <span class="item-row-name">${food.names ? (food.names[lang] || food.name) : food.name}</span>
+            <div class="item-row-controls">
+                <input type="number" data-index="${index}" 
+                       value="${item.quantity}" min="1" step="1" ${isOwner ? '' : 'readonly'}>
+                <span>g</span>
             </div>
-            ${isOwner ? `<button class="btn-icon remove-item" data-index="${index}">&times;</button>` : ''}
+            ${isOwner ? `<button class="btn-remove-item" data-index="${index}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>` : ''}
         `;
 
-        const qInput = row.querySelector('.item-quantity-input');
+        const qInput = row.querySelector('input');
         if (qInput && isOwner) {
             qInput.addEventListener('input', (e) => {
                 const val = parseFloat(e.target.value) || 0;
@@ -309,7 +428,7 @@ function renderCurrentMenuItems() {
             });
         }
 
-        const rmBtn = row.querySelector('.remove-item');
+        const rmBtn = row.querySelector('.btn-remove-item');
         if (rmBtn) {
             rmBtn.addEventListener('click', () => {
                 currentMenu.items.splice(index, 1);
@@ -324,15 +443,32 @@ function renderCurrentMenuItems() {
 }
 
 function calculateTotals() {
-    let totals = { protein: 0, potassium: 0, phosphorus: 0, salt: 0, calcium: 0 };
+    let totals = {
+        // Macros & Minerals
+        protein: 0, sugar: 0, fat: 0, potassium: 0, phosphorus: 0, salt: 0, calcium: 0,
+        magnesium: 0, iron: 0, copper: 0, sulfur: 0, chlorine: 0,
+        // Vitamins
+        vitamin_k: 0, vitamin_a: 0, vitamin_c: 0, vitamin_e: 0,
+        vitamin_b1: 0, vitamin_b3: 0, vitamin_b5: 0, vitamin_b6: 0, vitamin_b9: 0
+    };
+
     currentMenu.items.forEach(item => {
         const food = item.food_data;
         const ratio = item.quantity / 100;
-        for (let key in totals) {
-            if (food.nutrients && food.nutrients[key]) {
-                totals[key] += food.nutrients[key] * ratio;
-            }
-        }
+
+        // Nutrients level 1
+        const n = food.nutrients || {};
+        const nutrientsKeys = ['protein', 'sugar', 'fat', 'potassium', 'phosphorus', 'salt', 'calcium', 'magnesium', 'iron', 'copper', 'sulfur', 'chlorine'];
+        nutrientsKeys.forEach(k => {
+            if (n[k] !== undefined) totals[k] += n[k] * ratio;
+        });
+
+        // Vitamins level
+        const v = food.vitamins || {};
+        const vitaminsKeys = ['vitamin_k', 'vitamin_a', 'vitamin_c', 'vitamin_e', 'vitamin_b1', 'vitamin_b3', 'vitamin_b5', 'vitamin_b6', 'vitamin_b9'];
+        vitaminsKeys.forEach(k => {
+            if (v[k] !== undefined) totals[k] += v[k] * ratio;
+        });
     });
     updateTotalsUI(totals);
 }
@@ -342,15 +478,79 @@ function updateTotalsUI(totals) {
     const lang = getCurrentLang();
     const t = translations[lang] || translations['es'];
 
-    menuTotalsContainer.innerHTML = `<h4>${t.totalSummary || 'Resumen Nutricional Total'}</h4>`;
+    if (!menuTotalsContainer) return;
 
-    for (let key in totals) {
-        const val = totals[key].toFixed(key === 'salt' ? 2 : 0);
-        const color = user ? Nephrologist.getTrafficColor(key, val, user) : '';
-        const badge = document.createElement('div');
-        badge.className = `nutrient-badge ${color}`;
-        badge.innerHTML = `<strong>${key.toUpperCase()}:</strong> ${val}${key === 'salt' ? 'g' : 'mg'}`;
-        menuTotalsContainer.appendChild(badge);
+    menuTotalsContainer.innerHTML = '';
+
+    // Category 1: Info Nutricional
+    const mainSection = document.createElement('div');
+    mainSection.className = 'nutritional-info';
+    mainSection.innerHTML = `
+        <h3 onclick="toggleSection('builder-nutrients-grid', this)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            <span data-i18n="nutritionalInfo">${t.nutritionalInfo || 'Información Nutricional'}</span>
+            <span class="toggle-icon">▼</span>
+        </h3>
+        <div id="builder-nutrients-grid" class="info-grid"></div>
+    `;
+    const mainGrid = mainSection.querySelector('.info-grid');
+    const mainKeys = ['protein', 'sugar', 'fat', 'potassium', 'phosphorus', 'salt', 'calcium', 'magnesium', 'iron', 'copper', 'sulfur', 'chlorine'];
+
+    mainKeys.forEach(key => {
+        const val = totals[key] || 0;
+        let formattedVal;
+        if (['salt', 'protein', 'sugar', 'fat'].includes(key)) formattedVal = val.toFixed(2);
+        else if (['iron', 'copper'].includes(key)) formattedVal = val.toFixed(1);
+        else formattedVal = val.toFixed(0);
+
+        let unit = 'mg';
+        if (['protein', 'sugar', 'fat', 'salt'].includes(key)) unit = 'g';
+
+        const colorClass = user && ['protein', 'potassium', 'phosphorus', 'salt', 'calcium'].includes(key)
+            ? Nephrologist.getTrafficColor(key, formattedVal, user) : '';
+
+        const item = document.createElement('div');
+        item.className = `info-item ${colorClass}`;
+        item.innerHTML = `
+            <span class="label">${t[key] || key.replace('_', ' ')}</span>
+            <span class="value">${formattedVal}${unit}</span>
+        `;
+        mainGrid.appendChild(item);
+    });
+
+    // Category 2: Vitamins
+    const vitSection = document.createElement('div');
+    vitSection.className = 'nutritional-info';
+    vitSection.innerHTML = `
+        <h3 onclick="toggleSection('builder-vitamins-grid', this)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            <span data-i18n="vitamins">${t.vitamins || 'Vitaminas'}</span>
+            <span class="toggle-icon">▼</span>
+        </h3>
+        <div id="builder-vitamins-grid" class="info-grid"></div>
+    `;
+    const vitGrid = vitSection.querySelector('.info-grid');
+    const vitKeys = ['vitamin_k', 'vitamin_a', 'vitamin_c', 'vitamin_e', 'vitamin_b1', 'vitamin_b3', 'vitamin_b5', 'vitamin_b6', 'vitamin_b9'];
+
+    vitKeys.forEach(key => {
+        const val = totals[key] || 0;
+        let formattedVal = key.includes('b') ? val.toFixed(2) : (key === 'vitamin_k' || key === 'vitamin_a' || key === 'vitamin_b9' ? val.toFixed(0) : val.toFixed(1));
+        let unit = (key === 'vitamin_k' || key === 'vitamin_a' || key === 'vitamin_b9') ? 'ug' : 'mg';
+
+        const item = document.createElement('div');
+        item.className = 'info-item';
+        item.innerHTML = `
+            <span class="label">${t[key] || key.replace('_', ' ')}</span>
+            <span class="value">${formattedVal}${unit}</span>
+        `;
+        vitGrid.appendChild(item);
+    });
+
+    menuTotalsContainer.appendChild(mainSection);
+    menuTotalsContainer.appendChild(vitSection);
+
+    // Update count badge
+    const countBadge = document.getElementById('selected-count-badge');
+    if (countBadge) {
+        countBadge.textContent = currentMenu.items.length;
     }
 }
 

@@ -39,12 +39,21 @@ def handle_get_menus(query_params, handler):
                 
                 # Get nutrients for calculation
                 cursor.execute("""
-                    SELECT n.key, fn.value 
+                    SELECT n.key as nkey, fn.value as nval 
                     FROM food_nutrients fn 
                     JOIN nutrients n ON fn.nutrient_id = n.id 
                     WHERE fn.food_id = ?
                 """, (item['food_id'],))
-                nutrients = {row['key']: row['value'] for row in cursor.fetchall()}
+                nutrients = {row['nkey']: row['nval'] for row in cursor.fetchall()}
+
+                # Get vitamins for calculation
+                cursor.execute("""
+                    SELECT v.key as vkey, fv.value as vval 
+                    FROM food_vitamins fv 
+                    JOIN vitamins v ON fv.vitamin_id = v.id 
+                    WHERE fv.food_id = ?
+                """, (item['food_id'],))
+                vitamins = {row['vkey']: row['vval'] for row in cursor.fetchall()}
 
                 items.append({
                     "id": item['id'],
@@ -53,7 +62,8 @@ def handle_get_menus(query_params, handler):
                     "meal_type": item['meal_type'],
                     "image": item['image_url'],
                     "names": trans,
-                    "nutrients": nutrients
+                    "nutrients": nutrients,
+                    "vitamins": vitamins
                 })
             
             menus.append({
