@@ -179,7 +179,9 @@ export const translations = {
         backToForum: "Volver al foro",
         threadCreated: "¡Tema creado exitosamente!",
         errorGeneric: "Algo salió mal. Por favor, inténtalo de nuevo.",
-        errorLogin: "Debes iniciar sesión para publicar."
+        errorLogin: "Debes iniciar sesión para publicar.",
+        error_title: "Error",
+        error_size_msg: "La imagen es demasiado grande. Máximo 2MB."
     },
     en: {
         title: "Smart Renal Diet",
@@ -359,7 +361,9 @@ export const translations = {
         backToForum: "Back to forum",
         threadCreated: "Thread created successfully!",
         errorGeneric: "Something went wrong. Please try again.",
-        errorLogin: "You must be logged in to post."
+        errorLogin: "You must be logged in to post.",
+        error_title: "Error",
+        error_size_msg: "Image is too large. Maximum 2MB."
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -524,7 +528,9 @@ export const translations = {
         writeComment: "Einen Kommentar schreiben...",
         postComment: "Veröffentlichen",
         noThreads: "Noch keine Themen. Sei der Erste, der fragt!",
-        backToForum: "Zurück zum Forum"
+        backToForum: "Zurück zum Forum",
+        error_title: "Fehler",
+        error_size_msg: "Das Bild ist zu groß. Maximal 2 MB."
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -689,7 +695,9 @@ export const translations = {
         writeComment: "Écrire un commentaire...",
         postComment: "Publier",
         noThreads: "Pas encore de sujets. Soyez le premier à demander !",
-        backToForum: "Retour au forum"
+        backToForum: "Retour au forum",
+        error_title: "Erreur",
+        error_size_msg: "L'image est trop grande. Maximum 2 Mo."
     },
     pt: {
         title: "Dieta Renal Inteligente",
@@ -854,7 +862,9 @@ export const translations = {
         writeComment: "Escreva um comentário...",
         postComment: "Publicar",
         noThreads: "Ainda não há tópicos. Seja o primeiro a perguntar!",
-        backToForum: "Voltar ao fórum"
+        backToForum: "Voltar ao fórum",
+        error_title: "Erro",
+        error_size_msg: "A imagem é muito grande. Máximo 2MB."
     },
     ja: {
         title: "スマート腎臓食",
@@ -1022,7 +1032,9 @@ export const translations = {
         writeComment: "コメントを書く...",
         postComment: "投稿",
         noThreads: "まだトピックはありません。最初の質問をしましょう！",
-        backToForum: "掲示板に戻る"
+        backToForum: "掲示板に戻る",
+        error_title: "エラー",
+        error_size_msg: "画像が大きすぎます。最大2MBです。"
     },
 };
 

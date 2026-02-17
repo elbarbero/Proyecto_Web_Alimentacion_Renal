@@ -524,10 +524,12 @@ function setupMedicalProfile() {
             if (file) {
                 // Size validation (2MB limit for VPS stability)
                 if (file.size > 2 * 1024 * 1024) {
-                    showDialog(
-                        i18n.t('error_title') || 'Error',
-                        'La imagen es demasiado grande. Máximo 2MB.',
-                        'error'
+                    const lang = getCurrentLang();
+                    const t = translations[lang] || translations['es'];
+                    showAlert(
+                        t.error_title || 'Error',
+                        t.error_size_msg || 'La imagen es demasiado grande. Máximo 2MB.',
+                        '❌'
                     );
                     e.target.value = ''; // Clear input
                     return;
