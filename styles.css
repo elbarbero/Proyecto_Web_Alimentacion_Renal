@@ -377,6 +377,10 @@ body {
     padding: 2rem;
 }
 
+#custom-confirm-modal {
+    z-index: 2000 !important;
+}
+
 .modal.active {
     display: flex;
     animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
