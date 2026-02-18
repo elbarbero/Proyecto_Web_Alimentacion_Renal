@@ -13,9 +13,11 @@ def handle_get_menus(query_params, handler):
         
         # Get menus: User's private menus + All public menus
         cursor.execute("""
-            SELECT * FROM menus 
-            WHERE user_id = ? OR is_public = 1 
-            ORDER BY is_public DESC, created_at DESC
+            SELECT m.*, u.name as creator_name 
+            FROM menus m
+            JOIN users u ON m.user_id = u.id
+            WHERE m.user_id = ? OR m.is_public = 1 
+            ORDER BY m.is_public DESC, m.created_at DESC
         """, (user_id,))
         menus_rows = cursor.fetchall()
         
@@ -75,6 +77,7 @@ def handle_get_menus(query_params, handler):
                 "description": menu['description'],
                 "is_public": menu['is_public'],
                 "user_id": menu['user_id'],
+                "creator_name": menu['creator_name'],
                 "created_at": menu['created_at'],
                 "items": items
             })

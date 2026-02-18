@@ -13,7 +13,7 @@ let isCreating = false;
 let editingMenuId = null;
 
 // DOM Elements
-let menusListContainer, newMenuBtn, creationForm, menuNameInput, menuPublicToggle, privacyStatusText, menuItemsContainer, menuTotalsContainer, saveMenuBtn, cancelMenuBtn;
+let menusListContainer, newMenuBtn, creationForm, menuNameInput, menuPublicToggle, privacyStatusText, menuCreatorInfo, menuItemsContainer, menuTotalsContainer, saveMenuBtn, cancelMenuBtn;
 let foodSearchInput, foodSearchResults, toastContainer, menuListSearch;
 
 function setupDOM() {
@@ -23,6 +23,7 @@ function setupDOM() {
     menuNameInput = document.getElementById('menu-name-meta');
     menuPublicToggle = document.getElementById('menu-public-toggle');
     privacyStatusText = document.getElementById('privacy-status-text');
+    menuCreatorInfo = document.getElementById('menu-creator-info');
     menuItemsContainer = document.getElementById('selected-items');
     menuTotalsContainer = document.getElementById('menu-totals');
     saveMenuBtn = document.getElementById('save-menu-btn');
@@ -41,6 +42,7 @@ export async function initMenus() {
         editingMenuId = null;
         currentMenu = { name: '', items: [] };
         menuNameInput.value = '';
+        if (menuCreatorInfo) menuCreatorInfo.classList.add('hidden');
         renderCurrentMenuItems();
         toggleCreation(true);
     });
@@ -167,9 +169,33 @@ function renderMenus() {
                 <h3>${menu.name}</h3>
                 <span class="privacy-badge">${privacyText}</span>
             </div>
-            <p>${menu.items.length} alimentos</p>
+            <div class="menu-card-meta">
+                <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                        <path d="M3 6h18"></path>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span>${menu.items.length} ${t.ingredients || 'alimentos'}</span>
+                </div>
+                <div class="meta-item creator">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>${menu.creator_name || 'Desconocido'}</span>
+                </div>
+            </div>
             <div class="menu-actions">
-                ${isOwner ? `<button class="btn-small delete-menu" data-id="${menu.id}">${t.deleteMenu || 'Eliminar'}</button>` : `<span class="read-only">${t.readOnly || 'Solo lectura'}</span>`}
+                ${isOwner ? `
+                    <button class="btn-delete-icon delete-menu" data-id="${menu.id}" title="${t.deleteMenu || 'Eliminar'}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6h18"></path>
+                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                        </svg>
+                    </button>
+                ` : `<span class="read-only-badge">${t.readOnly || 'Solo lectura'}</span>`}
             </div>
         `;
 
@@ -225,6 +251,16 @@ function openMenu(menu) {
         menuPublicToggle.checked = menu.is_public === 1;
         menuPublicToggle.disabled = !isOwner; // Disable toggle
         updatePrivacyText();
+    }
+
+    // Display creator info
+    if (menuCreatorInfo) {
+        if (menu.creator_name) {
+            menuCreatorInfo.textContent = translations[lang].createdBy.replace('{name}', menu.creator_name);
+            menuCreatorInfo.classList.remove('hidden');
+        } else {
+            menuCreatorInfo.classList.add('hidden');
+        }
     }
 
     // Hide/Show Save button
