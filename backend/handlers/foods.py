@@ -11,7 +11,7 @@ def handle_get_foods(handler):
         cursor = conn.cursor()
         
         # Foods
-        cursor.execute("SELECT id, image_url FROM foods")
+        cursor.execute("SELECT id, image_url, unit FROM foods")
         foods_rows = cursor.fetchall()
         
         # Categories
@@ -59,6 +59,7 @@ def handle_get_foods(handler):
                 "category": category_string,
                 "names": names,
                 "image": f['image_url'],
+                "unit": f['unit'],
                 "nutrients": nut_dict.get(f_id, {}),
                 "vitamins": vit_dict.get(f_id, {})
             })

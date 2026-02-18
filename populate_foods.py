@@ -281,19 +281,25 @@ def populate():
                 "category": cat["category"]
             })
             for method in cat["methods"]:
-                generated.append(apply_method(base, method))
+                item_to_add = apply_method(base, method)
+                # Assign unit based on specific items or categories
+                if "drinks" in cat["category"] or item_to_add["name"] == "Aceite de Oliva" or "Leche" in item_to_add["name"] or "Yogur Líquido" in item_to_add["name"]:
+                     item_to_add["unit"] = "ml"
+                else:
+                     item_to_add["unit"] = "g"
+                generated.append(item_to_add)
 
     # 2. Fixed additions
-    def make_item(cat, n, en, de, fr, pt, ja, q, p, s, f, k, ph, sa, ca):
+    def make_item(cat, n, en, de, fr, pt, ja, q, p, s, f, k, ph, sa, ca, unit="g"):
         return {
             "name":n, "name_en":en, "name_de":de, "name_fr":fr, "name_pt":pt, "name_ja":ja,
             "image_query":q, "protein":p, "sugar":s, "fat":f, "potassium":k, "phosphorus":ph, "salt":sa, "calcium":ca,
-            "category": cat
+            "category": cat, "unit": unit
         }
 
     # Dairy
-    generated.append(make_item("dairy", "Leche Entera", "Whole Milk", "Vollmilch", "Lait Entier", "Leite Gordo", "牛乳", "glass of fresh whole milk", 3.2, 4.8, 3.6, 150, 93, 0.1, 120))
-    generated.append(make_item("dairy", "Leche Desnatada", "Skim Milk", "Magermilch", "Lait Écrémé", "Leite Magro", "無脂肪牛乳", "glass of skim milk", 3.4, 5.0, 0.1, 156, 96, 0.1, 122))
+    generated.append(make_item("dairy", "Leche Entera", "Whole Milk", "Vollmilch", "Lait Entier", "Leite Gordo", "牛乳", "glass of fresh whole milk", 3.2, 4.8, 3.6, 150, 93, 0.1, 120, "ml"))
+    generated.append(make_item("dairy", "Leche Desnatada", "Skim Milk", "Magermilch", "Lait Écrémé", "Leite Magro", "無脂肪牛乳", "glass of skim milk", 3.4, 5.0, 0.1, 156, 96, 0.1, 122, "ml"))
     generated.append(make_item("dairy", "Yogur Natural", "Natural Yogurt", "Naturjoghurt", "Yaourt Nature", "Iogurte Natural", "プレーンヨーグルト", "natural yogurt bowl", 3.5, 4.7, 3.3, 155, 95, 0.05, 121))
     generated.append(make_item("dairy", "Yogur Griego", "Greek Yogurt", "Griechischer Joghurt", "Yaourt Grec", "Iogurte Grego", "ギリシャヨーグルト", "creamy greek yogurt bowl", 10.0, 3.0, 5.0, 141, 135, 0.04, 110))
     generated.append(make_item("dairy", "Yogur Desnatado", "Low-fat Yogurt", "Fettarmer Joghurt", "Yaourt 0%", "Iogurte Magro", "低脂肪ヨーグルト", "low fat yogurt bowl", 5.3, 7.0, 0.1, 234, 137, 0.07, 183))
@@ -312,7 +318,7 @@ def populate():
     generated.append(make_item("dairy", "Ayran", "Ayran", "Ayran", "Ayran", "Ayran", "アイラン", "glass of ayran drink", 2.0, 1.5, 1.5, 80, 60, 0.5, 70))
     generated.append(make_item("dairy", "Petit Suisse", "Petit Suisse", "Fruchtzwerge", "Petit Suisse", "Petit Suisse", "プチスイス", "petit suisse yogurt cup", 7.0, 12.0, 3.0, 120, 100, 0.03, 90))
     generated.append(make_item("dairy", "Cuajada", "Curd", "Quark", "Caillé", "Coalhada", "凝乳", "curd dessert bowl", 4.0, 4.0, 5.0, 130, 100, 0.04, 140))
-    generated.append(make_item("dairy", "Yogur Líquido", "Drinking Yogurt", "Trinkjoghurt", "Yaourt à Boire", "Iogurte Líquido", "飲むヨーグルト", "drinking yogurt bottle", 3.0, 12.0, 1.5, 140, 90, 0.05, 110))
+    generated.append(make_item("dairy", "Yogur Líquido", "Drinking Yogurt", "Trinkjoghurt", "Yaourt à Boire", "Iogurte Líquido", "飲むヨーグルト", "drinking yogurt bottle", 3.0, 12.0, 1.5, 140, 90, 0.05, 110, "ml"))
     
     # Nuts (Special Category: legumes_nuts_group,nuts_spec)
     generated.append(make_item("legumes_nuts_group,nuts_spec", "Nueces", "Walnuts", "Walnüsse", "Noix", "Nozes", "くるみ", "bowl of raw whole walnuts", 15.0, 2.6, 65.0, 441, 346, 0.01, 98))
@@ -329,7 +335,7 @@ def populate():
     generated.append(make_item("legumes_nuts_group,nuts_spec", "Nueces de Brasil", "Brazil Nuts", "Paranüsse", "Noix du Brésil", "Castanha do Pará", "ブラジルナッツ", "bowl of raw brazil nuts", 14.0, 2.3, 67.0, 659, 725, 0.0, 160))
     
     # Fats
-    generated.append(make_item("fats", "Aceite de Oliva", "Olive Oil", "Olivenöl", "Huile d'Olive", "Azeite", "オリーブオイル", "olive oil glass bottle", 0.0, 0.0, 100.0, 0, 0, 0.0, 0))
+    generated.append(make_item("fats", "Aceite de Oliva", "Olive Oil", "Olivenöl", "Huile d'Olive", "Azeite", "オリーブオイル", "olive oil glass bottle", 0.0, 0.0, 100.0, 0, 0, 0.0, 0, "ml"))
     generated.append(make_item("fats", "Mantequilla", "Butter", "Butter", "Beurre", "Manteiga", "バター", "block of fresh dairy butter", 0.9, 0.1, 81.0, 24, 24, 0.01, 24))
     generated.append(make_item("fats", "Mayonesa", "Mayonnaise", "Mayonnaise", "Mayonnaise", "Maionese", "マヨネーズ", "mayonnaise sauce in a bowl", 1.0, 1.0, 75.0, 20, 28, 0.6, 12))
     
@@ -349,30 +355,30 @@ def populate():
     generated.append(make_item("sweets", "Helado", "Ice Cream", "Eiscreme", "Glace", "Gelado", "アイスクリーム", "scoop of vanilla ice cream", 3.5, 21.0, 11.0, 199, 105, 0.08, 128))
     generated.append(make_item("sweets", "Gelatina", "Jelly", "Götterspeise", "Gelée", "Gelatina", "ゼリー", "fruit jelly bowl", 1.2, 14.0, 0.0, 10, 5, 0.02, 3))
 
-    # Drinks
-    generated.append(make_item("drinks", "Agua", "Water", "Wasser", "Eau", "Água", "水", "glass of pure mineral water", 0.0, 0.0, 0.0, 0, 0, 0.0, 5))
-    generated.append(make_item("drinks", "Infusión de Manzanilla", "Camomile Tea", "Kamillentee", "Camomille", "Camomila", "カモミールティー", "cup of camomile tea", 0.0, 0.0, 0.0, 10, 0, 0.0, 2))
-    generated.append(make_item("drinks", "Té", "Tea", "Tee", "Thé", "Chá", "お茶", "cup of hot black tea", 0.0, 0.0, 0.0, 37, 0, 0.0, 0))
-    generated.append(make_item("drinks", "Vino Tinto", "Red Wine", "Rotwein", "Vin Rouge", "Vinho Tinto", "赤ワイン", "glass of red wine", 0.2, 0.6, 0.0, 127, 23, 0.01, 8))
-    generated.append(make_item("drinks", "Cerveza", "Beer", "Bier", "Bière", "Cerveja", "ビール", "glass of cold beer", 0.5, 3.6, 0.0, 27, 14, 0.01, 4))
-    generated.append(make_item("drinks", "Coca Cola", "Cola", "Cola", "Coca", "Coca", "コーラ", "glass of cola soda with ice", 0.0, 10.6, 0.0, 0, 15, 0.01, 2))
-    generated.append(make_item("drinks", "Café", "Coffee", "Kaffee", "Café", "Café", "コーヒー", "black coffee cup steaming", 0.1, 0.0, 0.0, 49, 3, 0.0, 2))
-    generated.append(make_item("drinks", "Zumo de Naranja", "Orange Juice", "Orangensaft", "Jus d'Orange", "Sumo de Laranja", "オレンジジュース", "fresh orange juice glass", 0.7, 8.4, 0.2, 200, 17, 0.0, 11))
-    generated.append(make_item("drinks", "Zumo de Manzana", "Apple Juice", "Apfelsaft", "Jus de Pomme", "Sumo de Maçã", "リンゴジュース", "fresh apple juice glass", 0.1, 9.6, 0.1, 101, 7, 0.0, 5))
-    generated.append(make_item("drinks", "Zumo de Piña", "Pineapple Juice", "Ananassaft", "Jus d'Ananas", "Sumo de Abacaxi", "パイナップルジュース", "fresh pineapple juice glass", 0.4, 12.0, 0.1, 130, 8, 0.0, 13))
-    generated.append(make_item("drinks", "Zumo de Uva", "Grape Juice", "Traubensaft", "Jus de Raisin", "Sumo de Uva", "ブドウジュース", "glass of purple grape juice", 0.4, 14.0, 0.1, 119, 12, 0.0, 9))
-    generated.append(make_item("drinks", "Zumo de Tomate", "Tomato Juice", "Tomatensaft", "Jus de Tomate", "Sumo de Tomate", "トマトジュース", "glass of red tomato juice", 0.8, 2.6, 0.1, 217, 19, 0.05, 8))
-    generated.append(make_item("drinks", "Zumo de Pomelo", "Grapefruit Juice", "Grapefruitsaft", "Jus de Pamplemousse", "Sumo de Toranja", "グレープフルーツジュース", "glass of grapefruit juice", 0.5, 9.0, 0.1, 162, 15, 0.0, 9))
-    generated.append(make_item("drinks", "Zumo de Zanahoria", "Carrot Juice", "Karottensaft", "Jus de Carotte", "Sumo de Cenoura", "人参ジュース", "glass of carrot juice", 0.9, 3.9, 0.1, 292, 29, 0.04, 24))
-    generated.append(make_item("drinks", "Zumo de Melocotón", "Peach Juice", "Pfirsichsaft", "Jus de Pêche", "Sumo de Pêssego", "桃ジュース", "glass of peach juice", 0.4, 8.0, 0.1, 120, 12, 0.0, 5))
-    generated.append(make_item("drinks", "Zumo de Pera", "Pear Juice", "Birnensaft", "Jus de Poire", "Sumo de Pêra", "洋梨ジュース", "glass of pear juice", 0.2, 9.0, 0.1, 80, 8, 0.0, 6))
-    generated.append(make_item("drinks", "Zumo de Arándanos", "Cranberry Juice", "Cranberrysaft", "Jus de Canneberge", "Sumo de Arando", "クランベリージュース", "glass of cranberry juice", 0.0, 12.0, 0.0, 77, 13, 0.0, 5))
-    generated.append(make_item("drinks", "Zumo de Mango", "Mango Juice", "Mangosaft", "Jus de Mangue", "Sumo de Manga", "マンゴージュース", "glass of mango juice", 0.5, 13.0, 0.2, 110, 10, 0.0, 10))
-    generated.append(make_item("drinks", "Zumo de Granada", "Pomegranate Juice", "Granatapfelsaft", "Jus de Grenade", "Sumo de Romã", "ザクロジュース", "glass of pomegranate juice", 0.2, 13.0, 0.0, 214, 25, 0.0, 11))
-    generated.append(make_item("drinks", "Zumo de Limón", "Lemon Juice", "Zitronensaft", "Jus de Citron", "Sumo de Limão", "レモン汁", "glass of fresh lemon juice", 0.4, 2.5, 0.0, 103, 8, 0.0, 7))
-    generated.append(make_item("drinks", "Zumo de Lima", "Lime Juice", "Limettensaft", "Jus de Citron Vert", "Sumo de Lima", "ライム果汁", "glass of fresh lime juice", 0.4, 1.7, 0.0, 117, 10, 0.0, 10))
-    generated.append(make_item("drinks", "Zumo Multifruta", "Multifruit Juice", "Multivitaminsaft", "Jus Multifruits", "Sumo Multifrutas", "ミックスジュース", "glass of mixed multifruit juice", 0.5, 11.0, 0.1, 150, 15, 0.0, 10))
-    generated.append(make_item("drinks", "Limonada", "Lemonade", "Limonade", "Limonade", "Limonada", "レモネード", "glass of fresh lemonade with ice", 0.1, 10.0, 0.0, 10, 2, 0.0, 2))
+    generated.append(make_item("drinks", "Agua", "Water", "Wasser", "Eau", "Água", "水", "glass of pure mineral water", 0.0, 0.0, 0.0, 0, 0, 0.0, 5, "ml"))
+    generated.append(make_item("drinks", "Infusión de Manzanilla", "Camomile Tea", "Kamillentee", "Camomille", "Camomila", "カモミールティー", "cup of camomile tea", 0.0, 0.0, 0.0, 10, 0, 0.0, 2, "ml"))
+    generated.append(make_item("drinks", "Té", "Tea", "Tee", "Thé", "Chá", "お茶", "cup of hot black tea", 0.0, 0.0, 0.0, 37, 0, 0.0, 0, "ml"))
+    generated.append(make_item("drinks", "Vino Tinto", "Red Wine", "Rotwein", "Vin Rouge", "Vinho Tinto", "赤ワイン", "glass of red wine", 0.2, 0.6, 0.0, 127, 23, 0.01, 8, "ml"))
+    generated.append(make_item("drinks", "Cerveza", "Beer", "Bier", "Bière", "Cerveja", "ビール", "glass of cold beer", 0.5, 3.6, 0.0, 27, 14, 0.01, 4, "ml"))
+    generated.append(make_item("drinks", "Coca Cola", "Cola", "Cola", "Coca", "Coca", "コーラ", "glass of cola soda with ice", 0.0, 10.6, 0.0, 0, 15, 0.01, 2, "ml"))
+    generated.append(make_item("drinks", "Café", "Coffee", "Kaffee", "Café", "Café", "コーヒー", "black coffee cup steaming", 0.1, 0.0, 0.0, 49, 3, 0.0, 2, "ml"))
+    generated.append(make_item("drinks", "Zumo de Naranja", "Orange Juice", "Orangensaft", "Jus d'Orange", "Sumo de Laranja", "オレンジジュース", "fresh orange juice glass", 0.7, 8.4, 0.2, 200, 17, 0.0, 11, "ml"))
+    generated.append(make_item("drinks", "Zumo de Manzana", "Apple Juice", "Apfelsaft", "Jus de Pomme", "Sumo de Maçã", "リンゴジュース", "fresh apple juice glass", 0.1, 9.6, 0.1, 101, 7, 0.0, 5, "ml"))
+    generated.append(make_item("drinks", "Zumo de Piña", "Pineapple Juice", "Ananassaft", "Jus d'Ananas", "Sumo de Abacaxi", "パイナップルジュース", "fresh pineapple juice glass", 0.4, 12.0, 0.1, 130, 8, 0.0, 13, "ml"))
+    generated.append(make_item("drinks", "Zumo de Uva", "Grape Juice", "Traubensaft", "Jus de Raisin", "Sumo de Uva", "ブドウジュース", "glass of purple grape juice", 0.4, 14.0, 0.1, 119, 12, 0.0, 9, "ml"))
+    generated.append(make_item("drinks", "Zumo de Tomate", "Tomato Juice", "Tomatensaft", "Jus de Tomate", "Sumo de Tomate", "トマトジュース", "glass of red tomato juice", 0.8, 2.6, 0.1, 217, 19, 0.05, 8, "ml"))
+    generated.append(make_item("drinks", "Zumo de Pomelo", "Grapefruit Juice", "Grapefruitsaft", "Jus de Pamplemousse", "Sumo de Toranja", "グレープフルーツジュース", "glass of grapefruit juice", 0.5, 9.0, 0.1, 162, 15, 0.0, 9, "ml"))
+    generated.append(make_item("drinks", "Zumo de Zanahoria", "Carrot Juice", "Karottensaft", "Jus de Carotte", "Sumo de Cenoura", "人参ジュース", "glass of carrot juice", 0.9, 3.9, 0.1, 292, 29, 0.04, 24, "ml"))
+    generated.append(make_item("drinks", "Zumo de Melocotón", "Peach Juice", "Pfirsichsaft", "Jus de Pêche", "Sumo de Pêssego", "桃ジュース", "glass of peach juice", 0.4, 8.0, 0.1, 120, 12, 0.0, 5, "ml"))
+    generated.append(make_item("drinks", "Zumo de Pera", "Pear Juice", "Birnensaft", "Jus de Poire", "Sumo de Pêra", "洋梨ジュース", "glass of pear juice", 0.2, 9.0, 0.1, 80, 8, 0.0, 6, "ml"))
+    generated.append(make_item("drinks", "Zumo de Arándanos", "Cranberry Juice", "Cranberrysaft", "Jus de Canneberge", "Sumo de Arando", "クランベリージュース", "glass of cranberry juice", 0.0, 12.0, 0.0, 77, 13, 0.0, 5, "ml"))
+    generated.append(make_item("drinks", "Zumo de Mango", "Mango Juice", "Mangosaft", "Jus de Mangue", "Sumo de Manga", "マンゴージュース", "glass of mango juice", 0.5, 13.0, 0.2, 110, 10, 0.0, 10, "ml"))
+    generated.append(make_item("drinks", "Zumo de Granada", "Pomegranate Juice", "Granatapfelsaft", "Jus de Grenade", "Sumo de Romã", "ザクロジュース", "glass of pomegranate juice", 0.2, 13.0, 0.0, 214, 25, 0.0, 11, "ml"))
+    generated.append(make_item("drinks", "Zumo de Limón", "Lemon Juice", "Zitronensaft", "Jus de Citron", "Sumo de Limão", "レモン汁", "glass of fresh lemon juice", 0.4, 2.5, 0.0, 103, 8, 0.0, 7, "ml"))
+    generated.append(make_item("drinks", "Zumo de Lima", "Lime Juice", "Limettensaft", "Jus de Citron Vert", "Sumo de Lima", "ライム果汁", "glass of fresh lime juice", 0.4, 1.7, 0.0, 117, 10, 0.0, 10, "ml"))
+    generated.append(make_item("drinks", "Zumo Multifruta", "Multifruit Juice", "Multivitaminsaft", "Jus Multifruits", "Sumo Multifrutas", "ミックスジュース", "glass of mixed multifruit juice", 0.5, 11.0, 0.1, 150, 15, 0.0, 10, "ml"))
+    generated.append(make_item("drinks", "Limonada", "Lemonade", "Limonade", "Limonada", "Limonada", "レモネード", "glass of fresh lemonade with ice", 0.1, 10.0, 0.0, 10, 2, 0.0, 2, "ml"))
+    generated.append(make_item("drinks", "Vinagre", "Vinegar", "Essig", "Vinaigre", "Vinagre", "酢", "glass bottle of clear vinegar", 0.0, 0.0, 0.0, 2, 2, 0.0, 6, "ml"))
 
     # Snacks (Mixed under carbs/sweets)
     generated.append(make_item("carbs", "Patatas Chips", "Potato Chips", "Kartoffelchips", "Chips de Pomme de Terre", "Batatas Chips", "ポテトチップス", "bowl of crispy potato chips", 6.5, 0.5, 35.0, 1200, 160, 1.5, 25))
@@ -424,9 +430,17 @@ def populate():
     print(f"Insertando {len(generated)} alimentos...")
     for f in generated:
         # a. Insertar food
-        cursor.execute("INSERT INTO foods (category_id, image_url) VALUES (?, ?)", 
-                       (category_map[f["category"]], get_image_url(f["image_query"])))
+        cursor.execute("INSERT INTO foods (image_url, unit) VALUES (?, ?)", 
+                       (get_image_url(f["image_query"]), f["unit"]))
         food_id = cursor.lastrowid
+        
+        # a2. Insertar Food Categories (Join Table)
+        # Some foods have multiple categories separated by comma
+        cats = [c.strip() for c in f["category"].split(',')]
+        for c_key in cats:
+            if c_key in category_map:
+                cursor.execute("INSERT OR IGNORE INTO food_categories (food_id, category_id) VALUES (?, ?)",
+                             (food_id, category_map[c_key]))
         
         # b. Insertar Traducciones
         translations = [

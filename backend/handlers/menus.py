@@ -24,7 +24,8 @@ def handle_get_menus(query_params, handler):
             menu_id = menu['id']
             # Get items for this menu
             cursor.execute("""
-                SELECT mi.*, f.image_url 
+                SELECT mi.*, f.image_url, f.unit, 
+                (SELECT GROUP_CONCAT(c.key) FROM food_categories fc JOIN categories c ON fc.category_id = c.id WHERE fc.food_id = f.id) as category_string
                 FROM menu_items mi 
                 JOIN foods f ON mi.food_id = f.id 
                 WHERE mi.menu_id = ?
@@ -61,6 +62,8 @@ def handle_get_menus(query_params, handler):
                     "quantity": item['quantity'],
                     "meal_type": item['meal_type'],
                     "image": item['image_url'],
+                    "unit": item['unit'],
+                    "category": item['category_string'],
                     "names": trans,
                     "nutrients": nutrients,
                     "vitamins": vitamins

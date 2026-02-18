@@ -201,8 +201,12 @@ function openMenu(menu) {
             return {
                 food_id: it.food_id,
                 food_data: {
-                    ...it,
+                    id: it.food_id,
                     name: foodName,
+                    names: it.names,
+                    image: it.image,
+                    unit: it.unit || 'g',
+                    category: it.category || '',
                     nutrients: it.nutrients || {},
                     vitamins: it.vitamins || {}
                 },
@@ -322,18 +326,31 @@ function renderSearchResults(matches) {
 }
 
 function getCategoryIcon(category) {
+    if (!category) return '🥗';
+    const cats = category.split(',').map(c => c.trim().toLowerCase());
+
     const icons = {
-        'Frutas': '🍎',
-        'Verduras': '🥦',
-        'Lácteos': '🥛',
-        'Carnes': '🍗',
-        'Pescados': '🐟',
-        'Cereales': '🍞',
-        'Legumbres': '🫘',
-        'Mis Alimentos': '✨',
-        'Todos': '🍲'
+        'fruits': '🍎',
+        'fruits_spec': '🍎',
+        'veg': '🥦',
+        'vegetables': '🥦',
+        'dairy': '🥛',
+        'proteins': '🍗',
+        'legumes_nuts_group': '🫘',
+        'legumes_spec': '🫘',
+        'nuts_spec': '🥜',
+        'carbs': '🍞',
+        'fats': '🧈',
+        'sweets': '🍩',
+        'drinks': '🥤',
+        'tubers_spec': '🥔'
     };
-    return icons[category] || '🥗';
+
+    // Find first matching category
+    for (let c of cats) {
+        if (icons[c]) return icons[c];
+    }
+    return '🥗';
 }
 
 function updatePrivacyText() {
@@ -360,7 +377,8 @@ function addFoodToMenu(food) {
 
     if (existingItem) {
         existingItem.quantity = (parseFloat(existingItem.quantity) || 0) + 100;
-        showToast(`${translations[getCurrentLang()].foodAdded || "Alimento añadido"} (+100g)`, "success");
+        const unit = food.unit || 'g';
+        showToast(`${translations[getCurrentLang()].foodAdded || "Alimento añadido"} (+100${unit})`, "success");
     } else {
         currentMenu.items.push({
             food_id: food.id,
@@ -409,7 +427,7 @@ function renderCurrentMenuItems() {
             <div class="item-row-controls">
                 <input type="number" data-index="${index}" 
                        value="${item.quantity}" min="1" step="1" ${isOwner ? '' : 'readonly'}>
-                <span>g</span>
+                <span>${food.unit || 'g'}</span>
             </div>
             ${isOwner ? `<button class="btn-remove-item" data-index="${index}">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

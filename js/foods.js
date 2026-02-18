@@ -283,13 +283,24 @@ function renderGrid(foodsToRender) {
 
 export function openModal(food) {
     currentFood = food;
-    if (gramsInput) {
-        gramsInput.value = '';
-        gramsInput.focus();
+    const currentLang = getCurrentLang();
+    const t = translations[currentLang] || translations['es'];
+
+    // Update label and placeholder based on unit
+    const amountLabel = modal.querySelector('label[for="grams-input"]');
+    if (amountLabel) {
+        amountLabel.textContent = food.unit === 'ml' ? t.amountLabel_ml : t.amountLabel_g;
     }
+
+    if (gramsInput) {
+        gramsInput.value = '100'; // Default to 100 as per new plan
+        gramsInput.placeholder = '100';
+    }
+
     if (mImg) mImg.src = food.image;
     if (mName) mName.textContent = getFoodName(food);
-    updateNutrients(0);
+
+    updateNutrients(100);
     modal.classList.add('active');
     document.body.style.overflow = 'hidden'; // Lock body scroll
 
@@ -313,8 +324,9 @@ export function closeModal() {
     currentFood = null;
 }
 
-function updateNutrients(grams) {
+function updateNutrients(amount) {
     if (!currentFood) return;
+    const grams = parseFloat(amount) || 0;
     const ratio = grams / 100;
     const n = currentFood.nutrients;
 
