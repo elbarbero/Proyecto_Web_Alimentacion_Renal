@@ -29,8 +29,10 @@ export function initAuthState() {
         try {
             const user = JSON.parse(storedUser);
             if (userBtn) userBtn.classList.add('user-logged-in');
-            if (menusCard) menusCard.classList.remove('hidden');
-            if (forumCard) forumCard.classList.remove('hidden');
+
+            // Enable cards (Logged In)
+            if (menusCard) menusCard.classList.remove('disabled-card');
+            if (forumCard) forumCard.classList.remove('disabled-card');
 
             // Fast avatar sync
             const avatarImg = document.getElementById('user-avatar-img');
@@ -44,6 +46,11 @@ export function initAuthState() {
         } catch (e) {
             console.error('initAuthState: Error parsing user', e);
         }
+    } else {
+        // Disable cards (Logged Out)
+        if (menusCard) menusCard.classList.add('disabled-card');
+        if (forumCard) forumCard.classList.add('disabled-card');
+        if (userBtn) userBtn.classList.remove('user-logged-in');
     }
 }
 
