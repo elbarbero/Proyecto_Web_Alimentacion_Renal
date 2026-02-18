@@ -13,12 +13,14 @@ def handle_get_menus(query_params, handler):
         
         # Get menus: User's private menus + All public menus
         cursor.execute("""
-            SELECT m.*, u.name as creator_name 
+            SELECT m.*, u.name as creator_name,
+                   (SELECT COUNT(*) FROM menu_likes WHERE menu_id = m.id) as likes_count,
+                   (SELECT COUNT(*) FROM menu_likes WHERE menu_id = m.id AND user_id = ?) as user_liked
             FROM menus m
             JOIN users u ON m.user_id = u.id
             WHERE m.user_id = ? OR m.is_public = 1 
             ORDER BY m.is_public DESC, m.created_at DESC
-        """, (user_id,))
+        """, (user_id, user_id))
         menus_rows = cursor.fetchall()
         
         menus = []
@@ -78,6 +80,8 @@ def handle_get_menus(query_params, handler):
                 "is_public": menu['is_public'],
                 "user_id": menu['user_id'],
                 "creator_name": menu['creator_name'],
+                "likes_count": menu['likes_count'],
+                "user_liked": bool(menu['user_liked']),
                 "created_at": menu['created_at'],
                 "items": items
             })
@@ -188,4 +192,35 @@ def handle_update_menu(data, handler):
         send_json(handler, 200, {"status": "success"})
     except Exception as e:
         print(f"Update Menu Error: {e}")
+        send_json(handler, 500, {"error": str(e)})
+
+def handle_toggle_like(data, handler):
+    try:
+        user_id = data.get('user_id')
+        menu_id = data.get('menu_id')
+        
+        if not user_id or not menu_id:
+            return send_json(handler, 400, {"error": "user_id and menu_id required"})
+            
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Check if already liked
+        cursor.execute("SELECT id FROM menu_likes WHERE menu_id = ? AND user_id = ?", (menu_id, user_id))
+        like = cursor.fetchone()
+        
+        if like:
+            # Unlike
+            cursor.execute("DELETE FROM menu_likes WHERE id = ?", (like['id'],))
+            status = "unliked"
+        else:
+            # Like
+            cursor.execute("INSERT INTO menu_likes (menu_id, user_id) VALUES (?, ?)", (menu_id, user_id))
+            status = "liked"
+            
+        conn.commit()
+        conn.close()
+        send_json(handler, 200, {"status": "success", "action": status})
+    except Exception as e:
+        print(f"Toggle Like Error: {e}")
         send_json(handler, 500, {"error": str(e)})

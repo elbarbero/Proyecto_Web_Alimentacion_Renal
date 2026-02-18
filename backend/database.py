@@ -80,6 +80,18 @@ def run_migrations():
             FOREIGN KEY(thread_id) REFERENCES forum_threads(id),
             FOREIGN KEY(user_id) REFERENCES users(id)
         )""")
+
+        # Likes Table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS menu_likes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            menu_id INTEGER,
+            user_id INTEGER,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(menu_id) REFERENCES menus(id),
+            FOREIGN KEY(user_id) REFERENCES users(id),
+            UNIQUE(menu_id, user_id)
+        )""")
             
         conn.commit()
         conn.close()

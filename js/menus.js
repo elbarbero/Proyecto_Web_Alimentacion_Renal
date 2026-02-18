@@ -170,20 +170,30 @@ function renderMenus() {
                 <span class="privacy-badge">${privacyText}</span>
             </div>
             <div class="menu-card-meta">
-                <div class="meta-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
-                        <path d="M3 6h18"></path>
-                        <path d="M16 10a4 4 0 0 1-8 0"></path>
-                    </svg>
-                    <span>${menu.items.length} ${t.ingredients || 'alimentos'}</span>
+                <div class="meta-row main-meta">
+                    <div class="meta-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                            <path d="M3 6h18"></path>
+                            <path d="M16 10a4 4 0 0 1-8 0"></path>
+                        </svg>
+                        <span>${menu.items.length} ${t.ingredients || 'alimentos'}</span>
+                    </div>
+                    <div class="meta-item like-btn ${menu.user_liked ? 'liked' : ''}" data-id="${menu.id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="${menu.user_liked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                        </svg>
+                        <span class="like-count">${menu.likes_count || 0}</span>
+                    </div>
                 </div>
-                <div class="meta-item creator">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    <span>${menu.creator_name || 'Desconocido'}</span>
+                <div class="meta-row second-meta">
+                    <div class="meta-item creator">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span>${menu.creator_name || 'Desconocido'}</span>
+                    </div>
                 </div>
             </div>
             <div class="menu-actions">
@@ -206,6 +216,14 @@ function renderMenus() {
             delBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 handleDeleteMenu(menu.id);
+            });
+        }
+
+        const likeBtn = card.querySelector('.like-btn');
+        if (likeBtn) {
+            likeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleToggleLike(menu.id);
             });
         }
         menusListContainer.appendChild(card);
@@ -713,4 +731,33 @@ function showToast(message, type = 'success') {
         toast.classList.remove('active');
         setTimeout(() => toast.remove(), 300);
     }, 3000);
+}
+
+async function handleToggleLike(menuId) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+        // Redirigir o mostrar modal de login - de momento toast
+        if (typeof showToast === 'function') {
+            showToast('Inicia sesión para dar me gusta', 'error');
+        }
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/toggle_like', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: user.userId || user.id,
+                menu_id: menuId
+            })
+        });
+
+        const data = await response.json();
+        if (data.status === 'success') {
+            loadMenus(); // Recargar para actualizar contadores
+        }
+    } catch (e) {
+        console.error('Like toggle error:', e);
+    }
 }

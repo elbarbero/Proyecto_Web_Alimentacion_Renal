@@ -99,6 +99,9 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
         elif path == '/api/delete_menu':
             menus.handle_delete_menu(data, self)
             
+        elif path == '/api/toggle_like':
+            menus.handle_toggle_like(data, self)
+            
         elif path == '/api/forum/create_thread':
             forum.handle_create_thread(data, self)
             
