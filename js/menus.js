@@ -517,7 +517,7 @@ function renderCurrentMenuItems() {
 function calculateTotals() {
     let totals = {
         // Macros & Minerals
-        protein: 0, sugar: 0, fat: 0, potassium: 0, phosphorus: 0, salt: 0, calcium: 0,
+        kcal: 0, protein: 0, sugar: 0, fat: 0, potassium: 0, phosphorus: 0, salt: 0, calcium: 0,
         magnesium: 0, iron: 0, copper: 0, sulfur: 0, chlorine: 0,
         // Vitamins
         vitamin_k: 0, vitamin_a: 0, vitamin_c: 0, vitamin_e: 0,
@@ -527,6 +527,12 @@ function calculateTotals() {
     currentMenu.items.forEach(item => {
         const food = item.food_data;
         const ratio = item.quantity / 100;
+
+        // Calculate Kcal based on macros: 4 kcal/g for protein and carbs/sugars, 9 kcal/g for fat
+        const p = (food.nutrients && food.nutrients.protein) || 0;
+        const s = (food.nutrients && food.nutrients.sugar) || 0;
+        const f = (food.nutrients && food.nutrients.fat) || 0;
+        totals.kcal += (p * 4 + s * 4 + f * 9) * ratio;
 
         // Nutrients level 1
         const n = food.nutrients || {};
@@ -565,7 +571,7 @@ function updateTotalsUI(totals) {
         <div id="builder-nutrients-grid" class="info-grid"></div>
     `;
     const mainGrid = mainSection.querySelector('.info-grid');
-    const mainKeys = ['protein', 'sugar', 'fat', 'potassium', 'phosphorus', 'salt', 'calcium', 'magnesium', 'iron', 'copper', 'sulfur', 'chlorine'];
+    const mainKeys = ['kcal', 'protein', 'sugar', 'fat', 'potassium', 'phosphorus', 'salt', 'calcium', 'magnesium', 'iron', 'copper', 'sulfur', 'chlorine'];
 
     mainKeys.forEach(key => {
         const val = totals[key] || 0;
@@ -576,12 +582,15 @@ function updateTotalsUI(totals) {
 
         let unit = 'mg';
         if (['protein', 'sugar', 'fat', 'salt'].includes(key)) unit = 'g';
+        if (key === 'kcal') unit = ' kcal';
 
         const colorClass = user && ['protein', 'potassium', 'phosphorus', 'salt', 'calcium'].includes(key)
             ? Nephrologist.getTrafficColor(key, formattedVal, user) : '';
 
+        const kcalClass = key === 'kcal' ? 'kcal-item' : '';
+
         const item = document.createElement('div');
-        item.className = `info-item ${colorClass}`;
+        item.className = `info-item ${colorClass} ${kcalClass}`.trim();
         item.innerHTML = `
             <span class="label">${t[key] || key.replace('_', ' ')}</span>
             <span class="value">${formattedVal}${unit}</span>

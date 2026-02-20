@@ -9,7 +9,7 @@ let activeCategory = 'all';
 // DOM Elements
 // DOM Elements
 let gridContainer, modal, closeModalBtn, gramsInput, searchInput, categoryTabsContainer;
-let mImg, mName, valProtein, valSugar, valFat, valPotassium, valPhosphorus, valSalt, valCalcium;
+let mImg, mName, valKcal, valProtein, valSugar, valFat, valPotassium, valPhosphorus, valSalt, valCalcium;
 let valMagnesium, valIron, valCopper, valSulfur, valChlorine;
 let valVitK, valVitA, valVitC, valVitE, valVitB1, valVitB3, valVitB5, valVitB6, valVitB9;
 
@@ -28,6 +28,7 @@ function setupDOM() {
     if (modal) {
         mImg = modal.querySelector('#modal-img');
         mName = modal.querySelector('#modal-name');
+        valKcal = modal.querySelector('#val-kcal');
         valProtein = modal.querySelector('#val-protein');
         valSugar = modal.querySelector('#val-sugar');
         valFat = modal.querySelector('#val-fat');
@@ -330,6 +331,7 @@ function updateNutrients(amount) {
     const ratio = grams / 100;
     const n = currentFood.nutrients;
 
+    const vKcal = (((n.protein * ratio) * 4) + ((n.sugar * ratio) * 4) + ((n.fat * ratio) * 9)).toFixed(0);
     const vProteins = (n.protein * ratio).toFixed(1);
     const vSugar = (n.sugar * ratio).toFixed(1);
     const vFat = (n.fat * ratio).toFixed(1);
@@ -355,6 +357,7 @@ function updateNutrients(amount) {
     const vB6 = (v.vitamin_b6 ? (v.vitamin_b6 * ratio).toFixed(2) : "0");
     const vB9 = (v.vitamin_b9 ? (v.vitamin_b9 * ratio).toFixed(0) : "0");
 
+    if (valKcal) valKcal.textContent = vKcal + ' kcal';
     if (valProtein) valProtein.textContent = vProteins + 'g';
     if (valSugar) valSugar.textContent = vSugar + 'g';
     if (valFat) valFat.textContent = vFat + 'g';
