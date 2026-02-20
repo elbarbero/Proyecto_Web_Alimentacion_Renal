@@ -1,4 +1,4 @@
-import { fetchUser, login, register, requestPasswordReset, resetPassword, fetchCountries } from './api.js';
+import { fetchUser, login, register, requestPasswordReset, resetPassword, fetchCountries, verifyEmail } from './api.js';
 import { translations, getCurrentLang } from './i18n.js';
 import { clearChatHistory } from './chat.js';
 import { setupCustomSelects, showAlert } from './ui.js';
@@ -178,6 +178,7 @@ export function setupAuth() {
     setupMedicalProfile();
     setupTermsModal();
     checkResetToken();
+    checkVerifyToken();
 
     populateNationalityDropdowns();
     setupCustomSelects(); // Re-run to attach listeners to new options
@@ -475,15 +476,25 @@ async function handleAuthSubmit(e) {
             }
 
             if (isRegistering) {
-                // Open Profile for setup
-                loadProfileData();
-                if (medicalModal) medicalModal.classList.add('active');
+                // Show verification toast/alert then Open Profile
+                showAlert(
+                    "Registro exitoso",
+                    "Te hemos enviado un correo. Por favor, revisa tu bandeja de entrada y verifica tu cuenta antes de 7 días para evitar su desactivación.",
+                    "✉️"
+                ).then(() => {
+                    loadProfileData();
+                    if (medicalModal) medicalModal.classList.add('active');
+                });
             } else {
                 // For login, reload to refresh app state fully
                 location.reload();
             }
         } else {
-            if (authError) authError.textContent = data.message || "Error";
+            if (data.message === 'unverified_email') {
+                if (authError) authError.textContent = t.unverifiedEmail || "Por favor, verifica tu correo electrónico para continuar usando tu cuenta.";
+            } else {
+                if (authError) authError.textContent = data.message || "Error";
+            }
         }
 
     } catch (err) {
@@ -984,5 +995,41 @@ function checkResetToken() {
         // Show Reset View
         const rView = document.getElementById('reset-password-view');
         if (rView) rView.classList.remove('hidden-view');
+    }
+}
+
+async function checkVerifyToken() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('verify_token');
+
+    if (token) {
+        const t = translations[getCurrentLang()] || translations['es'];
+        try {
+            const res = await verifyEmail(token);
+            const data = await res.json();
+
+            if (data.status === 'success') {
+                showAlert(
+                    t.emailVerifiedTitle || "Email Verificado",
+                    t.emailVerifiedSuccess || "Tu cuenta ha sido verificada correctamente. ¡Gracias!",
+                    "✅"
+                ).then(() => {
+                    window.location.href = window.location.pathname; // Clear URL
+                });
+            } else {
+                showAlert(
+                    t.error_title || "Error",
+                    data.message || "Ocurrió un error verificando tu correo.",
+                    "❌"
+                ).then(() => {
+                    window.location.href = window.location.pathname; // Clear URL
+                });
+            }
+        } catch (error) {
+            console.error("Verification error:", error);
+            showAlert("Error", "Error de conexión al verificar el email.", "❌").then(() => {
+                window.location.href = window.location.pathname;
+            });
+        }
     }
 }

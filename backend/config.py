@@ -28,5 +28,5 @@ SENDER_EMAIL = os.environ.get("EMAIL_USER", ENV.get("EMAIL_USER", "nutrirenalweb
 SENDER_PASSWORD = os.environ.get("EMAIL_PASS", ENV.get("EMAIL_PASS", ""))
 RECIPIENT_EMAIL = os.environ.get("EMAIL_RECIPIENT", ENV.get("EMAIL_RECIPIENT", "nutrirenalweb@gmail.com"))
 DB_NAME = "renal_diet.db"
-PORT = 8000
+PORT = 8001
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", ENV.get("GEMINI_API_KEY", ""))

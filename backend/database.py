@@ -28,6 +28,19 @@ def run_migrations():
         if 'terms_accepted_at' not in columns:
             print("Migrating DB: Adding terms_accepted_at...")
             cursor.execute("ALTER TABLE users ADD COLUMN terms_accepted_at REAL")
+            
+        if 'email_verified' not in columns:
+            print("Migrating DB: Adding email_verified...")
+            cursor.execute("ALTER TABLE users ADD COLUMN email_verified INTEGER DEFAULT 0")
+            cursor.execute("UPDATE users SET email_verified = 1") # Existing users are grandfathered in
+            
+        if 'verification_token' not in columns:
+            print("Migrating DB: Adding verification_token...")
+            cursor.execute("ALTER TABLE users ADD COLUMN verification_token TEXT")
+            
+        if 'verification_sent_at' not in columns:
+            print("Migrating DB: Adding verification_sent_at...")
+            cursor.execute("ALTER TABLE users ADD COLUMN verification_sent_at REAL")
 
         # Create Menus Tables
         cursor.execute("""

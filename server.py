@@ -75,6 +75,9 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
         elif path == '/api/reset_password':
             auth.handle_reset_password(data, self)
             
+        elif path == '/api/verify_email':
+            auth.handle_verify_email(data, self)
+            
         elif path == '/api/update_profile':
             users.handle_update_profile(data, self)
             

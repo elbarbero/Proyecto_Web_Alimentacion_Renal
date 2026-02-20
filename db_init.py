@@ -107,6 +107,9 @@ def init_db():
         treatment_type TEXT,
         kidney_stage TEXT,
         avatar_url TEXT,
+        email_verified INTEGER DEFAULT 0,
+        verification_token TEXT,
+        verification_sent_at REAL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     ''')

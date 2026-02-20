@@ -19,6 +19,14 @@ def handle_login(data, handler):
     conn.close()
 
     if user and verify_password(user['password_hash'], password):
+        # Verification check
+        # sqlite3.Row doesn't support .get(), check if columns exist by checking keys
+        if 'email_verified' in user.keys() and user['email_verified'] == 0:
+            sent_at = user['verification_sent_at'] if 'verification_sent_at' in user.keys() else None
+            if sent_at and (time.time() - sent_at) > 7 * 24 * 3600:
+                send_json(handler, 403, {"status": "error", "message": "unverified_email"})
+                return
+
         send_json(handler, 200, {
             "status": "success", 
             "userId": user['id'], 
@@ -58,9 +66,14 @@ def handle_register(data, handler):
     hashed_pw = hash_password(password)
     terms_accepted_at = time.time()
     
+    verification_token = secrets.token_urlsafe(32)
+    verification_sent_at = time.time()
+    
     try:
-        cursor.execute("INSERT INTO users (email, password_hash, name, surnames, birthdate, nationality, terms_accepted_at, avatar_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
-                       (email, hashed_pw, name, surnames, birthdate, nationality, terms_accepted_at, '/images/default_avatar.png'))
+        cursor.execute("""
+            INSERT INTO users (email, password_hash, name, surnames, birthdate, nationality, terms_accepted_at, avatar_url, email_verified, verification_token, verification_sent_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?)
+        """, (email, hashed_pw, name, surnames, birthdate, nationality, terms_accepted_at, '/images/default_avatar.png', verification_token, verification_sent_at))
         conn.commit()
         user_id = cursor.lastrowid
         conn.close()
@@ -74,6 +87,20 @@ def handle_register(data, handler):
             "nationality": nationality,
             "email": email
         })
+        
+        # Send Verification Email
+        host = handler.headers.get("X-Forwarded-Host", handler.headers.get("Host", f"localhost:{PORT}"))
+        scheme = handler.headers.get("X-Forwarded-Proto", "http")
+        verify_link = f"{scheme}://{host}/?verify_token={verification_token}"
+        
+        body = f"""
+        <h2>Verifica tu correo electrónico</h2>
+        <p>Gracias por registrarte en Alimentación Renal Inteligente. Haz clic en el siguiente enlace para verificar tu cuenta:</p>
+        <p><a href="{verify_link}">Verificar mi cuenta</a></p>
+        <p>Si no verificas tu cuenta en 7 días, será desactivada temporalmente.</p>
+        """
+        send_email(email, "Verifica tu cuenta - Alimentación Renal", body)
+        
     except Exception as e:
         print(f"Register Error: {e}")
         conn.close()
@@ -139,3 +166,26 @@ def handle_reset_password(data, handler):
     conn.close()
 
     send_json(handler, 200, {"status": "success", "message": "Contraseña actualizada"})
+
+def handle_verify_email(data, handler):
+    token = data.get('token')
+    
+    if not token:
+        send_json(handler, 400, {"status": "error", "message": "Token faltante"})
+        return
+        
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM users WHERE verification_token = ?", (token,))
+    user = cursor.fetchone()
+    
+    if not user:
+        conn.close()
+        send_json(handler, 400, {"status": "error", "message": "Token inválido o cuenta ya verificada"})
+        return
+        
+    cursor.execute("UPDATE users SET email_verified = 1, verification_token = NULL WHERE id = ?", (user['id'],))
+    conn.commit()
+    conn.close()
+    
+    send_json(handler, 200, {"status": "success", "message": "Cuenta verificada exitosamente"})

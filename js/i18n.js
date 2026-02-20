@@ -207,7 +207,10 @@ export const translations = {
         error_title: "Error",
         error_size_msg: "La imagen es demasiado grande. Máximo 2MB.",
         loginRequiredTitle: "Acción requerida",
-        loginRequiredMsg: "Debes Iniciar Sesión o Registrarte para usar esta función."
+        loginRequiredMsg: "Debes Iniciar Sesión o Registrarte para usar esta función.",
+        unverifiedEmail: "Por favor, verifica tu correo electrónico para continuar usando tu cuenta.",
+        emailVerifiedTitle: "Email Verificado",
+        emailVerifiedSuccess: "Tu cuenta ha sido verificada correctamente. ¡Gracias!"
     },
     en: {
         title: "Smart Renal Diet",
@@ -415,7 +418,10 @@ export const translations = {
         error_title: "Error",
         error_size_msg: "Image is too large. Maximum 2MB.",
         loginRequiredTitle: "Action Required",
-        loginRequiredMsg: "You must Log In or Sign Up to use this feature."
+        loginRequiredMsg: "You must Log In or Sign Up to use this feature.",
+        unverifiedEmail: "Please verify your email address to continue using your account.",
+        emailVerifiedTitle: "Email Verified",
+        emailVerifiedSuccess: "Your account has been successfully verified. Thank you!"
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -593,7 +599,10 @@ export const translations = {
         error_title: "Fehler",
         error_size_msg: "Das Bild ist zu groß. Maximal 2 MB.",
         loginRequiredTitle: "Aktion erforderlich",
-        loginRequiredMsg: "Sie müssen sich anmelden oder registrieren, um diese Funktion zu nutzen."
+        loginRequiredMsg: "Sie müssen sich anmelden oder registrieren, um diese Funktion zu nutzen.",
+        unverifiedEmail: "Bitte verifizieren Sie Ihre E-Mail-Adresse, um Ihr Konto weiter zu nutzen.",
+        emailVerifiedTitle: "E-Mail verifiziert",
+        emailVerifiedSuccess: "Ihr Konto wurde erfolgreich verifiziert. Danke!"
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -771,7 +780,10 @@ export const translations = {
         error_title: "Erreur",
         error_size_msg: "L'image est trop grande. Maximum 2 Mo.",
         loginRequiredTitle: "Action Requise",
-        loginRequiredMsg: "Vous devez vous connecter ou vous inscrire pour utiliser cette fonctionnalité."
+        loginRequiredMsg: "Vous devez vous connecter ou vous inscrire pour utiliser cette fonctionnalité.",
+        unverifiedEmail: "Veuillez vérifier votre adresse e-mail pour continuer à utiliser votre compte.",
+        emailVerifiedTitle: "E-mail Vérifié",
+        emailVerifiedSuccess: "Votre compte a été vérifié avec succès. Merci !"
     },
     pt: {
         title: "Dieta Renal Inteligente",
