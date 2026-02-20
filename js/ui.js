@@ -230,6 +230,23 @@ let currentViewId = 'view-home';
 const viewHistory = [];
 
 export function showView(viewId, saveHistory = true) {
+    if (viewId === 'view-menus' || viewId === 'view-forum') {
+        const storedUser = localStorage.getItem('user');
+        if (!storedUser) {
+            const lang = getCurrentLang();
+            const t = translations[lang] || translations['es'];
+            showAlert(
+                t.loginRequiredTitle || "Acción requerida",
+                t.loginRequiredMsg || "Debes Iniciar Sesión o Registrarte para usar esta función.",
+                "🔒"
+            ).then(() => {
+                const userBtn = document.getElementById('user-btn');
+                if (userBtn) userBtn.click();
+            });
+            return;
+        }
+    }
+
     const views = document.querySelectorAll('.view-section');
     const backBtn = document.getElementById('global-back-btn');
 

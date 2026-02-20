@@ -205,7 +205,9 @@ export const translations = {
         errorGeneric: "Algo salió mal. Por favor, inténtalo de nuevo.",
         errorLogin: "Debes iniciar sesión para publicar.",
         error_title: "Error",
-        error_size_msg: "La imagen es demasiado grande. Máximo 2MB."
+        error_size_msg: "La imagen es demasiado grande. Máximo 2MB.",
+        loginRequiredTitle: "Acción requerida",
+        loginRequiredMsg: "Debes Iniciar Sesión o Registrarte para usar esta función."
     },
     en: {
         title: "Smart Renal Diet",
@@ -411,7 +413,9 @@ export const translations = {
         errorGeneric: "Something went wrong. Please try again.",
         errorLogin: "You must be logged in to post.",
         error_title: "Error",
-        error_size_msg: "Image is too large. Maximum 2MB."
+        error_size_msg: "Image is too large. Maximum 2MB.",
+        loginRequiredTitle: "Action Required",
+        loginRequiredMsg: "You must Log In or Sign Up to use this feature."
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -587,7 +591,9 @@ export const translations = {
         noThreads: "Noch keine Themen. Sei der Erste, der fragt!",
         backToForum: "Zurück zum Forum",
         error_title: "Fehler",
-        error_size_msg: "Das Bild ist zu groß. Maximal 2 MB."
+        error_size_msg: "Das Bild ist zu groß. Maximal 2 MB.",
+        loginRequiredTitle: "Aktion erforderlich",
+        loginRequiredMsg: "Sie müssen sich anmelden oder registrieren, um diese Funktion zu nutzen."
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -763,7 +769,9 @@ export const translations = {
         noThreads: "Pas encore de sujets. Soyez le premier à demander !",
         backToForum: "Retour au forum",
         error_title: "Erreur",
-        error_size_msg: "L'image est trop grande. Maximum 2 Mo."
+        error_size_msg: "L'image est trop grande. Maximum 2 Mo.",
+        loginRequiredTitle: "Action Requise",
+        loginRequiredMsg: "Vous devez vous connecter ou vous inscrire pour utiliser cette fonctionnalité."
     },
     pt: {
         title: "Dieta Renal Inteligente",
