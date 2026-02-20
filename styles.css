@@ -255,6 +255,64 @@ body {
     line-height: 1.7;
 }
 
+/* Menu Tabs Segmented Control */
+.menus-tabs {
+    display: inline-flex;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.04);
+    padding: 0.35rem;
+    border-radius: 50px;
+    margin-bottom: 2rem;
+    position: relative;
+    /* We'll use a sliding background pill */
+    z-index: 1;
+}
+
+/* Sliding active background indicator */
+.menus-tabs::before {
+    content: '';
+    position: absolute;
+    top: 0.35rem;
+    bottom: 0.35rem;
+    left: 0.35rem;
+    width: calc(50% - 0.35rem);
+    background: white;
+    border-radius: 50px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    z-index: -1;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Move the indicator based on a modifier class on the container */
+.menus-tabs.public-active::before {
+    transform: translateX(100%);
+}
+
+.menu-tab-btn {
+    flex: 1;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.menu-tab-btn:hover {
+    color: var(--primary-color);
+}
+
+.menu-tab-btn.active {
+    color: var(--primary-color);
+}
+
 /* Search Bar */
 .search-container {
     margin-top: 2rem;

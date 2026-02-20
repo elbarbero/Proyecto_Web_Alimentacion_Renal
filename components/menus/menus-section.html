@@ -1,8 +1,7 @@
 <!-- VIEW: MENUS -->
 <section id="view-menus" class="view-section hidden">
     <div class="container">
-        <div class="menus-header">
-            <h2 data-i18n="menusTitle">Mis Menús</h2>
+        <div class="menus-header" style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
             <button id="new-menu-btn" class="btn-primary" data-i18n="newMenu"> + Nuevo Menú</button>
         </div>
 
@@ -108,19 +107,26 @@
             </div>
         </div>
 
-        <!-- Saved Menus List -->
-        <div class="search-container" id="menus-search-container" style="margin-bottom: 2rem;">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" id="menu-list-search" data-i18n-placeholder="searchMenusPlaceholder"
-                placeholder="Buscar en mis menús...">
-        </div>
+        <!-- Saved Menus List Section -->
+        <div id="menus-dashboard-header" style="margin-bottom: 2rem; text-align: center;">
+            <!-- Tabs -->
+            <div class="menus-tabs">
+                <button class="menu-tab-btn active" data-tab="my_menus" data-i18n="myMenusTab">Mis Menús</button>
+                <button class="menu-tab-btn" data-tab="public_menus" data-i18n="publicMenusTab">Menús Públicos</button>
+            </div>
 
-        <div id="menus-list" class="menus-grid">
-            <!-- Menus generated dynamically -->
+            <div class="search-container" id="menus-search-container">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="menu-list-search" data-i18n-placeholder="searchMenusPlaceholder"
+                    placeholder="Buscar en mis menús...">
+            </div>
+
+            <div id="menus-list" class="menus-grid">
+                <!-- Menus generated dynamically -->
+            </div>
         </div>
-    </div>
 </section>

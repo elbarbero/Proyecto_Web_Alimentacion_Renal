@@ -11,6 +11,7 @@ let currentMenu = {
 };
 let isCreating = false;
 let editingMenuId = null;
+let activeMenusTab = 'my_menus'; // 'my_menus' or 'public_menus'
 
 // DOM Elements
 let menusListContainer, newMenuBtn, creationForm, menuNameInput, menuPublicToggle, privacyStatusText, menuCreatorInfo, menuItemsContainer, menuTotalsContainer, saveMenuBtn, cancelMenuBtn;
@@ -81,6 +82,26 @@ export async function initMenus() {
         menuListSearch.addEventListener('input', () => renderMenus());
     }
 
+    // Tabs Listener
+    const menuTabBtns = document.querySelectorAll('.menu-tab-btn');
+    const menusTabsContainer = document.querySelector('.menus-tabs');
+    menuTabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            activeMenusTab = btn.getAttribute('data-tab');
+            menuTabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Move sliding background
+            if (activeMenusTab === 'public_menus') {
+                menusTabsContainer.classList.add('public-active');
+            } else {
+                menusTabsContainer.classList.remove('public-active');
+            }
+
+            renderMenus();
+        });
+    });
+
     // Load data in background
     foodDatabase = await fetchFoods();
     await loadMenus();
@@ -139,8 +160,22 @@ async function loadMenus() {
 function renderMenus() {
     if (!menusListContainer) return;
 
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user ? (user.userId || user.id) : null;
+
+    // Read the search input from the DOM and normalize it
     const searchTerm = menuListSearch ? normalizeText(menuListSearch.value) : '';
-    const filteredMenus = menus.filter(m => normalizeText(m.name).includes(searchTerm));
+
+    const filteredMenus = menus.filter(m => {
+        const matchesSearch = normalizeText(m.name).includes(searchTerm);
+        let matchesTab = false;
+        if (activeMenusTab === 'my_menus') {
+            matchesTab = String(m.user_id) === String(userId);
+        } else if (activeMenusTab === 'public_menus') {
+            matchesTab = m.is_public === 1 && String(m.user_id) !== String(userId);
+        }
+        return matchesSearch && matchesTab;
+    });
 
     menusListContainer.innerHTML = '';
 
@@ -152,8 +187,6 @@ function renderMenus() {
         menusListContainer.innerHTML = `<p class="empty-msg">${msg}</p>`;
         return;
     }
-
-    const user = JSON.parse(localStorage.getItem('user'));
 
     filteredMenus.forEach(menu => {
         const isOwner = user && menu.user_id === (user.userId || user.id);

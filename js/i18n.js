@@ -149,6 +149,8 @@ export const translations = {
         menusDesc: "Planifica tus comidas",
         // Menus
         menusTitle: "Mis Menús",
+        myMenusTab: "Mis Menús",
+        publicMenusTab: "Menús Públicos",
         newMenu: " + Nuevo Menú",
         saveMenu: "Guardar Menú",
         addFood: "Añadir Alimento",
@@ -353,6 +355,8 @@ export const translations = {
         menusDesc: "Plan your meals",
         // Menus
         menusTitle: "My Menus",
+        myMenusTab: "My Menus",
+        publicMenusTab: "Public Menus",
         newMenu: " + New Menu",
         saveMenu: "Save Menu",
         addFood: "Add Food",
@@ -545,6 +549,8 @@ export const translations = {
         menusDesc: "Planen Sie Ihre Mahlzeiten",
         // Menus
         menusTitle: "Meine Menüs",
+        myMenusTab: "Meine Menüs",
+        publicMenusTab: "Öffentliche Menüs",
         newMenu: " + Neues Menü",
         saveMenu: "Menü speichern",
         addFood: "Lebensmittel hinzufügen",
@@ -719,6 +725,8 @@ export const translations = {
         menusDesc: "Planifiez vos repas",
         // Menus
         menusTitle: "Mes Menus",
+        myMenusTab: "Mes Menus",
+        publicMenusTab: "Menus Publics",
         newMenu: " + Nouveau Menu",
         saveMenu: "Enregistrer le menu",
         addFood: "Ajouter un aliment",
@@ -893,6 +901,8 @@ export const translations = {
         menusDesc: "Planeie as suas refeições",
         // Menus
         menusTitle: "Meus Menus",
+        myMenusTab: "Meus Menus",
+        publicMenusTab: "Menus Públicos",
         newMenu: " + Novo Menu",
         saveMenu: "Salvar Menu",
         addFood: "Adicionar Alimento",
@@ -1066,6 +1076,8 @@ export const translations = {
         menusDesc: "食事を計画する",
         // Menus
         menusTitle: "マイメニュー",
+        myMenusTab: "マイメニュー",
+        publicMenusTab: "公開メニュー",
         newMenu: " + 新規作成",
         saveMenu: "保存",
         addFood: "食品を追加",
