@@ -1084,6 +1084,13 @@ async function checkVerifyToken() {
             const data = await res.json();
 
             if (data.status === 'success') {
+                const storedUser = localStorage.getItem('user');
+                if (storedUser) {
+                    const u = JSON.parse(storedUser);
+                    u.email_verified = 1;
+                    localStorage.setItem('user', JSON.stringify(u));
+                }
+
                 showAlert(
                     t.emailVerifiedTitle || "Email Verificado",
                     t.emailVerifiedSuccess || "Tu cuenta ha sido verificada correctamente. ¡Gracias!",
