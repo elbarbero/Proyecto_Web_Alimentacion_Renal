@@ -1,4 +1,4 @@
-import { fetchUser, login, register, requestPasswordReset, resetPassword, fetchCountries, verifyEmail } from './api.js';
+import { fetchUser, login, register, requestPasswordReset, resetPassword, fetchCountries, verifyEmail, resendVerification } from './api.js';
 import { translations, getCurrentLang } from './i18n.js';
 import { clearChatHistory } from './chat.js';
 import { setupCustomSelects, showAlert } from './ui.js';
@@ -43,6 +43,46 @@ export function initAuthState() {
                 if (!url.startsWith('/')) url = '/' + url;
                 avatarImg.src = url.includes('?') ? `${url}&t=${timestamp}` : `${url}?t=${timestamp}`;
             }
+
+            // Unverified Banner Logic
+            const banner = document.getElementById('unverified-banner');
+            if (banner) {
+                if (user.email_verified === 0) {
+                    banner.classList.remove('hidden');
+                    const resendBannerLink = document.getElementById('banner-resend-link');
+                    if (resendBannerLink) {
+                        resendBannerLink.onclick = async (e) => {
+                            e.preventDefault();
+                            resendBannerLink.style.pointerEvents = 'none';
+                            resendBannerLink.style.opacity = '0.5';
+                            const t = translations[getCurrentLang()] || translations['es'];
+                            resendBannerLink.textContent = t.sending || "Enviando...";
+                            try {
+                                const res = await resendVerification(user.email);
+                                const resData = await res.json();
+                                if (resData.status === 'success') {
+                                    showAlert(
+                                        t.verificationSentTitle || "Correo Enviado",
+                                        t.verificationSentSuccess || "Se ha enviado un nuevo enlace de verificación a tu correo.",
+                                        "✉️"
+                                    );
+                                } else {
+                                    showAlert("Error", resData.message || "Error al reenviar", "❌");
+                                }
+                            } catch (error) {
+                                showAlert("Error", "Error de conexión", "❌");
+                            } finally {
+                                resendBannerLink.style.pointerEvents = 'auto';
+                                resendBannerLink.style.opacity = '1';
+                                resendBannerLink.textContent = t.unverifiedBannerResend || "Haz clic aquí para reenviar el enlace.";
+                            }
+                        };
+                    }
+                } else {
+                    banner.classList.add('hidden');
+                }
+            }
+
         } catch (e) {
             console.error('initAuthState: Error parsing user', e);
         }
@@ -51,6 +91,9 @@ export function initAuthState() {
         if (menusCard) menusCard.classList.add('disabled-card');
         if (forumCard) forumCard.classList.add('disabled-card');
         if (userBtn) userBtn.classList.remove('user-logged-in');
+
+        const banner = document.getElementById('unverified-banner');
+        if (banner) banner.classList.add('hidden');
     }
 }
 
@@ -457,6 +500,7 @@ async function handleAuthSubmit(e) {
                 kidney_stage: data.kidney_stage,
                 nationality: data.nationality,
                 email: data.email || payload.email, // Prefer backend source
+                email_verified: data.email_verified !== undefined ? data.email_verified : 1, // Store verification status
                 avatar_url: data.avatar_url || 'images/default_avatar.png'
             };
 
@@ -492,6 +536,37 @@ async function handleAuthSubmit(e) {
         } else {
             if (data.message === 'unverified_email') {
                 if (authError) authError.textContent = t.unverifiedEmail || "Por favor, verifica tu correo electrónico para continuar usando tu cuenta.";
+                const resendContainer = document.getElementById('resend-verification-container');
+                if (resendContainer) {
+                    resendContainer.style.display = 'block';
+                    const resendLink = document.getElementById('resend-verification-link');
+                    // Setup one-off click listener to prevent spam
+                    resendLink.onclick = async () => {
+                        resendLink.style.pointerEvents = 'none';
+                        resendLink.style.opacity = '0.5';
+                        resendLink.textContent = t.sending || "Enviando...";
+                        try {
+                            const res = await resendVerification(email.value);
+                            const resData = await res.json();
+                            if (resData.status === 'success') {
+                                showAlert(
+                                    t.verificationSentTitle || "Correo Enviado",
+                                    t.verificationSentSuccess || "Se ha enviado un nuevo enlace de verificación a tu correo.",
+                                    "✉️"
+                                );
+                                resendContainer.style.display = 'none';
+                            } else {
+                                if (authError) authError.textContent = resData.message || "Error al reenviar";
+                            }
+                        } catch (e) {
+                            if (authError) authError.textContent = "Error de conexión";
+                        } finally {
+                            resendLink.style.pointerEvents = 'auto';
+                            resendLink.style.opacity = '1';
+                            resendLink.textContent = t.resendVerification || "¿No recibiste el correo? Reenviar verificación";
+                        }
+                    };
+                }
             } else {
                 if (authError) authError.textContent = data.message || "Error";
             }

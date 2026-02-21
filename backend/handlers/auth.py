@@ -38,7 +38,8 @@ def handle_login(data, handler):
             "has_insufficiency": user['has_insufficiency'],
             "treatment_type": user['treatment_type'],
             "kidney_stage": user['kidney_stage'],
-            "avatar_url": user['avatar_url']
+            "avatar_url": user['avatar_url'],
+            "email_verified": user['email_verified'] if 'email_verified' in user.keys() else 1 # Default to 1 (verified) if column doesn't exist yet
         })
     else:
         send_json(handler, 401, {"status": "error", "message": "Invalid credentials"})
@@ -85,6 +86,7 @@ def handle_register(data, handler):
             "surnames": surnames,
             "birthdate": birthdate,
             "nationality": nationality,
+            "email_verified": 0,
             "email": email
         })
         
@@ -136,6 +138,51 @@ def handle_request_reset(data, handler):
 
     conn.close()
     send_json(handler, 200, {"status": "success", "message": "Si el email existe, se ha enviado un correo."})
+
+def handle_resend_verification(data, handler):
+    email = data.get('email')
+    
+    if not email:
+        send_json(handler, 400, {"status": "error", "message": "Email faltante"})
+        return
+        
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, email_verified FROM users WHERE email = ?", (email,))
+    user = cursor.fetchone()
+    
+    if not user:
+        conn.close()
+        send_json(handler, 404, {"status": "error", "message": "Usuario no encontrado"})
+        return
+        
+    # sqlite3.Row doesn't support .get(), check if columns exist by checking keys
+    if 'email_verified' in user.keys() and user['email_verified'] == 1:
+        conn.close()
+        send_json(handler, 400, {"status": "error", "message": "El usuario ya está verificado"})
+        return
+        
+    verification_token = secrets.token_urlsafe(32)
+    verification_sent_at = time.time()
+    
+    cursor.execute("UPDATE users SET verification_token = ?, verification_sent_at = ? WHERE id = ?", (verification_token, verification_sent_at, user['id']))
+    conn.commit()
+    conn.close()
+    
+    # Send Verification Email
+    host = handler.headers.get("X-Forwarded-Host", handler.headers.get("Host", f"localhost:{PORT}"))
+    scheme = handler.headers.get("X-Forwarded-Proto", "http")
+    verify_link = f"{scheme}://{host}/?verify_token={verification_token}"
+    
+    body = f"""
+    <h2>Verifica tu correo electrónico</h2>
+    <p>Has solicitado reenviar el correo de verificación. Haz clic en el siguiente enlace para verificar tu cuenta:</p>
+    <p><a href="{verify_link}">Verificar mi cuenta</a></p>
+    <p>Si no verificas tu cuenta en 7 días desde hoy, será desactivada temporalmente.</p>
+    """
+    send_email(email, "Reenvío - Verifica tu cuenta - Alimentación Renal", body)
+    
+    send_json(handler, 200, {"status": "success", "message": "Correo reenviado exitosamente"})
 
 def handle_reset_password(data, handler):
     token = data.get('token')

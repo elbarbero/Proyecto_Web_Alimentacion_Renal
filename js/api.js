@@ -60,6 +60,15 @@ export async function requestPasswordReset(email) {
     return res;
 }
 
+export async function resendVerification(email) {
+    const res = await fetch(`${API_BASE}/resend_verification`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    });
+    return res;
+}
+
 export async function verifyEmail(token) {
     const res = await fetch(`${API_BASE}/verify_email`, {
         method: 'POST',

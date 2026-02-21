@@ -29,6 +29,7 @@ def handle_get_user(query_params, handler):
             "has_insufficiency": user['has_insufficiency'],
             "treatment_type": user['treatment_type'],
             "kidney_stage": user['kidney_stage'],
+            "email_verified": user['email_verified'] if 'email_verified' in user.keys() else 1,
             "avatar_url": user['avatar_url']
         })
     else:

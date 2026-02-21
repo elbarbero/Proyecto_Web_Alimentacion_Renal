@@ -210,7 +210,13 @@ export const translations = {
         loginRequiredMsg: "Debes Iniciar Sesión o Registrarte para usar esta función.",
         unverifiedEmail: "Por favor, verifica tu correo electrónico para continuar usando tu cuenta.",
         emailVerifiedTitle: "Email Verificado",
-        emailVerifiedSuccess: "Tu cuenta ha sido verificada correctamente. ¡Gracias!"
+        emailVerifiedSuccess: "Tu cuenta ha sido verificada correctamente. ¡Gracias!",
+        resendVerification: "¿No recibiste el correo? Reenviar verificación",
+        sending: "Enviando...",
+        verificationSentTitle: "Correo Enviado",
+        verificationSentSuccess: "Se ha enviado un nuevo enlace de verificación a tu correo.",
+        unverifiedBannerMsg: "Tu cuenta de correo no está verificada. ",
+        unverifiedBannerResend: "Haz clic aquí para reenviar el enlace."
     },
     en: {
         title: "Smart Renal Diet",
@@ -421,7 +427,13 @@ export const translations = {
         loginRequiredMsg: "You must Log In or Sign Up to use this feature.",
         unverifiedEmail: "Please verify your email address to continue using your account.",
         emailVerifiedTitle: "Email Verified",
-        emailVerifiedSuccess: "Your account has been successfully verified. Thank you!"
+        emailVerifiedSuccess: "Your account has been successfully verified. Thank you!",
+        resendVerification: "Didn't receive the email? Resend verification",
+        sending: "Sending...",
+        verificationSentTitle: "Email Sent",
+        verificationSentSuccess: "A new verification link has been sent to your email.",
+        unverifiedBannerMsg: "Your email account is not verified. ",
+        unverifiedBannerResend: "Click here to resend the link."
     },
     de: {
         title: "Intelligente Nierendiät",
@@ -602,7 +614,13 @@ export const translations = {
         loginRequiredMsg: "Sie müssen sich anmelden oder registrieren, um diese Funktion zu nutzen.",
         unverifiedEmail: "Bitte verifizieren Sie Ihre E-Mail-Adresse, um Ihr Konto weiter zu nutzen.",
         emailVerifiedTitle: "E-Mail verifiziert",
-        emailVerifiedSuccess: "Ihr Konto wurde erfolgreich verifiziert. Danke!"
+        emailVerifiedSuccess: "Ihr Konto wurde erfolgreich verifiziert. Danke!",
+        resendVerification: "Keine E-Mail erhalten? Überprüfung erneut senden",
+        sending: "Senden...",
+        verificationSentTitle: "E-Mail gesendet",
+        verificationSentSuccess: "Ein neuer Bestätigungslink wurde an Ihre E-Mail gesendet.",
+        unverifiedBannerMsg: "Ihre E-Mail-Adresse ist nicht verifiziert. ",
+        unverifiedBannerResend: "Klicken Sie hier, um den Link erneut zu senden."
     },
     fr: {
         title: "Alimentation Rénale Intelligente",
@@ -783,7 +801,13 @@ export const translations = {
         loginRequiredMsg: "Vous devez vous connecter ou vous inscrire pour utiliser cette fonctionnalité.",
         unverifiedEmail: "Veuillez vérifier votre adresse e-mail pour continuer à utiliser votre compte.",
         emailVerifiedTitle: "E-mail Vérifié",
-        emailVerifiedSuccess: "Votre compte a été vérifié avec succès. Merci !"
+        emailVerifiedSuccess: "Votre compte a été vérifié avec succès. Merci !",
+        resendVerification: "Vous n'avez pas reçu l'e-mail ? Renvoyer la vérification",
+        sending: "Envoi en cours...",
+        verificationSentTitle: "E-mail Envoyé",
+        verificationSentSuccess: "Un nouveau lien de vérification a été envoyé à votre adresse e-mail.",
+        unverifiedBannerMsg: "Votre compte e-mail n'est pas vérifié. ",
+        unverifiedBannerResend: "Cliquez ici pour renvoyer le lien."
     },
     pt: {
         title: "Dieta Renal Inteligente",
@@ -958,8 +982,18 @@ export const translations = {
         postComment: "Publicar",
         noThreads: "Ainda não há tópicos. Seja o primeiro a perguntar!",
         backToForum: "Voltar ao fórum",
-        error_title: "Erro",
-        error_size_msg: "A imagem é muito grande. Máximo 2MB."
+        error_size_msg: "A imagem é muito grande. Máximo 2MB.",
+        loginRequiredTitle: "Ação Necessária",
+        loginRequiredMsg: "Você deve fazer login ou se registrar para usar este recurso.",
+        unverifiedEmail: "Por favor, verifique sua conta de e-mail para continuar usando sua conta.",
+        emailVerifiedTitle: "E-mail Verificado",
+        emailVerifiedSuccess: "Sua conta foi verificada com sucesso. Obrigado!",
+        resendVerification: "Não recebeu o e-mail? Reenviar verificação",
+        sending: "Enviando...",
+        verificationSentTitle: "E-mail Enviado",
+        verificationSentSuccess: "Um novo link de verificação foi enviado para o seu e-mail.",
+        unverifiedBannerMsg: "Sua conta de e-mail não está verificada. ",
+        unverifiedBannerResend: "Clique aqui para reenviar o link."
     },
     ja: {
         title: "スマート腎臓食",
@@ -1133,7 +1167,18 @@ export const translations = {
         noThreads: "まだトピックはありません。最初の質問をしましょう！",
         backToForum: "掲示板に戻る",
         error_title: "エラー",
-        error_size_msg: "画像が大きすぎます。最大2MBです。"
+        error_size_msg: "画像が大きすぎます。最大2MBです。",
+        loginRequiredTitle: "必要なアクション",
+        loginRequiredMsg: "この機能を使用するには、ログインまたはサインアップする必要があります。",
+        unverifiedEmail: "アカウントを引き続き使用するためには、メールアドレスを確認してください。",
+        emailVerifiedTitle: "メール確認済み",
+        emailVerifiedSuccess: "アカウントの確認が正常に完了しました。ありがとうございます！",
+        resendVerification: "メールが届きませんか？確認メールを再送信する",
+        sending: "送信中...",
+        verificationSentTitle: "メール送信済み",
+        verificationSentSuccess: "新しい確認リンクがメールに送信されました。",
+        unverifiedBannerMsg: "メールアカウントが確認されていません。 ",
+        unverifiedBannerResend: "ここをクリックしてリンクを再送信してください。"
     },
 };
 
@@ -1161,17 +1206,20 @@ export function updateTexts() {
             if (el.children.length === 0) {
                 el.textContent = t[key];
             } else {
-                // If it has children, we might destroy them if we set textContent.
-                // For this project, mostly text is direct content. 
-                // Exceptions: Buttons with icons? 
-                // Let's assume safe to textContent unless it's a specific class.
-                // Or better: check if it only contains text nodes.
-
-                // Safe approach: Only update if text matches strict pattern? 
-                // Or use specific attribute logic.
-                // The original script.js likely just did el.textContent = t[key].
-                // Let's check script.js logic later. For now, textContent is standard.
-                el.innerText = t[key];
+                // If it has children (like the banner link), we should use innerHTML 
+                // but replace only the text nodes or just allow the translation to contain HTML.
+                // Since our translations for the banner are just text, we can use childNodes iteration
+                let translationSet = false;
+                for (let node of el.childNodes) {
+                    if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim().length > 0) {
+                        node.nodeValue = t[key];
+                        translationSet = true;
+                        break;
+                    }
+                }
+                if (!translationSet) {
+                    el.innerHTML = t[key] + el.innerHTML;
+                }
             }
         }
     });

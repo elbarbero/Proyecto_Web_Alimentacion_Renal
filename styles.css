@@ -25,6 +25,10 @@
     padding: 0;
 }
 
+.hidden {
+    display: none !important;
+}
+
 body {
     font-family: var(--font-body);
     background-color: var(--bg-color);
@@ -53,6 +57,46 @@ body {
     width: 100%;
     gap: 0;
     /* Remove gap to ensure strict flex sizing */
+}
+
+/* Unverified Banner */
+.unverified-banner {
+    width: 100%;
+    background-color: #fee2e2;
+    color: #991b1b;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #f87171;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1);
+    animation: slideDown 0.3s ease-out;
+}
+
+.unverified-banner a {
+    color: #b91c1c;
+    font-weight: 700;
+    text-decoration: underline;
+    margin-left: 0.5rem;
+    transition: color 0.2s;
+}
+
+.unverified-banner a:hover {
+    color: #7f1d1d;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Replaces spacer */
