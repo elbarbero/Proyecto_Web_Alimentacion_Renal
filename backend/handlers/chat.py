@@ -32,7 +32,7 @@ def handle_chat(data, handler):
         context_prompt += "\nSi el usuario pide un **MENÚ**, USA LISTAS (Bullets), **NO USES TABLAS**."
         context_prompt += "\n\nFORMATO OBLIGATORIO POR COMIDA:"
         context_prompt += "\n   *   **Nombre del Plato** (descripción breve)."
-        context_prompt += "\n       - *Nutrientes: Calorías: X kcal, Proteínas: Xg, Fósforo: Xmg, Potasio: Xmg, Sodio: Xmg.*"
+        context_prompt += "\n       - *Nutrientes: Calorías: X kcal, Proteínas: Xg, Carbohidratos: Xg, Fósforo: Xmg, Potasio: Xmg, Sodio: Xmg.*"
         context_prompt += "\n\nREGLAS DE ESTILO:"
         context_prompt += "\n   1. **NO USES ICONOS** para los nutrientes. Usa las palabras completas (Proteína, Potasio, etc). Muestra todos los nutrientes que se muestran en la web"
         context_prompt += "\n   2. Pon los datos justo DEBAJO del plato, indentado si es posible."
@@ -94,7 +94,7 @@ def handle_chat(data, handler):
                          name_row = c.fetchone()
                          name = name_row['name'] if name_row else f"Food {f_id}"
                          
-                         nut_str = ", ".join([f"{n['key']}: {n['value']}{n['unit']}" for n in nutrients if n['key'] in ['potassium','phosphorus','protein','sodium']])
+                         nut_str = ", ".join([f"{n['key']}: {n['value']}{n['unit']}" for n in nutrients if n['key'] in ['potassium','phosphorus','protein','carbs','sodium']])
                          context_prompt += f"\n- {name}: {nut_str}"
 
             except Exception as e:

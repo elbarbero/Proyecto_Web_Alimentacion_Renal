@@ -117,6 +117,7 @@ def init_db():
     # 2. Inicializar Catálogos
     nutrients_data = [
         ('protein', 'Proteínas', 'g'),
+        ('carbs', 'Carbohidratos', 'g'),
         ('sugar', 'Azúcares', 'g'),
         ('fat', 'Grasas', 'g'),
         ('potassium', 'Potasio', 'mg'),

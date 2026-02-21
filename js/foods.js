@@ -9,7 +9,7 @@ let activeCategory = 'all';
 // DOM Elements
 // DOM Elements
 let gridContainer, modal, closeModalBtn, gramsInput, searchInput, categoryTabsContainer;
-let mImg, mName, valKcal, valProtein, valSugar, valFat, valPotassium, valPhosphorus, valSalt, valCalcium;
+let mImg, mName, valKcal, valProtein, valCarbs, valSugar, valFat, valPotassium, valPhosphorus, valSalt, valCalcium;
 let valMagnesium, valIron, valCopper, valSulfur, valChlorine;
 let valVitK, valVitA, valVitC, valVitE, valVitB1, valVitB3, valVitB5, valVitB6, valVitB9;
 
@@ -30,6 +30,7 @@ function setupDOM() {
         mName = modal.querySelector('#modal-name');
         valKcal = modal.querySelector('#val-kcal');
         valProtein = modal.querySelector('#val-protein');
+        valCarbs = modal.querySelector('#val-carbs');
         valSugar = modal.querySelector('#val-sugar');
         valFat = modal.querySelector('#val-fat');
         valPotassium = modal.querySelector('#val-potassium');
@@ -331,8 +332,9 @@ function updateNutrients(amount) {
     const ratio = grams / 100;
     const n = currentFood.nutrients;
 
-    const vKcal = (((n.protein * ratio) * 4) + ((n.sugar * ratio) * 4) + ((n.fat * ratio) * 9)).toFixed(0);
+    const vKcal = (((n.protein * ratio) * 4) + (((n.carbs !== undefined ? n.carbs : n.sugar) * ratio) * 4) + ((n.fat * ratio) * 9)).toFixed(0);
     const vProteins = (n.protein * ratio).toFixed(1);
+    const vCarbs = (n.carbs !== undefined ? (n.carbs * ratio).toFixed(1) : (n.sugar * ratio).toFixed(1));
     const vSugar = (n.sugar * ratio).toFixed(1);
     const vFat = (n.fat * ratio).toFixed(1);
     const vPotassium = (n.potassium * ratio).toFixed(0);
@@ -359,6 +361,7 @@ function updateNutrients(amount) {
 
     if (valKcal) valKcal.textContent = vKcal + ' kcal';
     if (valProtein) valProtein.textContent = vProteins + 'g';
+    if (valCarbs) valCarbs.textContent = vCarbs + 'g';
     if (valSugar) valSugar.textContent = vSugar + 'g';
     if (valFat) valFat.textContent = vFat + 'g';
     if (valPotassium) valPotassium.textContent = vPotassium + 'mg';

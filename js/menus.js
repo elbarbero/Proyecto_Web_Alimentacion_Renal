@@ -550,7 +550,7 @@ function renderCurrentMenuItems() {
 function calculateTotals() {
     let totals = {
         // Macros & Minerals
-        kcal: 0, protein: 0, sugar: 0, fat: 0, potassium: 0, phosphorus: 0, salt: 0, calcium: 0,
+        kcal: 0, protein: 0, carbs: 0, sugar: 0, fat: 0, potassium: 0, phosphorus: 0, salt: 0, calcium: 0,
         magnesium: 0, iron: 0, copper: 0, sulfur: 0, chlorine: 0,
         // Vitamins
         vitamin_k: 0, vitamin_a: 0, vitamin_c: 0, vitamin_e: 0,
@@ -561,15 +561,15 @@ function calculateTotals() {
         const food = item.food_data;
         const ratio = item.quantity / 100;
 
-        // Calculate Kcal based on macros: 4 kcal/g for protein and carbs/sugars, 9 kcal/g for fat
+        // Calculate Kcal based on macros: 4 kcal/g for protein and carbs, 9 kcal/g for fat
         const p = (food.nutrients && food.nutrients.protein) || 0;
-        const s = (food.nutrients && food.nutrients.sugar) || 0;
+        const c = (food.nutrients && food.nutrients.carbs) || 0;
         const f = (food.nutrients && food.nutrients.fat) || 0;
-        totals.kcal += (p * 4 + s * 4 + f * 9) * ratio;
+        totals.kcal += (p * 4 + c * 4 + f * 9) * ratio;
 
         // Nutrients level 1
         const n = food.nutrients || {};
-        const nutrientsKeys = ['protein', 'sugar', 'fat', 'potassium', 'phosphorus', 'salt', 'calcium', 'magnesium', 'iron', 'copper', 'sulfur', 'chlorine'];
+        const nutrientsKeys = ['protein', 'carbs', 'sugar', 'fat', 'potassium', 'phosphorus', 'salt', 'calcium', 'magnesium', 'iron', 'copper', 'sulfur', 'chlorine'];
         nutrientsKeys.forEach(k => {
             if (n[k] !== undefined) totals[k] += n[k] * ratio;
         });
@@ -604,17 +604,17 @@ function updateTotalsUI(totals) {
         <div id="builder-nutrients-grid" class="info-grid"></div>
     `;
     const mainGrid = mainSection.querySelector('.info-grid');
-    const mainKeys = ['kcal', 'protein', 'sugar', 'fat', 'potassium', 'phosphorus', 'salt', 'calcium', 'magnesium', 'iron', 'copper', 'sulfur', 'chlorine'];
+    const mainKeys = ['kcal', 'protein', 'carbs', 'sugar', 'fat', 'potassium', 'phosphorus', 'salt', 'calcium', 'magnesium', 'iron', 'copper', 'sulfur', 'chlorine'];
 
     mainKeys.forEach(key => {
         const val = totals[key] || 0;
         let formattedVal;
-        if (['salt', 'protein', 'sugar', 'fat'].includes(key)) formattedVal = val.toFixed(2);
+        if (['salt', 'protein', 'carbs', 'sugar', 'fat'].includes(key)) formattedVal = val.toFixed(2);
         else if (['iron', 'copper'].includes(key)) formattedVal = val.toFixed(1);
         else formattedVal = val.toFixed(0);
 
         let unit = 'mg';
-        if (['protein', 'sugar', 'fat', 'salt'].includes(key)) unit = 'g';
+        if (['protein', 'carbs', 'sugar', 'fat', 'salt'].includes(key)) unit = 'g';
         if (key === 'kcal') unit = ' kcal';
 
         const colorClass = user && ['protein', 'potassium', 'phosphorus', 'salt', 'calcium'].includes(key)
