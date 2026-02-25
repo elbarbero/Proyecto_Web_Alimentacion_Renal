@@ -46,6 +46,9 @@ def handle_get_foods(handler):
             if row['food_id'] not in vit_dict: vit_dict[row['food_id']] = {}
             vit_dict[row['food_id']][row['vitamin_key']] = row['value']
 
+        # Core nutrients that must always exist
+        REQUIRED_NUTRIENTS = ['protein', 'carbs', 'sugar', 'fat', 'potassium', 'phosphorus', 'salt', 'calcium']
+
         foods = []
         for f in foods_rows:
             f_id = f['id']
@@ -53,14 +56,20 @@ def handle_get_foods(handler):
             default_name = names.get('es', names.get('en', 'Unknown'))
             category_string = ",".join(cat_dict.get(f_id, []))
             
+            # Ensure safe nutrients
+            f_nuts = nut_dict.get(f_id, {})
+            for kn in REQUIRED_NUTRIENTS:
+                if kn not in f_nuts:
+                    f_nuts[kn] = 0
+            
             foods.append({
                 "id": f_id,
                 "name": default_name,
                 "category": category_string,
                 "names": names,
-                "image": f['image_url'],
+                "image": f['image_url'] or "assets/placeholder-food.png", # Placeholder if null
                 "unit": f['unit'],
-                "nutrients": nut_dict.get(f_id, {}),
+                "nutrients": f_nuts,
                 "vitamins": vit_dict.get(f_id, {})
             })
         

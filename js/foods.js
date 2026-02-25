@@ -330,22 +330,25 @@ function updateNutrients(amount) {
     if (!currentFood) return;
     const grams = parseFloat(amount) || 0;
     const ratio = grams / 100;
-    const n = currentFood.nutrients;
+    const n = currentFood.nutrients || {};
 
-    const vKcal = (((n.protein * ratio) * 4) + (((n.carbs !== undefined ? n.carbs : n.sugar) * ratio) * 4) + ((n.fat * ratio) * 9)).toFixed(0);
-    const vProteins = (n.protein * ratio).toFixed(1);
-    const vCarbs = (n.carbs !== undefined ? (n.carbs * ratio).toFixed(1) : (n.sugar * ratio).toFixed(1));
-    const vSugar = (n.sugar * ratio).toFixed(1);
-    const vFat = (n.fat * ratio).toFixed(1);
-    const vPotassium = (n.potassium * ratio).toFixed(0);
-    const vPhosphorus = (n.phosphorus * ratio).toFixed(0);
-    const vSalt = (n.salt * ratio).toFixed(2);
-    const vCalcium = (n.calcium * ratio).toFixed(0);
-    const vMagnesium = (n.magnesium ? (n.magnesium * ratio).toFixed(0) : "0");
-    const vIron = (n.iron ? (n.iron * ratio).toFixed(1) : "0"); // Iron often small
-    const vCopper = (n.copper ? (n.copper * ratio).toFixed(1) : "0");
-    const vSulfur = (n.sulfur ? (n.sulfur * ratio).toFixed(0) : "0");
-    const vChlorine = (n.chlorine ? (n.chlorine * ratio).toFixed(0) : "0");
+    // Helper to get safe values
+    const getVal = (key) => (n[key] !== undefined ? n[key] : 0);
+
+    const vKcal = (((getVal('protein') * ratio) * 4) + (((n.carbs !== undefined ? n.carbs : getVal('sugar')) * ratio) * 4) + ((getVal('fat') * ratio) * 9)).toFixed(0);
+    const vProteins = (getVal('protein') * ratio).toFixed(1);
+    const vCarbs = (n.carbs !== undefined ? (n.carbs * ratio).toFixed(1) : (getVal('sugar') * ratio).toFixed(1));
+    const vSugar = (getVal('sugar') * ratio).toFixed(1);
+    const vFat = (getVal('fat') * ratio).toFixed(1);
+    const vPotassium = (getVal('potassium') * ratio).toFixed(0);
+    const vPhosphorus = (getVal('phosphorus') * ratio).toFixed(0);
+    const vSalt = (getVal('salt') * ratio).toFixed(2);
+    const vCalcium = (getVal('calcium') * ratio).toFixed(0);
+    const vMagnesium = (getVal('magnesium') ? (n.magnesium * ratio).toFixed(0) : "0");
+    const vIron = (getVal('iron') ? (n.iron * ratio).toFixed(1) : "0");
+    const vCopper = (getVal('copper') ? (n.copper * ratio).toFixed(1) : "0");
+    const vSulfur = (getVal('sulfur') ? (n.sulfur * ratio).toFixed(0) : "0");
+    const vChlorine = (getVal('chlorine') ? (n.chlorine * ratio).toFixed(0) : "0");
 
     // Vitamins Calculation
     const v = currentFood.vitamins || {};

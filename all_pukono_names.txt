@@ -1,0 +1,518 @@
+Abadejo
+Aceite de cacahuete
+Aceite de coco
+Aceite de girasol
+Aceite de higado de bacalao
+Aceite de maiz
+Aceite de oliva virgen
+Aceite de palma
+Aceite de soja
+Aceituna negra
+Aceituna verde
+Acelga en conserva
+Achicoria
+Agua con gas
+Agua de mineralizacion debil
+Ala de pollo
+Albaricoque seco (orejones)
+Albondigas en conserva
+Alcachofa congelada
+Alcachofa en conserva
+Alcaparra
+Alga agar cruda
+Alga agar desecada
+Alga espirulina desecada
+Alga kelp cruda
+Alga laver cruda
+Alga musgo de irlanda cruda
+Alga spirulina cruda
+Alga wakame cruda
+Alioli
+Almeja
+Almeja y berberecho en conserva
+Almendra
+Almendra frita salada sin cascara
+Almendra tostada sin cascara
+Anacardo
+Anca de rana
+Anchoa en aceite
+Angula
+Anis
+Añojo lomo
+Apio en conserva
+Arandano
+Arroz
+Arroz blanco de coccion rapida
+Arroz con leche
+Arroz integral
+Arroz tres delicias congelado
+Atun al natural
+Atun en aceite
+Atun en escabeche
+Avellana
+Avena
+Azafran
+Azucar blanco
+Azucar moreno
+Bacaladilla
+Bacalao fresco
+Bacalao salado
+Bacon
+Barrita de chocolate con galleta
+Barrita hipocalórica
+Batido de cacao
+Batido de fresa
+Batido de vainilla
+Batido fermentado de soja
+Batido hipocalórico
+Berberecho
+Berro
+Besugo
+Bitter con alcohol
+Bizcocho
+Bizcocho de chocolate
+Bogavante
+Bollo
+Bollo de leche
+Bollo relleno de chocolate
+Bollo tipo donette
+Bollo tipo donut
+Bollo tipo donut de chocolate
+Bombon
+Boniato
+Bonito
+Bonito en aceite
+Bonito en aceite de soja
+Borraja
+Breca
+Brecol
+Brote de soja
+Butifarra
+Caballa en aceite
+Cabeza de jabali
+Cabracho
+Cabrito
+Cacahuete
+Cacahuete frito salado sin cascara
+Cacahuete tostado y salado sin cascara
+Cacao en polvo azucarado
+Cacao en polvo bajo en calorias
+Cafe descafeinado en polvo soluble
+Cafe en grano
+Cafe en polvo soluble
+Calamar en salsa americana
+Calamares a la romana congelados
+Caldo en cubitos de carne
+Callos a la madrileña (lata)
+Callos de ternera
+Canela
+Canelones de carne
+Cangrejo y similares
+Caqui / palosanto
+Caracol
+Caramelo
+Cardo
+Cardo en conserva
+Carne de ballena
+Carne de caballo
+Carne de cerdo semigrasa
+Carne de jabali
+Carne de vaca 2ª y 3ª
+Carne de vaca magra
+Carne empanada
+Carpa
+Castaña
+Castaña asada
+Cava
+Centollo
+Cerdo magro
+Cereales de desayuno con base de arroz
+Cereales de desayuno con base de arroz y chocolate
+Cereales de desayuno con base de arroz y trigo integral
+Cereales de desayuno con base de arroz
+Cereales de desayuno con base de avena
+Cereales de desayuno con base de avena integral tostada y miel
+Cereales de desayuno con base de maiz
+Cereales de desayuno con base de maiz azucarados
+Cereales de desayuno con base de maiz
+Cereales de desayuno con base de trigo y chocolate
+Cereales de desayuno con base de trigo y frutas
+Cereales de desayuno con base de trigo y miel
+Cereales de desayuno de trigo integral relleno de pasas
+Cereales de desayuno salvado de trigo completo
+Cereales de desayuno variados integrales con miel
+Cerveza baja en alcohol
+Cerveza sin alcohol
+Champán
+Champiñón
+Champiñón en conserva
+Chicle
+Chistorra
+Chocolate blanco
+Chocolate con leche y almendra
+Chocolate en polvo a la taza
+Chocolate puro
+Chopped de cerdo
+Chuleta de cerdo
+Chuleta de cordero
+Chuleta de ternera
+Churro
+Cigala
+Ciruela seca
+Clara de huevo
+Coco fresco
+Coco rallado
+Col
+Col rizada
+Coñac
+Copa de chocolate y nata
+Corazon de vaca
+Corteza de trigo
+Costilla de cerdo
+Crema de almendra
+Crema de cacahuete
+Crema de cacao y avellanas
+Crema de chocolate
+Crema desecada de champiñón
+Crema desecada de esparragos
+Crema hipocalórica
+Croisant
+Croisant de chocolate
+Croqueta de bacalao
+Croqueta de jamon
+Croqueta de marisco
+Croqueta de merluza
+Croqueta de queso
+Croqueta de pollo
+Datil
+Delicias de jamon y queso
+Dulce de membrillo y pastas de frutas
+Empanadilla de atun
+Endivia
+Ensaimada
+Escarola
+Esparrago de lata
+Esparrago verde
+Espinaca
+Espinaca congelada
+Espinaca en conserva
+Espinacas a la crema congeladas
+Fabada en conserva
+Faisan
+Fecula de maiz
+Flan de huevo
+Flan de vainilla
+Foie gras
+Frambuesa
+Fresa y freson
+Fritos de maiz
+Galleta cubierta de chocolate
+Galleta doble rellena de chocolate
+Galleta integral
+Galleta salada
+Galleta tipo cookie
+Galleta tipo digestive
+Galleta tipo digestive con chocolate
+Galleta tipo maria
+Gallina
+Gallo/ pelaia
+Gamba roja
+Ganchitos/gusanitos
+Garbanzo
+Garbanzo en conserva
+Gaseosa
+Gazpacho en conserva
+Germen de trigo
+Ginebra
+Grosella negra
+Grosella roja
+Guindilla picante
+Guisante congelado
+Guisante en conserva
+Guisante seco
+Guisante verde
+Gusanitos con queso
+Haba fresca
+Haba seca
+Harina de maiz
+Harina de soja
+Harina de trigo
+Harina integral de trigo
+Helado cremoso
+Higado de cerdo
+Higado de pollo
+Higado de ternera
+Higado de vaca
+Higos secos
+Horchata
+Huevo de codorniz
+Huevo de pato
+Jamon cocido/york
+Jamon cocido enlatado
+Jamon iberico
+Judia blanca
+Judia blanca en conserva
+Judia pinta
+Judia pinta en conserva
+Judia verde
+Judia verde congelada
+Judia verde en conserva
+Jurel
+Ketchup
+Langosta
+Langostino
+Lasaña boloñesa
+Laurel
+Leche concentrada
+Leche condensada azucarada
+Leche condensada desnatada con azucar
+Leche de cabra
+Leche de oveja
+Leche de soja
+Leche de vaca desnatada
+Leche de vaca entera
+Leche de vaca semidesnatada
+Leche en polvo desnatada
+Leche en polvo entera
+Leche en polvo semidesnatada
+Leche evaporada entera
+Leche fermentada con lactobacillus acidophilus
+Leche fermentada con lactobacillus casei
+Leche fermentada tipo bio con frutas
+Leche fermentada tipo bio desnatado con frutas
+Leche fermentada tipo bio desnatado natural
+Leche fermentada tipo bio natural
+Lechuga
+Lengua de buey
+Lengua de cerdo
+Lengua de cordero
+Lengua de ternera
+Lengua de vaca
+Lenteja
+Lenteja en conserva
+Levadura
+Licor dulce
+Liebre
+Lombarda
+Lomo de cerdo
+Lomo de ternera
+Lomo embuchado
+Longaniza
+Macedonia de frutas en almibar
+Macedonia de frutas en su jugo
+Magdalena
+Maiz en grano hervido en lata
+Maiz en mazorca crudo
+Maiz en mazorca hervido
+Manita de cerdo
+Manteca de cerdo
+Margarina
+Margarina vegetal o de maiz
+Margarina ligera
+Margarina salada
+Masa de hojaldre congelada
+Mayonesa comercial
+Mayonesa ligera
+Mazapan
+Medias noches
+Mejillon
+Mejillon en conserva al natural
+Mejillon en escabeche
+Melocoton en almibar
+Melocoton seco (orejones)
+Membrillo
+Menestra congelada
+Menestra en conserva
+Menta fresca
+Merluza congelada
+Mermelada de albaricoque y melocoton
+Mermelada de ciruela
+Mermelada de frambuesa
+Mermelada de fresa
+Mermelada de fresa baja en calorias
+Mermelada de naranja
+Mijo
+Milhoja con nata y crema
+Molleja de cordero
+Mora
+Morcilla de arroz
+Mortadela
+Mostaza
+Mousse de chocolate
+Muesli
+Mujol
+Muslo de pavo
+Muslo de pollo
+Nabo
+Nachos con queso
+Nata liquida para cocinar
+Nata liquida para montar
+Natillas/ crema catalana
+Natillas de chocolate
+Niscalo
+Nispero
+Nuez
+Nuez moscada
+Ostra
+Paella de marisco congelada
+Paleta/jarrete de cordero
+Palito de cangrejo
+Palmera
+Palmito en conserva
+Palometa
+Palomitas de maiz
+Pan blanco
+Pan blanco sin sal
+Pan blanco tipo baguette
+Pan de centeno
+Pan de molde
+Pan de molde integral
+Pan integral
+Pan tipo hamburguesa
+Panceta
+Pasas
+Pasta
+Pasta al huevo
+Pasta de colores
+Pasta de té
+Pasta rellena de carne
+Pasta rellena de queso hervida
+Pastel de chocolate
+Pastel relleno de crema
+Patatas fritas de bolsa
+Patatas fritas de bolsa bajas en calorias
+Patatas prefritas congeladas
+Pechuga de pavo
+Pechuga de pollo
+Pez espada
+Pierna de cordero
+Pimenton
+Pimienta blanca
+Pimiento morron en conserva
+Piña en almibar
+Piña en su jugo
+Pipa de girasol pelada con sal
+Pipa de girasol pelada sin sal
+Pipa de girasol sin sal
+Pistacho
+Pistacho tostado salado
+Pisto de verduras congelado
+Pizza de atun congelada
+Pizza margarita congelada
+Pizza romana congelada
+Platija
+Pollo empanado congelado
+Pollo
+Polo de hielo
+Pudin de pasas
+Puerro en conserva
+Pulmon de cerdo
+Pulmon de cordero
+Pulmon de ternera
+Pure de patatas
+Queso azul
+Queso brie
+Queso camembert
+Queso de arzua
+Queso de bola
+Queso de burgos
+Queso de cabra curado
+Queso de cabra semicurado
+Queso de cabra tierno
+Queso de cabrales
+Queso emmental
+Queso en lonchas
+Queso en porciones
+Queso en porciones descremado
+Queso gallego
+Queso gouda
+Queso gruyere
+Queso idiazabal
+Queso manchego curado
+Queso manchego fresco
+Queso manchego semicurado
+Queso roquefort
+Queso tetilla
+Queso tipo manchego en aceite
+Queso torta del casar
+Quisquilla
+Raviolis con salsa de tomate/ napolitana congelados
+Raya
+Remolacha en conserva
+Repollo
+Requeson
+Riñon de cerdo
+Riñon de cordero
+Riñon de ternera
+Rollito de primavera congelado
+Ron
+Rosada
+Sal
+Salami
+Salchicha
+Salchicha tipo frankfurt
+Salchichon
+Salmon ahumado
+Salsa agridulce
+Salsa al curry
+Salsa barbacoa
+Salsa bechamel
+Salsa boloñesa
+Salsa carbonara
+Salsa de queso
+Salsa de soja
+Salsa holandesa
+Salsa roquefort
+Salsa vinagreta
+Salvado de trigo
+San jacobo congelado
+Sardina
+Sardina con salsa de tomate
+Sardina en aceite
+Sardina en escabeche
+Sargo
+Semola de trigo
+Seso de cerdo
+Seso de cordero
+Seso de ternera
+Sidra
+Sobao
+Sobrasada
+Soda sifon
+Sofrito
+Soja
+Solomillo añojo
+Solomillo de avestruz
+Solomillo de buey
+Solomillo de cerdo
+Solomillo de ternera
+Solomillo de vaca
+Sopa de ave con fideos para reconstituir
+Sopa jardinera para reconstituir
+Sucedaneo de cafe soluble
+Suizo
+Tapioca
+Tarta de crema pastelera y manzana
+Tarta de frutas
+Tequila
+Tomate frito en conserva
+Tomate pelado enlatado
+Tomate triturado
+Tonica
+Triangulos maiz
+Turron de alicante
+Turron de jijona
+Uva blanca
+Uva negra
+Vainilla
+Vermut
+Vieira
+Vino blanco
+Yogur desnatado de sabores
+Yogur desnatado natural
+Yogur entero con fruta
+Yogur entero de sabores
+Yogur liquido de sabores
+Yogur liquido natural
+Zanahoria en conserva
+Zumo de tomate natural
