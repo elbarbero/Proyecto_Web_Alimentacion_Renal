@@ -346,7 +346,7 @@ function updateNutrients(amount) {
     const vCalcium = (getVal('calcium') * ratio).toFixed(0);
     const vMagnesium = (getVal('magnesium') ? (n.magnesium * ratio).toFixed(0) : "0");
     const vIron = (getVal('iron') ? (n.iron * ratio).toFixed(1) : "0");
-    const vCopper = (getVal('copper') ? (n.copper * ratio).toFixed(1) : "0");
+    const vCopper = (getVal('copper') ? (n.copper * ratio).toFixed(3) : "0");
     const vSulfur = (getVal('sulfur') ? (n.sulfur * ratio).toFixed(0) : "0");
     const vChlorine = (getVal('chlorine') ? (n.chlorine * ratio).toFixed(0) : "0");
 

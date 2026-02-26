@@ -610,7 +610,8 @@ function updateTotalsUI(totals) {
         const val = totals[key] || 0;
         let formattedVal;
         if (['salt', 'protein', 'carbs', 'sugar', 'fat'].includes(key)) formattedVal = val.toFixed(2);
-        else if (['iron', 'copper'].includes(key)) formattedVal = val.toFixed(1);
+        else if (['copper'].includes(key)) formattedVal = val.toFixed(3);
+        else if (['iron'].includes(key)) formattedVal = val.toFixed(1);
         else formattedVal = val.toFixed(0);
 
         let unit = 'mg';
