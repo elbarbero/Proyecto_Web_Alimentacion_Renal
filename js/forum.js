@@ -303,23 +303,33 @@ async function loadComments(threadId) {
             const canModify = isOwner && (commentAge <= 10 * 60 * 1000);
 
             let actionsHTML = '';
+            const t = translations[getCurrentLang()];
+
             if (isOwner) {
-                const t = translations[getCurrentLang()];
                 const disabledAttr = canModify ? '' : 'disabled';
                 const opacityStyle = canModify ? '' : 'opacity: 0.5; cursor: not-allowed;';
                 const titleHint = canModify ? '' : `title="${t.timeExpiredHint || 'El tiempo para editar o borrar ha expirado (10 min)'}"`;
 
                 actionsHTML = `
-                    <div class="comment-actions" style="margin-top: 12px; display: flex; gap: 10px;">
-                        <button class="btn-secondary btn-small" onclick="${canModify ? `editComment(${comment.id})` : ''}" ${disabledAttr} ${titleHint} style="display: flex; align-items: center; gap: 4px; padding: 4px 10px; ${opacityStyle}">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                            ${t.editBtn || 'Editar'}
-                        </button>
-                        <button class="btn-small delete-menu" onclick="${canModify ? `deleteComment(${comment.id})` : ''}" ${disabledAttr} ${titleHint} style="display: flex; align-items: center; gap: 4px; padding: 4px 10px; ${opacityStyle}">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                            ${t.deleteCommentBtn || 'Borrar'}
-                        </button>
-                    </div>
+                    <button class="btn-secondary btn-small" onclick="${canModify ? `editComment(${comment.id})` : ''}" ${disabledAttr} ${titleHint} style="display: flex; align-items: center; gap: 4px; padding: 4px 10px; ${opacityStyle}">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        ${t.editBtn || 'Editar'}
+                    </button>
+                    <button class="btn-small delete-menu" onclick="${canModify ? `deleteComment(${comment.id})` : ''}" ${disabledAttr} ${titleHint} style="display: flex; align-items: center; gap: 4px; padding: 4px 10px; ${opacityStyle}">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        ${t.deleteCommentBtn || 'Borrar'}
+                    </button>
+                `;
+            }
+
+            // Botón Responder para todos los usuarios logueados
+            let replyBtnHTML = '';
+            if (userObj) {
+                replyBtnHTML = `
+                    <button class="btn-secondary btn-small" onclick="replyComment(${comment.id})" style="display: flex; align-items: center; gap: 4px; padding: 4px 10px; border: 1px solid var(--primary-color); background: rgba(var(--primary-rgb), 0.05);">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>
+                        ${t.reply || 'Responder'}
+                    </button>
                 `;
             }
 
@@ -332,8 +342,11 @@ async function loadComments(threadId) {
                         <span class="comment-date">${new Date(comment.created_at).toLocaleString(getCurrentLang(), { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
                 </div>
-                <div class="comment-content" id="comment-content-div-${comment.id}">${escapeHTML(comment.content)}</div>
-                ${actionsHTML}
+                <div class="comment-content" id="comment-content-div-${comment.id}">${formatCommentContent(comment.content)}</div>
+                <div class="comment-actions" style="margin-top: 12px; display: flex; gap: 10px; align-items: center;">
+                    ${replyBtnHTML}
+                    ${actionsHTML}
+                </div>
             </div>
             `;
         }).join('');
@@ -521,6 +534,66 @@ window.editComment = async function (commentId) {
     form.scrollIntoView({ behavior: 'smooth', block: 'center' });
     contentInput.focus();
 };
+
+window.replyComment = function (commentId) {
+    const textarea = document.getElementById('comment-content');
+    if (!textarea) return;
+
+    // Obtener data del comentario
+    const commentDiv = document.querySelector(`.comment-card[data-comment-id="${commentId}"]`);
+    if (!commentDiv) return;
+
+    const author = commentDiv.querySelector('.comment-author-name')?.innerText || 'user';
+    const avatar = commentDiv.querySelector('.author-avatar')?.src || '';
+    const content = document.getElementById(`comment-content-div-${commentId}`)?.innerText || '';
+
+    // Limitar longitud de la cita (opcional, el CSS ya trunca)
+    const snippet = content.length > 200 ? content.substring(0, 200) + '...' : content;
+
+    // Nuevo formato estructurado para mini-post
+    const quote = `[quote author="${author}" avatar="${avatar}"]${snippet}[/quote]\n\n`;
+
+    // Si ya estamos editando otro comentario, reseteamos primero
+    if (editingCommentId) {
+        resetCommentForm();
+    }
+
+    textarea.value = quote + textarea.value;
+
+    // Scroll al textarea
+    const form = document.getElementById('comment-form');
+    if (form) {
+        form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        textarea.focus();
+        // Mover cursor al final
+        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    }
+};
+
+function formatCommentContent(content) {
+    if (!content) return '';
+
+    // Primero escapamos el HTML normal
+    let html = escapeHTML(content);
+
+    // Regex para detectar etiquetas [quote author="..." avatar="..."]contenido[/quote]
+    // Usamos lazy matching (.*?) para el contenido
+    const quoteRegex = /\[quote\s+author="([^"]*)"\s+avatar="([^"]*)"\]([\s\S]*?)\[\/quote\]/g;
+
+    html = html.replace(quoteRegex, (match, author, avatar, text) => {
+        return `
+        <div class="quote-box">
+            <div class="quote-header">
+                <img src="${avatar}" class="quote-avatar" onerror="this.src='images/default_avatar.png'">
+                <span class="quote-author">${author}</span>
+            </div>
+            <div class="quote-text">${text}</div>
+        </div>
+        `;
+    });
+
+    return html;
+}
 
 async function handleEditFormSubmit(e) {
     e.preventDefault();

@@ -232,6 +232,7 @@ export const translations = {
         deleteBtn: "Eliminar",
         editThreadBtn: "Editar tema",
         deleteCommentBtn: "Borrar",
+        reply: "Responder",
         timeExpiredHint: "El tiempo para editar o eliminar ha expirado (10 min)"
     },
     en: {
@@ -465,6 +466,7 @@ export const translations = {
         deleteBtn: "Delete",
         editThreadBtn: "Edit thread",
         deleteCommentBtn: "Delete",
+        reply: "Reply",
         timeExpiredHint: "Time to edit or delete has expired (10 min)"
     },
     de: {
@@ -668,6 +670,7 @@ export const translations = {
         deleteBtn: "Löschen",
         editThreadBtn: "Thema bearbeiten",
         deleteCommentBtn: "Löschen",
+        reply: "Antworten",
         timeExpiredHint: "Zeit zum Bearbeiten oder Löschen ist abgelaufen (10 Min.)"
     },
     fr: {
@@ -871,6 +874,7 @@ export const translations = {
         deleteBtn: "Supprimer",
         editThreadBtn: "Modifier le sujet",
         deleteCommentBtn: "Supprimer",
+        reply: "Répondre",
         timeExpiredHint: "Le temps pour modifier ou supprimer a expiré (10 min)"
     },
     pt: {
@@ -1073,6 +1077,7 @@ export const translations = {
         deleteBtn: "Excluir",
         editThreadBtn: "Editar tópico",
         deleteCommentBtn: "Excluir",
+        reply: "Responder",
         timeExpiredHint: "O tempo para editar ou excluir expirou (10 min)"
     },
     ja: {
@@ -1274,6 +1279,7 @@ export const translations = {
         deleteBtn: "削除",
         editThreadBtn: "トピックを編集",
         deleteCommentBtn: "削除",
+        reply: "返信",
         timeExpiredHint: "編集または削除の期限が切れました（10分）"
     },
 };
