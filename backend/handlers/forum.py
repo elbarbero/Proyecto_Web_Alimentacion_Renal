@@ -7,12 +7,13 @@ def handle_get_threads(handler):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        # Join with users to get the author's name and avatar
+        # Seleccionar hilos ordenados por última actividad (hilo nuevo o último comentario)
         cursor.execute("""
-            SELECT t.*, u.name as author_name, u.avatar_url as author_avatar
+            SELECT t.*, u.name as author_name, u.avatar_url as author_avatar,
+                   COALESCE((SELECT MAX(created_at) FROM forum_comments WHERE thread_id = t.id), t.created_at) as last_activity
             FROM forum_threads t
             JOIN users u ON t.user_id = u.id
-            ORDER BY t.created_at DESC
+            ORDER BY last_activity DESC
         """)
         threads = [dict(row) for row in cursor.fetchall()]
         

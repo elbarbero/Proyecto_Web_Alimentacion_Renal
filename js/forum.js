@@ -237,6 +237,7 @@ window.openThread = async function (threadId) {
                             </div>
                         </div>
                     </div>
+                </div>
                 <div class="thread-content" id="thread-content-div-${thread.id}">${escapeHTML(thread.content)}</div>
             `;
 
