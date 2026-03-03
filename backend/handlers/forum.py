@@ -100,3 +100,131 @@ def handle_create_comment(data, handler):
     except Exception as e:
         print(f"Error creating comment: {e}")
         send_json(handler, 500, {"error": str(e)})
+
+def handle_edit_thread(data, handler):
+    thread_id = data.get('thread_id')
+    user_id = data.get('user_id')
+    title = data.get('title')
+    content = data.get('content')
+    
+    if not thread_id or not user_id or not title or not content:
+        send_json(handler, 400, {"error": "Missing required fields"})
+        return
+        
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT created_at FROM forum_threads 
+            WHERE id = ? AND user_id = ? 
+            AND datetime(created_at, '+10 minutes') >= datetime('now')
+        ''', (thread_id, user_id))
+        
+        if not cursor.fetchone():
+            conn.close()
+            send_json(handler, 403, {"error": "No puedes editar este tema. Han pasado más de 10 minutos o no eres el autor."})
+            return
+            
+        cursor.execute("UPDATE forum_threads SET title = ?, content = ? WHERE id = ?", (title, content, thread_id))
+        conn.commit()
+        conn.close()
+        send_json(handler, 200, {"status": "success"})
+    except Exception as e:
+        print(f"Error editing thread: {e}")
+        send_json(handler, 500, {"error": str(e)})
+
+def handle_delete_thread(data, handler):
+    thread_id = data.get('thread_id')
+    user_id = data.get('user_id')
+    
+    if not thread_id or not user_id:
+        send_json(handler, 400, {"error": "Missing required fields"})
+        return
+        
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT created_at FROM forum_threads 
+            WHERE id = ? AND user_id = ? 
+            AND datetime(created_at, '+10 minutes') >= datetime('now')
+        ''', (thread_id, user_id))
+        
+        if not cursor.fetchone():
+            conn.close()
+            send_json(handler, 403, {"error": "No puedes eliminar este tema. Han pasado más de 10 minutos o no eres el autor."})
+            return
+            
+        cursor.execute("DELETE FROM forum_comments WHERE thread_id = ?", (thread_id,))
+        cursor.execute("DELETE FROM forum_threads WHERE id = ?", (thread_id,))
+        conn.commit()
+        conn.close()
+        send_json(handler, 200, {"status": "success"})
+    except Exception as e:
+        print(f"Error deleting thread: {e}")
+        send_json(handler, 500, {"error": str(e)})
+
+def handle_edit_comment(data, handler):
+    comment_id = data.get('comment_id')
+    user_id = data.get('user_id')
+    content = data.get('content')
+    
+    if not comment_id or not user_id or not content:
+        send_json(handler, 400, {"error": "Missing required fields"})
+        return
+        
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT created_at FROM forum_comments 
+            WHERE id = ? AND user_id = ? 
+            AND datetime(created_at, '+10 minutes') >= datetime('now')
+        ''', (comment_id, user_id))
+        
+        if not cursor.fetchone():
+            conn.close()
+            send_json(handler, 403, {"error": "No puedes editar este comentario."})
+            return
+            
+        cursor.execute("UPDATE forum_comments SET content = ? WHERE id = ?", (content, comment_id))
+        conn.commit()
+        conn.close()
+        send_json(handler, 200, {"status": "success"})
+    except Exception as e:
+        print(f"Error editing comment: {e}")
+        send_json(handler, 500, {"error": str(e)})
+
+def handle_delete_comment(data, handler):
+    comment_id = data.get('comment_id')
+    user_id = data.get('user_id')
+    
+    if not comment_id or not user_id:
+        send_json(handler, 400, {"error": "Missing required fields"})
+        return
+        
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT created_at FROM forum_comments 
+            WHERE id = ? AND user_id = ? 
+            AND datetime(created_at, '+10 minutes') >= datetime('now')
+        ''', (comment_id, user_id))
+        
+        if not cursor.fetchone():
+            conn.close()
+            send_json(handler, 403, {"error": "No puedes eliminar este comentario."})
+            return
+            
+        cursor.execute("DELETE FROM forum_comments WHERE id = ?", (comment_id,))
+        conn.commit()
+        conn.close()
+        send_json(handler, 200, {"status": "success"})
+    except Exception as e:
+        print(f"Error deleting comment: {e}")
+        send_json(handler, 500, {"error": str(e)})

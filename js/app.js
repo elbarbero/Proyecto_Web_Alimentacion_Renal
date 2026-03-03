@@ -34,9 +34,17 @@ async function initApp() {
     updateTexts();
 
     // Listen for language changes from Custom Select
-    document.addEventListener('languageChanged', (e) => {
+    document.addEventListener('languageChanged', async (e) => {
         localStorage.setItem('language', e.detail);
         updateTexts();
+
+        // Refresh forum content if it's already loaded
+        try {
+            const { refreshForumView } = await import('./forum.js');
+            if (refreshForumView) refreshForumView();
+        } catch (err) {
+            console.warn('Forum not yet loaded for refresh');
+        }
     });
 
     // 2. UI Components

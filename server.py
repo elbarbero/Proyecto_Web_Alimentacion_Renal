@@ -114,6 +114,18 @@ class RenalDietHandler(http.server.SimpleHTTPRequestHandler):
         elif path == '/api/forum/create_comment':
             forum.handle_create_comment(data, self)
             
+        elif path == '/api/forum/edit_thread':
+            forum.handle_edit_thread(data, self)
+            
+        elif path == '/api/forum/delete_thread':
+            forum.handle_delete_thread(data, self)
+            
+        elif path == '/api/forum/edit_comment':
+            forum.handle_edit_comment(data, self)
+            
+        elif path == '/api/forum/delete_comment':
+            forum.handle_delete_comment(data, self)
+            
         else:
             self.send_error(404, "Endpoint not found")
 
